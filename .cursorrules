@@ -1,0 +1,85 @@
+# TET PAPER II SCIENCE HANDBOOK — Cursor AI Rules
+# Project: perumalrajdpr/tet-paper2-science-handbook
+# Last updated: 2026-05-03
+
+## PROJECT CONTEXT
+
+TN-TET Paper II Science handbook project (22 chapters):
+- Physics: P1-P8
+- Chemistry: C1-C7
+- Biology: B1-B7
+
+Core stack:
+- Python + ReportLab
+- Shared layout modules in `shared/`
+- Chapter modules in `chapters/`
+
+## LAYOUT SPEC (LOCKED)
+
+- Page size: 210mm × 290mm (custom A4 portrait)
+- Margins: 20mm on all sides
+- Facing pages: enabled
+- Full usable width: 170mm
+- Body columns: 82mm + 6mm gap + 82mm
+- Theme primary color: `#0F766E`
+- Preferred font: DejaVu Sans; allow safe fallback when OS font path differs
+
+## STRUCTURE RULES
+
+`shared/theme.py` is the source of truth for page and column constants.
+
+Full-width blocks (must span full 170mm):
+- chapter banner
+- section headings
+- all tables
+- fact boxes (★)
+- glossary container
+
+Two-column blocks:
+- regular narrative/body text between section blocks
+- use `two_col_body()` or `two_col_paragraphs()` helpers
+
+## CONTENT RULES
+
+Always prioritize exam memorization:
+- add ★ fact boxes for years, names, constants, values
+- prefer dense comparison tables over long prose
+- keep solved numerical problems in table form
+- keep glossary in two-column format
+- footer page number format must be `P1.1`, `P1.2`, `C3.1`, etc.
+
+Never include:
+- Learning Outcomes / Objectives section
+- Quick Recap section
+
+Do not add standalone "Key Facts — Rapid Revision" sections unless user explicitly asks.
+
+## CHAPTER MODULE CONTRACT
+
+Each chapter file should include:
+1. `CHAPTER_ID`, `CHAPTER_TITLE`, `SUBTITLE`
+2. `content()` returning flowables
+3. `build(out_path)` used by build script
+4. standalone `if __name__ == '__main__':` build block
+
+Use `chapters/P1_measurement.py` as style reference unless user requests a different pattern.
+
+## RENDERING SAFETY
+
+Superscripts in table cells:
+- use XML tags: `10<super>12</super>`
+- avoid unicode superscripts in table cells where rendering may break
+
+Body paragraph unicode superscripts are acceptable when font support is present.
+
+## EXECUTION CHECKLIST
+
+Before edits:
+1. Read `shared/theme.py`
+2. Read target chapter and compare with `P1_measurement.py`
+3. If `shared/` changes, assume impact across all chapters
+
+After edits:
+1. Run `python build/build_chapter.py <ID>` for touched chapter
+2. If shared modules changed, run broader build tests as needed
+3. Fix errors before commit/push

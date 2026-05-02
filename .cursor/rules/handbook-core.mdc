@@ -1,0 +1,52 @@
+---
+description: Core standards for TET Science handbook layout and chapter structure
+alwaysApply: true
+---
+
+# TET Handbook Core Rule
+
+## Locked Layout
+
+- Keep page geometry at `210mm x 290mm`, margins `20mm`, usable width `170mm`.
+- Keep body text in 2 columns: `82mm + 6mm gap + 82mm`.
+- Keep theme primary color as `#0F766E`.
+- Prefer DejaVu Sans; allow safe fallback if OS font path differs.
+
+## Flowable Width Rules
+
+Use full width for:
+- chapter banners
+- section headings
+- all tables
+- fact boxes (`★`)
+- glossary container
+
+Use two columns only for regular body/narrative text.
+
+## Content Design Rules
+
+- Optimize for memorization: dense tables + high-value fact boxes.
+- Include solved numericals in table format.
+- Keep glossary in two-column format.
+- Keep footer page numbering like `P1.1`, `P1.2`, `C3.1`.
+
+Never add:
+- Learning Outcomes / Objectives section
+- Quick Recap section
+
+Do not add a standalone "Key Facts — Rapid Revision" section unless explicitly requested.
+
+## Chapter File Contract
+
+Each chapter should contain:
+1. `CHAPTER_ID`, `CHAPTER_TITLE`, `SUBTITLE`
+2. `content()` returning flowables
+3. `build(out_path)`
+4. standalone `if __name__ == '__main__':` block
+
+Use `chapters/P1_measurement.py` as the structural reference unless user asks otherwise.
+
+## Rendering Safety
+
+- In table cells use superscript tags like `10<super>12</super>`.
+- Avoid unicode superscripts inside table cells.
