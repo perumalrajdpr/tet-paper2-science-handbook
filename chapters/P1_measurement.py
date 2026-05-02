@@ -7,16 +7,14 @@ TET Paper II Science Handbook
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from reportlab.lib.pagesizes import A5
 from reportlab.lib.units import mm
-from reportlab.platypus import SimpleDocTemplate, Spacer
 
 from shared.theme import (
     register_fonts, L_MARGIN, R_MARGIN, T_MARGIN, B_MARGIN,
     PRIMARY, SECONDARY, USABLE_W
 )
 from shared.components import (
-    chapter_banner, section, subsec, p, pl, b, fact, defn, sp,
+    chapter_banner, section, subsec, p, pl, b, fact, defn, sp, two_col_body,
     dense_table, problems_table, two_col_glossary
 )
 from shared.page_chrome import make_page_chrome
@@ -41,11 +39,13 @@ def content():
     # 1. BASICS
     # ─────────────────────────────────────────────────────────────────────────
     s += [section('1', 'Measurement — Basics')]
-    s += [p('<b>Measurement</b>: comparing an unknown quantity with a known standard. '
-            'Every measurement = <b>numerical value (magnitude) + unit</b>. '
-            'Eg: pencil 15 cm → "15" = magnitude, "cm" = unit.')]
-    s += [p('<b>Three things needed:</b> (1) An instrument, (2) A standard quantity, '
-            '(3) An acceptable unit.')]
+    s += [two_col_body(
+        '<b>Measurement</b>: comparing an unknown quantity with a known standard. '
+        'Every measurement = <b>numerical value (magnitude) + unit</b>. '
+        'Eg: pencil 15 cm → "15" = magnitude, "cm" = unit.',
+        '<b>Three things needed:</b> (1) An instrument, (2) A standard quantity, '
+        '(3) An acceptable unit.'
+    )]
 
     # ─────────────────────────────────────────────────────────────────────────
     # 2. PHYSICAL QUANTITIES
@@ -452,72 +452,9 @@ def content():
     ]), sp()]
 
     # ─────────────────────────────────────────────────────────────────────────
-    # 16. KEY FACTS — RAPID REVISION
+    # 16. GLOSSARY
     # ─────────────────────────────────────────────────────────────────────────
-    s += [section('16', 'Key Facts — Rapid Revision')]
-    s += [p('<b>Numerical values to memorize:</b>')]
-    s += [dense_table(
-        header=['Value', 'Quantity'],
-        rows=[
-            ['6.023 × 10²³',      'Avogadro number (entities in 1 mole)'],
-            ['1.496 × 10¹¹ m',    '1 Astronomical Unit (AU) — Earth–Sun distance'],
-            ['9.46 × 10¹⁵ m',     '1 Light year'],
-            ['3 × 10⁸ m/s',       'Speed of light in vacuum'],
-            ['3.153 × 10⁷ s',     'Number of seconds in 1 year'],
-            ['9.8 m/s²',          'Acceleration due to gravity (g) on Earth'],
-            ['1.852 km',          '1 nautical mile'],
-            ['32,768 Hz',         'Quartz crystal vibration frequency'],
-            ['76 cm of Hg',       'Standard atmospheric pressure (sea level)'],
-            ['1.01 × 10⁵ N/m²',  '1 atmosphere (atm)'],
-            ['10⁹ s',             'Quartz clock accuracy (1 sec error per...)'],
-            ['10¹³ s',            'Atomic clock accuracy (1 sec error per...)'],
-            ['82.5° E',           'Indian Standard Meridian longitude'],
-            ['5 h 30 m',          'IST = GMT + this value'],
-            ['15°',               'Width of one time zone (longitude)'],
-            ['24',                'Number of time zones on Earth'],
-            ['4.22 ly',           'Distance to Proxima Centauri (nearest star)'],
-            ['25,000 ly',         'Distance to centre of Milky Way galaxy'],
-        ],
-        col_widths=[USABLE_W*0.30, USABLE_W*0.70]
-    ), sp()]
-
-    s += [p('<b>Years & Historical Facts:</b>')]
-    s += [dense_table(
-        header=['Year / Period', 'Event'],
-        rows=[
-            ['16th century', '<b>William Bedwell</b> invented the ruler / scale'],
-            ['1790',         '<b>Metric system</b> created by the French'],
-            ['1889',         'Standard kg (Pt-Ir alloy) placed at Sèvres, France'],
-            ['1960',         '<b>SI System</b> adopted at 11th GCWM, Paris, France'],
-            ['1995',         'Plane & solid angle reclassified: supplementary → derived'],
-            ['Dec 1998',     'NASA Mars Climate Orbiter launched'],
-            ['Sep 23, 1999', 'Mars Orbiter lost — FPS vs MKS unit error; $125M loss'],
-        ],
-        col_widths=[USABLE_W*0.22, USABLE_W*0.78]
-    ), sp()]
-
-    s += [p('<b>People & Place Names:</b>')]
-    s += [dense_table(
-        header=['Name', 'Significance'],
-        rows=[
-            ['<b>William Bedwell</b>',             'Invented ruler / scale (16th century)'],
-            ['<b>Avogadro</b>',                    '6.023 × 10²³ named after him'],
-            ['<b>Sèvres, France</b>',              'Bureau of Weights & Measures (Std. kg, Std. m)'],
-            ['<b>Paris, France</b>',               '11th GCWM 1960 — SI system born'],
-            ['<b>Greenwich, London</b>',           'Royal Observatory — GMT origin (0° longitude)'],
-            ['<b>Mirzapur, Uttar Pradesh</b>',     'On 82.5°E — defines Indian Standard Time'],
-            ['<b>National Physical Lab, Delhi</b>','Holds India\'s copy of standard metre rod'],
-            ['<b>Caesium-133</b>',                 'Atom whose vibrations define atomic clocks'],
-            ['<b>Pt-Ir alloy</b>',                 'Material of standard metre rod & kilogram'],
-            ['<b>SiO₂ (Quartz crystal)</b>',       'Used in quartz clocks; vibrates at ~32,768 Hz'],
-        ],
-        col_widths=[USABLE_W*0.30, USABLE_W*0.70]
-    ), sp()]
-
-    # ─────────────────────────────────────────────────────────────────────────
-    # 17. GLOSSARY
-    # ─────────────────────────────────────────────────────────────────────────
-    s += [section('17', 'Glossary — Key Terms')]
+    s += [section('16', 'Glossary — Key Terms')]
     s += [two_col_glossary([
         ('Accuracy',           'Closeness of measured value to the true value.'),
         ('Ammeter',            'Measures electric current. Unit: ampere (A).'),

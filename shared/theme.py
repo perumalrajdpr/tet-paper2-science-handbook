@@ -6,19 +6,27 @@ Import this in every chapter file.
 
 from reportlab.lib.colors import HexColor, white, black
 from reportlab.lib.units import mm
-from reportlab.lib.pagesizes import A5
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.pdfbase.pdfmetrics import registerFontFamily
+from reportlab.pdfbase.pdfmetrics import registerFontFamily, Font
+from pathlib import Path
 
 # ─── PAGE ─────────────────────────────────────────────────────────────────────
-PAGE_SIZE   = A5
-PAGE_W, PAGE_H = A5
-L_MARGIN    = 10 * mm
-R_MARGIN    = 10 * mm
-T_MARGIN    = 11 * mm
-B_MARGIN    = 10 * mm
+# InDesign export spec:
+# page = 210 x 290 mm, margins = 20 mm, two columns = 82 mm + 6 mm + 82 mm
+PAGE_SIZE   = (210 * mm, 290 * mm)
+PAGE_W, PAGE_H = PAGE_SIZE
+L_MARGIN    = 20 * mm
+R_MARGIN    = 20 * mm
+T_MARGIN    = 20 * mm
+B_MARGIN    = 20 * mm
 USABLE_W    = PAGE_W - L_MARGIN - R_MARGIN
+
+FACING_PAGES = True
+
+# Two-column text geometry (inside full-width content area)
+COL_GAP = 6 * mm
+COL_W = 82 * mm
 
 # ─── COLORS ───────────────────────────────────────────────────────────────────
 PRIMARY     = HexColor('#0F766E')   # Deep teal-green  — main brand
@@ -41,13 +49,30 @@ def register_fonts():
     global _FONTS_REGISTERED
     if _FONTS_REGISTERED:
         return
-    dv = '/usr/share/fonts/truetype/dejavu'
-    pdfmetrics.registerFont(TTFont('DV',        f'{dv}/DejaVuSans.ttf'))
-    pdfmetrics.registerFont(TTFont('DV-Bold',   f'{dv}/DejaVuSans-Bold.ttf'))
-    pdfmetrics.registerFont(TTFont('DV-Italic', f'{dv}/DejaVuSans-Oblique.ttf'))
-    pdfmetrics.registerFont(TTFont('DV-BoldIt', f'{dv}/DejaVuSans-BoldOblique.ttf'))
-    pdfmetrics.registerFont(TTFont('DVCond',    f'{dv}/DejaVuSansCondensed.ttf'))
-    pdfmetrics.registerFont(TTFont('DVCond-B',  f'{dv}/DejaVuSansCondensed-Bold.ttf'))
+
+    candidates = [
+        Path('/usr/share/fonts/truetype/dejavu'),
+        Path('/usr/local/share/fonts/dejavu'),
+        Path('C:/Windows/Fonts'),
+    ]
+    dv = next((p for p in candidates if (p / 'DejaVuSans.ttf').exists()), None)
+
+    if dv:
+        pdfmetrics.registerFont(TTFont('DV',        str(dv / 'DejaVuSans.ttf')))
+        pdfmetrics.registerFont(TTFont('DV-Bold',   str(dv / 'DejaVuSans-Bold.ttf')))
+        pdfmetrics.registerFont(TTFont('DV-Italic', str(dv / 'DejaVuSans-Oblique.ttf')))
+        pdfmetrics.registerFont(TTFont('DV-BoldIt', str(dv / 'DejaVuSans-BoldOblique.ttf')))
+        pdfmetrics.registerFont(TTFont('DVCond',    str(dv / 'DejaVuSansCondensed.ttf')))
+        pdfmetrics.registerFont(TTFont('DVCond-B',  str(dv / 'DejaVuSansCondensed-Bold.ttf')))
+    else:
+        # Fallback for environments where DejaVu is not installed.
+        pdfmetrics.registerFont(Font('DV', 'Helvetica', 'WinAnsiEncoding'))
+        pdfmetrics.registerFont(Font('DV-Bold', 'Helvetica-Bold', 'WinAnsiEncoding'))
+        pdfmetrics.registerFont(Font('DV-Italic', 'Helvetica-Oblique', 'WinAnsiEncoding'))
+        pdfmetrics.registerFont(Font('DV-BoldIt', 'Helvetica-BoldOblique', 'WinAnsiEncoding'))
+        pdfmetrics.registerFont(Font('DVCond', 'Helvetica', 'WinAnsiEncoding'))
+        pdfmetrics.registerFont(Font('DVCond-B', 'Helvetica-Bold', 'WinAnsiEncoding'))
+
     registerFontFamily('DV',     normal='DV',     bold='DV-Bold',
                        italic='DV-Italic', boldItalic='DV-BoldIt')
     registerFontFamily('DVCond', normal='DVCond', bold='DVCond-B')

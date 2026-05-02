@@ -8,7 +8,7 @@ from reportlab.lib.colors import HexColor
 from shared.theme import (
     PRIMARY, SECONDARY, ACCENT, LIGHT_BG, HIGHLIGHT,
     BORDER, TEXT_DARK, TEXT_MUTED, PURPLE, LIGHT_BG2,
-    FONT_BOLD, FONT_REG, USABLE_W
+    FONT_BOLD, FONT_REG, USABLE_W, COL_W, COL_GAP
 )
 from shared.styles import make_styles
 
@@ -50,7 +50,16 @@ def _mm():
 
 def section(num, title):
     """Full-width colored bar section heading."""
-    return Paragraph(f"<b>{num}.  {title}</b>", S['section_bar'])
+    text = Paragraph(f"<b>{num}.  {title}</b>", S['section_bar'])
+    t = Table([[text]], colWidths=[USABLE_W])
+    t.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, -1), PRIMARY),
+        ('LEFTPADDING', (0, 0), (-1, -1), 3),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 3),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+    return t
 
 
 def subsec(num, title):
@@ -60,7 +69,7 @@ def subsec(num, title):
 # ─── TEXT HELPERS ────────────────────────────────────────────────────────────
 
 def p(text):
-    return Paragraph(text, S['body'])
+    return two_col_body(text)
 
 
 def pl(text):
@@ -73,12 +82,48 @@ def b(text):
 
 def fact(text):
     """Amber highlighted memorization fact box."""
-    return Paragraph(f"<b>★</b>  {text}", S['fact'])
+    para = Paragraph(f"<b>★</b>  {text}", S['fact'])
+    t = Table([[para]], colWidths=[USABLE_W])
+    t.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, -1), HIGHLIGHT),
+        ('BOX', (0, 0), (-1, -1), 0.4, ACCENT),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+    return t
 
 
 def defn(text):
     """Italic definition block on light teal background."""
     return Paragraph(text, S['defn'])
+
+
+def two_col_body(left_text, right_text=''):
+    """Two-column body text row (82mm + 6mm gap + 82mm)."""
+    left = Paragraph(left_text, S['body'])
+    right = Paragraph(right_text, S['body']) if right_text else Paragraph('', S['body'])
+    t = Table([[left, right]], colWidths=[COL_W, COL_W])
+    t.setStyle(TableStyle([
+        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+        ('LEFTPADDING', (0, 0), (0, -1), 0),
+        ('RIGHTPADDING', (0, 0), (0, -1), COL_GAP / 2),
+        ('LEFTPADDING', (1, 0), (1, -1), COL_GAP / 2),
+        ('RIGHTPADDING', (1, 0), (1, -1), 0),
+        ('TOPPADDING', (0, 0), (-1, -1), 0),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 1),
+    ]))
+    return t
+
+
+def two_col_paragraphs(paragraphs):
+    """Pack paragraph strings into paired 2-column rows."""
+    rows = []
+    for i in range(0, len(paragraphs), 2):
+        right = paragraphs[i + 1] if i + 1 < len(paragraphs) else ''
+        rows.append(two_col_body(paragraphs[i], right))
+    return rows
 
 
 def sp(h=1.5):
@@ -190,11 +235,13 @@ def two_col_glossary(items):
         right = cells[i+1] if i+1 < len(cells) else Paragraph('', cell_sty)
         rows.append([cells[i], right])
 
-    t = Table(rows, colWidths=[USABLE_W/2, USABLE_W/2])
+    t = Table(rows, colWidths=[(USABLE_W - COL_GAP) / 2, (USABLE_W - COL_GAP) / 2])
     t.setStyle(TableStyle([
         ('VALIGN',        (0,0), (-1,-1), 'TOP'),
-        ('LEFTPADDING',   (0,0), (-1,-1), 3),
-        ('RIGHTPADDING',  (0,0), (-1,-1), 3),
+        ('LEFTPADDING',   (0,0), (0,-1), 0),
+        ('RIGHTPADDING',  (0,0), (0,-1), COL_GAP / 2),
+        ('LEFTPADDING',   (1,0), (1,-1), COL_GAP / 2),
+        ('RIGHTPADDING',  (1,0), (1,-1), 0),
         ('TOPPADDING',    (0,0), (-1,-1), 1),
         ('BOTTOMPADDING', (0,0), (-1,-1), 1),
         ('LINEBELOW',     (0,0), (-1,-2), 0.2, BORDER),
