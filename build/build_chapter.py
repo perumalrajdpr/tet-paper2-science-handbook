@@ -23,7 +23,7 @@ from shared.theme import register_fonts
 CHAPTERS = {
     # ── Physics ───────────────────────────────────────────────────────────────
     'P1': ('chapters.P1_measurement',       'P1_Measurement.pdf'),
-    'P2': ('chapters.P2_force_motion',      'P2_Force_Motion_Pressure.pdf'),
+    'P2': ('chapters.P2_force_motion_pressure_v2', 'P2_Force_Motion_Pressure.pdf'),
     'P3': ('chapters.P3_heat',              'P3_Heat_Temperature.pdf'),
     'P4': ('chapters.P4_light',             'P4_Light.pdf'),
     'P5': ('chapters.P5_electricity',       'P5_Electricity.pdf'),
@@ -54,7 +54,7 @@ CHAPTERS = {
 def build(chapter_id: str, out_dir: str = 'output'):
     chapter_id = chapter_id.upper()
     if chapter_id not in CHAPTERS:
-        print(f"❌ Unknown chapter: {chapter_id}")
+        print(f"ERROR: Unknown chapter: {chapter_id}")
         print(f"   Valid IDs: {', '.join(sorted(CHAPTERS.keys()))}")
         sys.exit(1)
 
@@ -62,7 +62,7 @@ def build(chapter_id: str, out_dir: str = 'output'):
     out_path = os.path.join(out_dir, filename)
     os.makedirs(out_dir, exist_ok=True)
 
-    print(f"📖 Building {chapter_id}  →  {out_path}")
+    print(f"Building {chapter_id}  ->  {out_path}")
 
     # Register fonts once
     register_fonts()
@@ -72,12 +72,12 @@ def build(chapter_id: str, out_dir: str = 'output'):
         mod = importlib.import_module(module_name)
         mod.build(out_path)
     except ModuleNotFoundError:
-        print(f"⚠️  Chapter module not yet created: {module_name}.py")
+        print(f"WARNING: Chapter module not yet created: {module_name}.py")
         print(f"   Create chapters/{chapter_id.lower()}_*.py with a build(out_path) function.")
         sys.exit(1)
 
     size_kb = os.path.getsize(out_path) / 1024
-    print(f"✅ Done  →  {out_path}  ({size_kb:.1f} KB)")
+    print(f"Done  ->  {out_path}  ({size_kb:.1f} KB)")
 
 
 if __name__ == '__main__':
