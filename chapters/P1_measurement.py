@@ -1,536 +1,786 @@
 """
-Chapter P1 — MEASUREMENT
-Physics · Class 6 + 7 + 8
-TET Paper II Science Handbook
+TET Paper II Science Handbook — P1: Measurement
+Style: P3 one-liner cheat-sheet
+Font: 10.5pt body, 10pt cells (print-friendly A4)
+All sub-topics: Class 6 (Term I, Unit 1), Class 7 (Term I, Unit 1), Class 8 (Unit 1)
 """
 
-import sys, os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
+from reportlab.lib.pagesizes import A4
+from reportlab.lib import colors
 from reportlab.lib.units import mm
-
-from shared.theme import (
-    register_fonts, L_MARGIN, R_MARGIN, T_MARGIN, B_MARGIN,
-    PRIMARY, SECONDARY, USABLE_W
+from reportlab.platypus import (
+    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, HRFlowable
 )
-from shared.components import (
-    chapter_banner, section, subsec, p, pl, b, fact, defn, sp, two_col_body,
-    dense_table, problems_table, two_col_glossary
-)
-from shared.page_chrome import make_page_chrome
+from reportlab.lib.styles import ParagraphStyle
+from reportlab.lib.enums import TA_CENTER, TA_LEFT
+import os
+
+CHAPTER_ID = "P1"
+CHAPTER_TITLE = "Measurement"
+SUBTITLE = "Physics | Classes 6, 7 & 8 Combined"
+
+# ─── PALETTE ──────────────────────────────────────────────────────────────────
+TEAL   = colors.HexColor('#0F766E')
+TEAL_L = colors.HexColor('#CCFBF1')
+TEAL_M = colors.HexColor('#5EEAD4')
+TEAL_D = colors.HexColor('#134E4A')
+BLUE   = colors.HexColor('#1D4ED8')
+BLUE_L = colors.HexColor('#DBEAFE')
+BLUE_D = colors.HexColor('#1E3A8A')
+CYAN   = colors.HexColor('#0891B2')
+CYAN_L = colors.HexColor('#CFFAFE')
+GREEN  = colors.HexColor('#15803D')
+GREEN_L= colors.HexColor('#DCFCE7')
+GREEN_D= colors.HexColor('#14532D')
+ORANGE = colors.HexColor('#C2410C')
+ORANGE_L=colors.HexColor('#FFEDD5')
+RED    = colors.HexColor('#B91C1C')
+RED_L  = colors.HexColor('#FEE2E2')
+AMBER  = colors.HexColor('#B45309')
+AMBER_L= colors.HexColor('#FEF3C7')
+PURPLE = colors.HexColor('#7C3AED')
+PURPLE_L=colors.HexColor('#EDE9FE')
+PURPLE_D=colors.HexColor('#4C1D95')
+GRAY_L = colors.HexColor('#F3F4F6')
+GRAY_M = colors.HexColor('#D1D5DB')
+GRAY_D = colors.HexColor('#374151')
+SLATE  = colors.HexColor('#1E293B')
+WHITE  = colors.white
+
+PW, PH = 210 * mm, 290 * mm
+MAR = 20 * mm
+UW = 170 * mm
+C_GAP = 6 * mm
+CW = 82 * mm
+
+FN, FNB, FNI = 'Helvetica', 'Helvetica-Bold', 'Helvetica-Oblique'
+
+# ── FONT SIZES — print-friendly ───────────────────────────────────────────────
+FS_BODY  = 10.5   # main body text
+FS_CELL  = 10.0   # table cells
+FS_SMALL = 9.5    # secondary text
+FS_MINI  = 9.0    # glossary / sub-labels
+FS_SEC   = 11.0   # section headings
+FS_FORM  = 12.0   # formula strip main text
+
+def S(nm, **kw): return ParagraphStyle(nm, **kw)
+
+BD   = S('bd',  fontName=FN,  fontSize=FS_BODY,  leading=15,   textColor=GRAY_D, spaceAfter=2)
+BDB  = S('bdb', fontName=FNB, fontSize=FS_BODY,  leading=15,   textColor=SLATE)
+CE   = S('ce',  fontName=FN,  fontSize=FS_CELL,  leading=14,   textColor=GRAY_D)
+CEB  = S('ceb', fontName=FNB, fontSize=FS_CELL,  leading=14,   textColor=SLATE)
+HWC  = S('hwc', fontName=FNB, fontSize=FS_SMALL, leading=13,   textColor=WHITE, alignment=TA_CENTER)
+SC   = S('sc',  fontName=FNB, fontSize=FS_SEC,   leading=15,   textColor=WHITE)
+MIN  = S('mn',  fontName=FN,  fontSize=FS_MINI,  leading=13,   textColor=GRAY_D)
+MINB = S('mb',  fontName=FNB, fontSize=FS_MINI,  leading=13,   textColor=SLATE)
+
+sp = lambda h: Spacer(1, h*mm)
+P  = lambda t, st=BD: Paragraph(t, st)
+
+# ── UNICODE FIXER ─────────────────────────────────────────────────────────────
+_SUP = {'\u2070':'0','\u00b9':'1','\u00b2':'2','\u00b3':'3','\u2074':'4',
+        '\u2075':'5','\u2076':'6','\u2077':'7','\u2078':'8','\u2079':'9',
+        '\u207b':'-','\u207a':'+'}
+_SUB = {'\u2080':'0','\u2081':'1','\u2082':'2','\u2083':'3','\u2084':'4'}
+def _fix(text):
+    import re as _re
+    sc = ''.join(_SUP.keys()); bc = ''.join(_SUB.keys())
+    def rs(m): return '<super>'+''.join(_SUP.get(c,c) for c in m.group())+'</super>'
+    def rb(m): return '<sub>'  +''.join(_SUB.get(c,c) for c in m.group())+'</sub>'
+    t = _re.sub(f'[{_re.escape(sc)}]+', rs, text)
+    t = _re.sub(f'[{_re.escape(bc)}]+', rb, t)
+    return t
+
+# ─── BUILDERS ─────────────────────────────────────────────────────────────────
+
+def banner(code, title, sub=''):
+    data = [[
+        P(f'<font color="white"><b>{code}</b></font>',
+          S('bu', fontName=FNB, fontSize=26, leading=30, textColor=WHITE, alignment=TA_CENTER)),
+        [P(f'<font color="white"><b>{title}</b></font>',
+           S('bt', fontName=FNB, fontSize=16, leading=21, textColor=WHITE)),
+         P(f'<font color="#5EEAD4">{sub}</font>' if sub else '',
+           S('bs', fontName=FNI, fontSize=9.5, leading=12, textColor=TEAL_M)),
+         sp(1),
+         P('<font color="#CCFBF1">Classes 6 • 7 • 8  |  TET Paper II Science</font>',
+           S('bi', fontName=FN, fontSize=8.5, leading=11, textColor=TEAL_L))]
+    ]]
+    t = Table(data, colWidths=[28*mm, UW-28*mm])
+    t.setStyle(TableStyle([
+        ('BACKGROUND',(0,0),(-1,-1),TEAL_D),('VALIGN',(0,0),(-1,-1),'MIDDLE'),
+        ('LEFTPADDING',(0,0),(0,0),6*mm),('LEFTPADDING',(1,0),(1,0),4*mm),
+        ('RIGHTPADDING',(0,0),(-1,-1),4*mm),
+        ('TOPPADDING',(0,0),(-1,-1),5*mm),('BOTTOMPADDING',(0,0),(-1,-1),5*mm),
+    ]))
+    return t
+
+def sec(title, bg=TEAL):
+    t = Table([[P(title, SC)]], colWidths=[UW])
+    t.setStyle(TableStyle([
+        ('BACKGROUND',(0,0),(-1,-1),bg),
+        ('LEFTPADDING',(0,0),(-1,-1),5*mm),('RIGHTPADDING',(0,0),(-1,-1),3*mm),
+        ('TOPPADDING',(0,0),(-1,-1),2.5*mm),('BOTTOMPADDING',(0,0),(-1,-1),2.5*mm),
+    ]))
+    return t
+
+def sub_h(title, bg=colors.HexColor('#0D9488')):
+    t = Table([[P(title, S('sh', fontName=FNB, fontSize=FS_SMALL, leading=13, textColor=WHITE))]],
+              colWidths=[UW])
+    t.setStyle(TableStyle([
+        ('BACKGROUND',(0,0),(-1,-1),bg),
+        ('LEFTPADDING',(0,0),(-1,-1),4*mm),
+        ('TOPPADDING',(0,0),(-1,-1),2*mm),('BOTTOMPADDING',(0,0),(-1,-1),2*mm),
+    ]))
+    return t
+
+def grid(hdrs, rows, ws=None, hbg=TEAL, alt=GRAY_L):
+    if not ws:
+        ws = [UW / len(hdrs)] * len(hdrs)
+    else:
+        # Keep table layouts stable after migrating to the locked 170mm usable width.
+        total = sum(ws)
+        if total and abs(total - UW) > 1e-6:
+            ws = [w * (UW / total) for w in ws]
+    data = [[P(h, HWC) for h in hdrs]]
+    for row in rows:
+        data.append([P(_fix(c), CE) if isinstance(c,str) else c for c in row])
+    t = Table(data, colWidths=ws, repeatRows=1)
+    t.setStyle(TableStyle([
+        ('BACKGROUND',(0,0),(-1,0),hbg),('GRID',(0,0),(-1,-1),0.4,GRAY_M),
+        ('VALIGN',(0,0),(-1,-1),'MIDDLE'),
+        ('LEFTPADDING',(0,0),(-1,-1),2.5*mm),('RIGHTPADDING',(0,0),(-1,-1),2.5*mm),
+        ('TOPPADDING',(0,0),(-1,-1),2*mm),('BOTTOMPADDING',(0,0),(-1,-1),2*mm),
+        ('ROWBACKGROUNDS',(0,1),(-1,-1),[alt,WHITE]),
+    ]))
+    return t
+
+def one_liners(items, bg_bullet=TEAL, key_w=55*mm):
+    """Compact one-liner rows — plain string: bullet row | tuple: KV row."""
+    result_tables = []
+    cur_b = []; cur_kv = []; prev = None
+
+    def flush_b():
+        if not cur_b: return
+        t = Table(cur_b, colWidths=[6*mm, UW-6*mm])
+        t.setStyle(TableStyle([
+            ('VALIGN',(0,0),(-1,-1),'TOP'),
+            ('LEFTPADDING',(0,0),(-1,-1),2*mm),('RIGHTPADDING',(0,0),(-1,-1),2.5*mm),
+            ('TOPPADDING',(0,0),(-1,-1),1.5*mm),('BOTTOMPADDING',(0,0),(-1,-1),1.5*mm),
+            ('LINEBELOW',(0,0),(-1,-2),0.25,GRAY_M),
+        ]))
+        result_tables.append(t)
+
+    def flush_kv():
+        if not cur_kv: return
+        t = Table(cur_kv, colWidths=[key_w, UW-key_w])
+        t.setStyle(TableStyle([
+            ('BACKGROUND',(0,0),(0,-1),TEAL),
+            ('BACKGROUND',(1,0),(1,-1),TEAL_L),
+            ('BOX',(0,0),(-1,-1),0.6,TEAL),
+            ('LINEAFTER',(0,0),(0,-1),0.6,TEAL),
+            ('LINEBELOW',(0,0),(-1,-2),0.3,GRAY_M),
+            ('LEFTPADDING',(0,0),(-1,-1),3*mm),('RIGHTPADDING',(0,0),(-1,-1),3*mm),
+            ('TOPPADDING',(0,0),(-1,-1),2*mm),('BOTTOMPADDING',(0,0),(-1,-1),2*mm),
+            ('VALIGN',(0,0),(-1,-1),'MIDDLE'),
+        ]))
+        result_tables.append(t)
+
+    for item in items:
+        if isinstance(item, tuple):
+            if prev == 'b': flush_b(); cur_b = []
+            key, val = item
+            cur_kv.append([
+                P(f'<b>{key}</b>', S('ok', fontName=FNB, fontSize=FS_CELL, leading=14, textColor=WHITE)),
+                P(_fix(val),       S('ov', fontName=FN,  fontSize=FS_CELL, leading=14, textColor=SLATE)),
+            ])
+            prev = 'kv'
+        else:
+            if prev == 'kv': flush_kv(); cur_kv = []
+            cur_b.append([
+                P('▶', S('ob', fontName=FNB, fontSize=FS_CELL, leading=14, textColor=bg_bullet, alignment=TA_CENTER)),
+                P(_fix(item), S('oi', fontName=FN, fontSize=FS_CELL, leading=14, textColor=SLATE)),
+            ])
+            prev = 'b'
+
+    flush_b(); flush_kv()
+
+    if len(result_tables) == 1: return result_tables[0]
+    wrap = Table([[t] for t in result_tables], colWidths=[UW])
+    wrap.setStyle(TableStyle([
+        ('LEFTPADDING',(0,0),(-1,-1),0),('RIGHTPADDING',(0,0),(-1,-1),0),
+        ('TOPPADDING',(0,0),(-1,-1),0),('BOTTOMPADDING',(0,0),(-1,-1),1.5*mm),
+        ('VALIGN',(0,0),(-1,-1),'TOP'),
+    ]))
+    return wrap
+
+def kv_list(items, bg_L=TEAL, bg_R=TEAL_L, w_L=50*mm):
+    rows = []
+    for key, val in items:
+        rows.append([
+            P(key, S('kl', fontName=FNB, fontSize=FS_CELL, leading=14, textColor=WHITE)),
+            P(_fix(val), S('kr', fontName=FN, fontSize=FS_CELL, leading=14, textColor=SLATE)),
+        ])
+    t = Table(rows, colWidths=[w_L, UW-w_L])
+    t.setStyle(TableStyle([
+        ('BACKGROUND',(0,0),(0,-1),bg_L),('BACKGROUND',(1,0),(1,-1),bg_R),
+        ('BOX',(0,0),(-1,-1),0.6,bg_L),('LINEAFTER',(0,0),(0,-1),0.6,bg_L),
+        ('LINEBELOW',(0,0),(-1,-2),0.3,GRAY_M),
+        ('LEFTPADDING',(0,0),(-1,-1),3*mm),('RIGHTPADDING',(0,0),(-1,-1),3*mm),
+        ('TOPPADDING',(0,0),(-1,-1),2*mm),('BOTTOMPADDING',(0,0),(-1,-1),2*mm),
+        ('VALIGN',(0,0),(-1,-1),'MIDDLE'),
+    ]))
+    return t
+
+def fstrip(label, formula, note='', bg=BLUE_D):
+    note_t = f'  <font size="8.5" color="#94A3B8">({_fix(note)})</font>' if note else ''
+    t = Table([[
+        P(label, S('fl', fontName=FNB, fontSize=FS_SMALL, leading=13, textColor=TEAL_M)),
+        P(f'<b><font color="white">{_fix(formula)}</font></b>{note_t}',
+          S('ff', fontName=FNB, fontSize=FS_FORM, leading=16, textColor=WHITE, alignment=TA_CENTER)),
+    ]], colWidths=[48*mm, UW-48*mm])
+    t.setStyle(TableStyle([
+        ('BACKGROUND',(0,0),(-1,-1),bg),
+        ('LEFTPADDING',(0,0),(-1,-1),3*mm),('RIGHTPADDING',(0,0),(-1,-1),3*mm),
+        ('TOPPADDING',(0,0),(-1,-1),3*mm),('BOTTOMPADDING',(0,0),(-1,-1),3*mm),
+        ('VALIGN',(0,0),(-1,-1),'MIDDLE'),
+    ]))
+    return t
+
+def pill(icon, text, bg=GREEN_L, fg=GREEN_D):
+    t = Table([[P(f'{icon}  {_fix(text)}',
+                  S('pi', fontName=FNB, fontSize=FS_SMALL, leading=13, textColor=fg))]],
+              colWidths=[UW])
+    t.setStyle(TableStyle([
+        ('BACKGROUND',(0,0),(-1,-1),bg),
+        ('LEFTPADDING',(0,0),(-1,-1),4*mm),
+        ('TOPPADDING',(0,0),(-1,-1),2*mm),('BOTTOMPADDING',(0,0),(-1,-1),2*mm),
+        ('BOX',(0,0),(-1,-1),0.6,fg),
+    ]))
+    return t
+
+def note_box(title, items, bg_h=AMBER, bg_b=AMBER_L, icon='📌'):
+    rows = [[P(f'{icon}  {title}',
+               S('nt', fontName=FNB, fontSize=FS_SMALL, leading=13, textColor=WHITE))]]
+    for item in items:
+        rows.append([P(f'↳  {_fix(item)}', S('ni', fontName=FN, fontSize=FS_CELL, leading=14, textColor=SLATE))])
+    t = Table(rows, colWidths=[UW])
+    t.setStyle(TableStyle([
+        ('BACKGROUND',(0,0),(0,0),bg_h),('BACKGROUND',(0,1),(-1,-1),bg_b),
+        ('BOX',(0,0),(-1,-1),1,bg_h),('LINEBELOW',(0,0),(0,0),1,bg_h),
+        ('LEFTPADDING',(0,0),(-1,-1),4*mm),('RIGHTPADDING',(0,0),(-1,-1),3*mm),
+        ('TOPPADDING',(0,0),(-1,-1),2*mm),('BOTTOMPADDING',(0,0),(-1,-1),2*mm),
+    ]))
+    return t
+
+def dyk(items, hbg=PURPLE_D, bg=PURPLE_L):
+    rows = [[P('💡 Did You Know?',
+               S('dk', fontName=FNB, fontSize=FS_SMALL, leading=13, textColor=WHITE))]]
+    for item in items:
+        rows.append([P(f'◆  {_fix(item)}', S('di', fontName=FN, fontSize=FS_CELL, leading=14, textColor=SLATE))])
+    t = Table(rows, colWidths=[UW])
+    t.setStyle(TableStyle([
+        ('BACKGROUND',(0,0),(0,0),hbg),('BACKGROUND',(0,1),(-1,-1),bg),
+        ('BOX',(0,0),(-1,-1),1,hbg),('LINEBELOW',(0,0),(0,0),1,hbg),
+        ('LEFTPADDING',(0,0),(-1,-1),4*mm),('RIGHTPADDING',(0,0),(-1,-1),3*mm),
+        ('TOPPADDING',(0,0),(-1,-1),2*mm),('BOTTOMPADDING',(0,0),(-1,-1),2*mm),
+    ]))
+    return t
+
+def two_col(L, R):
+    def mk(items):
+        return [P(_fix(x)) if isinstance(x,str) else x for x in items]
+    t = Table([[mk(L), mk(R)]], colWidths=[CW, CW])
+    t.setStyle(TableStyle([
+        ('VALIGN',(0,0),(-1,-1),'TOP'),
+        ('LEFTPADDING',(0,0),(-1,-1),0),('RIGHTPADDING',(0,0),(-1,-1),0),
+        ('TOPPADDING',(0,0),(-1,-1),0),('BOTTOMPADDING',(0,0),(-1,-1),0),
+        ('INNERGRID',(0,0),(-1,-1),0,WHITE),('BOX',(0,0),(-1,-1),0,WHITE),
+    ]))
+    return t
+
+def prob(num, q, given, soln, ans):
+    rows = [
+        [P(f'Problem {num}', S('pt', fontName=FNB, fontSize=FS_CELL, textColor=BLUE_D)), P(q, BD)],
+        [P('Given', CEB), P(_fix(given), CE)],
+        [P('Solution', CEB), P(_fix(soln), CE)],
+        [P('Answer', S('pa', fontName=FNB, fontSize=FS_CELL, textColor=GREEN_D)),
+         P(f'<b><font color="#14532D">{_fix(ans)}</font></b>', CE)],
+    ]
+    t = Table(rows, colWidths=[24*mm, UW-24*mm])
+    t.setStyle(TableStyle([
+        ('BACKGROUND',(0,0),(-1,0),BLUE_L),('BACKGROUND',(0,-1),(-1,-1),GREEN_L),
+        ('BOX',(0,0),(-1,-1),1,BLUE_D),('INNERGRID',(0,0),(-1,-1),0.3,GRAY_M),
+        ('LEFTPADDING',(0,0),(-1,-1),3*mm),('RIGHTPADDING',(0,0),(-1,-1),2.5*mm),
+        ('TOPPADDING',(0,0),(-1,-1),2*mm),('BOTTOMPADDING',(0,0),(-1,-1),2*mm),
+        ('VALIGN',(0,0),(-1,-1),'TOP'),
+    ]))
+    return t
+
+def rapid_nums(rows):
+    return grid(['Quantity / Concept','Formula / Value','Unit / Note'], rows,
+                ws=[60*mm,74*mm,40*mm], hbg=TEAL_D)
+
+def rapid_ppl(rows):
+    return grid(['Scientist / Event','Contribution / Fact','Year / Class'], rows,
+                ws=[50*mm,86*mm,38*mm], hbg=PURPLE_D)
+
+def gloss_2col(terms):
+    rows = []
+    for i in range(0, len(terms), 2):
+        L = P(f'<b>{terms[i][0]}</b> — {terms[i][1]}', MIN)
+        R = P(f'<b>{terms[i+1][0]}</b> — {terms[i+1][1]}', MIN) if i+1<len(terms) else P('',MIN)
+        rows.append([L, R])
+    t = Table(rows, colWidths=[CW, CW])
+    t.setStyle(TableStyle([
+        ('GRID',(0,0),(-1,-1),0.3,GRAY_M),('ROWBACKGROUNDS',(0,0),(-1,-1),[GRAY_L,WHITE]),
+        ('VALIGN',(0,0),(-1,-1),'TOP'),
+        ('LEFTPADDING',(0,0),(-1,-1),3*mm),('RIGHTPADDING',(0,0),(-1,-1),3*mm),
+        ('TOPPADDING',(0,0),(-1,-1),2*mm),('BOTTOMPADDING',(0,0),(-1,-1),2*mm),
+    ]))
+    return t
 
 
-# ─── CHAPTER METADATA ────────────────────────────────────────────────────────
-CHAPTER_ID    = 'P1'
-CHAPTER_TITLE = 'MEASUREMENT'
-SUBTITLE      = 'Physics  ·  Class 6 + 7 + 8'
-
-
-# ─── CONTENT ─────────────────────────────────────────────────────────────────
-
+# ═══════════════════════════════════════════════════════════════════════════════
 def content():
-    """Return list of ReportLab flowables for this chapter."""
     s = []
 
-    # ── BANNER ────────────────────────────────────────────────────────────────
-    s += [chapter_banner(CHAPTER_ID, CHAPTER_TITLE, SUBTITLE), sp(1.5)]
+    # BANNER
+    s += [banner('P1','Measurement','Physics | Classes 6, 7 & 8 Combined'), sp(4)]
 
-    # ─────────────────────────────────────────────────────────────────────────
-    # 1. BASICS
-    # ─────────────────────────────────────────────────────────────────────────
-    s += [section('1', 'Measurement — Basics')]
-    s += [two_col_body(
-        '<b>Measurement</b>: comparing an unknown quantity with a known standard. '
-        'Every measurement = <b>numerical value (magnitude) + unit</b>. '
-        'Eg: pencil 15 cm → "15" = magnitude, "cm" = unit.',
-        '<b>Three things needed:</b> (1) An instrument, (2) A standard quantity, '
-        '(3) An acceptable unit.'
-    )]
+    # ══════════════════════════════════════════════════════════════════════════
+    # A  MEASUREMENT — Definition & Need
+    # ══════════════════════════════════════════════════════════════════════════
+    s += [sec('A  ·  MEASUREMENT — Definition & Need'), sp(2)]
 
-    # ─────────────────────────────────────────────────────────────────────────
-    # 2. PHYSICAL QUANTITIES
-    # ─────────────────────────────────────────────────────────────────────────
-    s += [section('2', 'Types of Physical Quantities')]
+    s += [kv_list([
+        ('Measurement',         'Comparison of an unknown quantity with a known standard quantity — result has TWO parts: a number and a unit'),
+        ('Need for Measurement','For uniformity and accuracy across countries, scientists adopted a common system (SI System)'),
+        ('Physical Quantity',   'Any quantity that can be measured — e.g., length, mass, time, temperature, current'),
+        ('Fundamental Quantity','Independent physical quantity that cannot be derived from others — 7 in SI system'),
+        ('Derived Quantity',    'Quantity derived from fundamental quantities — e.g., area = length × length; speed = length/time'),
+        ('Unit',                'Known standard used for comparison in measurement — e.g., metre, kilogram, second'),
+    ], bg_L=TEAL, bg_R=TEAL_L), sp(3)]
 
-    s += [subsec('2.1', 'Fundamental (Base) Quantities — 7 in SI')]
-    s += [p('Cannot be expressed in terms of any other quantity.')]
-    s += [dense_table(
-        header=['#', 'Quantity', 'SI Unit', 'Symbol', 'Instrument'],
-        rows=[
-            ['1', 'Length',             'metre',    'm',   'Metre scale, Measuring tape'],
-            ['2', 'Mass',               'kilogram', 'kg',  'Beam balance, Electronic balance'],
-            ['3', 'Time',               'second',   's',   'Clock, Stopwatch'],
-            ['4', 'Temperature',        'kelvin',   'K',   'Thermometer'],
-            ['5', 'Electric current',   'ampere',   'A',   'Ammeter'],
-            ['6', 'Amount of substance','mole',     'mol', '—'],
-            ['7', 'Luminous intensity', 'candela',  'cd',  'Photometer (Luminous intensity meter)'],
+    # ══════════════════════════════════════════════════════════════════════════
+    # B  UNIT SYSTEMS
+    # ══════════════════════════════════════════════════════════════════════════
+    s += [sec('B  ·  UNIT SYSTEMS — FPS, CGS, MKS & SI'), sp(2)]
+
+    s += [grid(
+        ['System','Full Form','Length','Mass','Time','Type / Notes'],
+        [
+            ['FPS','Foot-Pound-Second','Foot (ft)','Pound (lb)','Second (s)','British system — NOT a metric system'],
+            ['CGS','Centimetre-Gram-Second','Centimetre (cm)','Gram (g)','Second (s)','Metric system'],
+            ['MKS','Metre-Kilogram-Second','Metre (m)','Kilogram (kg)','Second (s)','Metric system — precursor to SI'],
+            ['SI','Systeme International\n(International System)','Metre (m)','Kilogram (kg)','Second (s)','Metric — universally accepted; adopted in 1960 at Paris'],
         ],
-        col_widths=[5*mm, 28*mm, 18*mm, 14*mm, USABLE_W - 65*mm]
-    )]
-    s += [fact('Memory aid: <b>L M T T E A L</b> → '
-               '"<b>L</b>ittle <b>M</b>en <b>T</b>each <b>T</b>he '
-               '<b>E</b>arly <b>A</b>fternoon <b>L</b>esson"'), sp()]
+        ws=[14*mm,46*mm,26*mm,24*mm,18*mm,46*mm]
+    ), sp(2)]
 
-    s += [subsec('2.2', 'Supplementary / Derived Angle Units (2)')]
-    s += [p('Until <b>1995</b>: classified as supplementary. '
-            '<b>From 1995</b>: shifted to derived quantities.')]
-    s += [dense_table(
-        header=['Quantity', 'Unit', 'Symbol', 'Definition'],
-        rows=[
-            ['Plane angle', 'radian',    'rad',
-             'Angle at intersection of 2 lines/planes (2D). '
-             'Arc-length = radius. π rad = 180°.'],
-            ['Solid angle', 'steradian', 'sr',
-             'Angle at vertex of cone / ≥3 planes (3D). '
-             'Surface area = r². 4π sr = full sphere.'],
-        ],
-        col_widths=[USABLE_W*0.18, USABLE_W*0.16, USABLE_W*0.12, USABLE_W*0.54]
-    )]
-    s += [fact('<b>π rad = 180°</b>  |  <b>1 rad ≈ 57.3°</b>  |  '
-               '<b>Full circle = 2π rad</b>  |  <b>Full sphere = 4π sr</b>'), sp()]
+    s += [pill('⚠', 'FPS = British system (NOT metric). CGS, MKS, SI = metric systems. TET exams test this difference!', ORANGE_L, ORANGE)]
+    s += [sp(2)]
 
-    s += [subsec('2.3', 'Derived Quantities')]
-    s += [p('Obtained by multiplying / dividing fundamental quantities.')]
-    s += [dense_table(
-        header=['Derived Quantity', 'Formula', 'SI Unit', 'Symbol'],
-        rows=[
-            ['Area',           'Length × Breadth',     'square metre',     'm²'],
-            ['Volume',         'L × B × H',            'cubic metre',      'm³'],
-            ['Speed',          'Distance ÷ Time',      'metre/second',     'm/s'],
-            ['Velocity',       'Displacement ÷ Time',  'metre/second',     'm/s (vector)'],
-            ['Acceleration',   'Velocity ÷ Time',      'metre/sec²',       'm s⁻²'],
-            ['Density',        'Mass ÷ Volume',        'kilogram/metre³',  'kg/m³'],
-            ['Force',          'Mass × Acceleration',  'newton',           'N = kg·m/s²'],
-            ['Pressure',       'Force ÷ Area',         'pascal',           'Pa = N/m²'],
-            ['Work / Energy',  'Force × Distance',     'joule',            'J = N·m'],
-            ['Power',          'Work ÷ Time',          'watt',             'W = J/s'],
-            ['Electric charge','Current × Time',       'coulomb',          'C = A·s'],
-            ['Frequency',      '1 ÷ Time period',      'hertz',            'Hz = 1/s'],
-        ],
-        col_widths=[USABLE_W*0.22, USABLE_W*0.28, USABLE_W*0.27, USABLE_W*0.23]
-    ), sp()]
-
-    # ─────────────────────────────────────────────────────────────────────────
-    # 3. UNIT SYSTEMS
-    # ─────────────────────────────────────────────────────────────────────────
-    s += [section('3', 'Unit Systems — Historical & Current')]
-    s += [dense_table(
-        header=['System', 'Length', 'Mass', 'Time', 'Notes'],
-        rows=[
-            ['FPS', 'Foot',       'Pound',    'Second', 'British system. Non-metric.'],
-            ['CGS', 'Centimetre', 'Gram',     'Second', 'Metric. Used in physics.'],
-            ['MKS', 'Metre',      'Kilogram', 'Second', 'Metric. Predecessor of SI.'],
-            ['SI',  'Metre',      'Kilogram', 'Second', 'Standard since 1960. Modern metric.'],
-        ],
-        col_widths=[15*mm, 22*mm, 22*mm, 18*mm, USABLE_W - 77*mm]
-    )]
-    s += [fact('<b>SI = Système International d\'Unités</b> (French). Adopted at '
-               '<b>11th General Conference on Weights and Measures, 1960, Paris, France</b>.')]
-    s += [fact('<b>Metric system</b> created by the <b>French</b> in <b>1790</b>.')]
-    s += [fact('<b>Standard metre rod</b>: kept at <b>Bureau of Weights and Measures, '
-               'Sèvres, Paris</b> (alloy of <b>platinum and iridium</b>). Copy at '
-               '<b>National Physical Laboratory, Delhi</b>.')]
-    s += [fact('<b>Standard kilogram</b>: Pt-Ir alloy bar at International Bureau, '
-               '<b>Sèvres, France since 1889</b>.')]
-    s += [fact('<b>Ruler / Scale</b>: invented by <b>William Bedwell</b> in the '
-               '<b>16th century</b>.')]
-    s += [p('<b>NASA Mars Climate Orbiter crash:</b> launched Dec 1998; lost on '
-            '<b>Sep 23, 1999</b>. One team used FPS, another MKS — unit mismatch '
-            'caused loss of <b>$125 million</b>.'), sp()]
-
-    # ─────────────────────────────────────────────────────────────────────────
-    # 4. SI PREFIXES
-    # ─────────────────────────────────────────────────────────────────────────
-    s += [section('4', 'SI Prefixes (Multiples & Sub-multiples)')]
-    s += [dense_table(
-        header=['Prefix', 'Symbol', 'Multiplier', 'Prefix', 'Symbol', 'Multiplier'],
-        rows=[
-            ['Tera',  'T',  '10¹²', 'Deci',  'd', '10⁻¹'],
-            ['Giga',  'G',  '10⁹',  'Centi', 'c', '10⁻²'],
-            ['Mega',  'M',  '10⁶',  'Milli', 'm', '10⁻³'],
-            ['Kilo',  'k',  '10³',  'Micro', 'µ', '10⁻⁶'],
-            ['Hecto', 'h',  '10²',  'Nano',  'n', '10⁻⁹'],
-            ['Deca',  'da', '10¹',  'Pico',  'p', '10⁻¹²'],
-        ],
-        col_widths=[USABLE_W/6]*6, font_size=7.8
-    )]
-    s += [subsec('4.1', 'Standard Conversions')]
-    s += [dense_table(
-        header=['Length', 'Mass', 'Volume / Capacity'],
-        rows=[
-            ['1 km = 1000 m',        '1 tonne = 1000 kg', '1 m³ = 1000 L'],
-            ['1 m = 100 cm',         '1 kg = 1000 g',     '1 L = 1000 mL = 1000 cc'],
-            ['1 cm = 10 mm',         '1 g = 1000 mg',     '1 cc = 1 cm³'],
-            ['1 m = 1000 mm',        '1 quintal = 100 kg','1 gallon = 3785 mL'],
-            ['1 light year = 9.46 × 10¹⁵ m', '1 carat = 200 mg', '1 ounce = 30 mL'],
-        ],
-        col_widths=[USABLE_W/3]*3
-    ), sp()]
-
-    # ─────────────────────────────────────────────────────────────────────────
-    # 5. LENGTH
-    # ─────────────────────────────────────────────────────────────────────────
-    s += [section('5', 'Length')]
-    s += [p('<b>Length</b> = distance between two points. SI unit: <b>metre (m)</b>.')]
-    s += [dense_table(
-        header=['Instrument', 'Use / Range'],
-        rows=[
-            ['Metre scale / Ruler',          'Standard lengths in cm and mm'],
-            ['Measuring tape',               'Longer lengths (height, room, field)'],
-            ['String / Thread',              'Curved or irregular lines'],
-            ['Divider',                      'Curved line — segment-by-segment method'],
-            ['Vernier calipers',             'Precision measurement; least count 0.01 cm'],
-            ['Screw gauge / Micrometer',     'Very small lengths; least count 0.001 cm'],
-            ['Odometer',                     'Distance travelled by automobile'],
-        ],
-        col_widths=[USABLE_W*0.40, USABLE_W*0.60]
-    )]
-    s += [subsec('5.1', 'Common Errors')]
-    s += [dense_table(
-        header=['Error', 'Cause', 'Avoidance'],
-        rows=[
-            ['Zero error',     'Object\'s edge not at "0" mark.', 'Start from the 0 mark.'],
-            ['Parallax error', 'Eye not vertically above the reading point.',
-             'Place eye perpendicular to scale.'],
-            ['Worn-edge error','Damaged scale ends.', 'Use un-damaged middle portion.'],
-        ],
-        col_widths=[USABLE_W*0.18, USABLE_W*0.42, USABLE_W*0.40]
-    ), sp()]
-
-    # ─────────────────────────────────────────────────────────────────────────
-    # 6. MASS & WEIGHT
-    # ─────────────────────────────────────────────────────────────────────────
-    s += [section('6', 'Mass and Weight')]
-    s += [dense_table(
-        header=['Property', 'Mass', 'Weight'],
-        rows=[
-            ['Definition',  'Quantity of matter',          'Gravitational force on mass'],
-            ['Type',        'Scalar & fundamental',        'Vector & derived'],
-            ['SI Unit',     'kilogram (kg)',                'newton (N)'],
-            ['Variation',   '<b>Constant everywhere</b>',  'Changes with gravity'],
-            ['On Moon',     'Same as Earth',               '<b>1/6 of Earth weight</b>'],
-            ['In space',    'Same',                        '<b>Zero</b> (weightlessness)'],
-            ['Formula',     '—',                           'W = m × g  (g = 9.8 m/s²)'],
-            ['Instrument',  'Beam / electronic balance',   'Spring balance'],
-        ],
-        col_widths=[USABLE_W*0.20, USABLE_W*0.36, USABLE_W*0.44]
-    ), sp()]
-
-    # ─────────────────────────────────────────────────────────────────────────
-    # 7. TIME
-    # ─────────────────────────────────────────────────────────────────────────
-    s += [section('7', 'Time and Clocks')]
-    s += [p('<b>Time</b> = duration between two events. SI unit: <b>second (s)</b>. '
-            '1 hr = 3600 s. 1 day = 86,400 s. '
-            '1 year (non-leap) = <b>3.153 × 10⁷ s</b>.')]
-    s += [dense_table(
-        header=['Ancient Device', 'Working Principle'],
-        rows=[
-            ['Sundial',               'Shadow of a vertical stick (gnomon) shows time.'],
-            ['Sand clock (hourglass)','Sand falls through small hole at constant rate.'],
-            ['Water clock (Clepsydra)','Steady water flow marks time intervals.'],
-            ['Pulse counting',         '~72 beats/min in adults.'],
-        ],
-        col_widths=[USABLE_W*0.28, USABLE_W*0.72]
-    )]
-    s += [subsec('7.1', 'Clocks by Display Type')]
-    s += [p('<b>(1) Analog clock</b> — 3 hands: hour (short thick), minute (long thin, '
-            '1 rotation/60 min), second (thinnest, 1 rotation/60 s = 60 rotations/hr). '
-            'Driven mechanically or electronically.  '
-            '<b>(2) Digital clock</b> — time in numerals; often called "electronic clock". '
-            'Shows date, day, month, year, temp.')]
-    s += [subsec('7.2', 'Clocks by Working Mechanism')]
-    s += [dense_table(
-        header=['Type', 'Working Principle', 'Accuracy', 'Used In'],
-        rows=[
-            ['Pendulum', 'Oscillation of a pendulum',
-             'Low', 'Old wall clocks'],
-            ['Quartz', 'Vibration of <b>quartz crystal (SiO₂)</b>; freq ~32,768 Hz',
-             '<b>1 s in 10⁹ s</b>', 'Watches, computers, GPS'],
-            ['Atomic', 'Periodic vibrations of <b>caesium-133 atom</b>',
-             '<b>1 s in 10¹³ s</b>', 'GPS, GLONASS, Intl. Time Distribution'],
-        ],
-        col_widths=[USABLE_W*0.16, USABLE_W*0.42, USABLE_W*0.16, USABLE_W*0.26]
-    )]
-    s += [fact('<b>GMT</b> = Greenwich Mean Time — Royal Observatory, Greenwich, London '
-               '(longitude 0°). Earth: 24 time zones, each <b>15° wide</b>, '
-               'adjacent zones differ by <b>1 hour</b>.')]
-    s += [fact('<b>IST = GMT + 5:30 hours</b>. Based on <b>82.5°E longitude</b> passing '
-               'through <b>Mirzapur, Uttar Pradesh</b>.'), sp()]
-
-    # ─────────────────────────────────────────────────────────────────────────
-    # 8. TEMPERATURE
-    # ─────────────────────────────────────────────────────────────────────────
-    s += [section('8', 'Temperature')]
-    s += [p('<b>Temperature</b> = degree of hotness/coldness = measure of '
-            '<b>average kinetic energy of particles</b>. SI unit: <b>kelvin (K)</b>. '
-            'Instrument: <b>Thermometer</b>.')]
-    s += [dense_table(
-        header=['Scale', 'Symbol', 'Freezing of water', 'Boiling of water'],
-        rows=[
-            ['Celsius',    '°C', '0 °C',         '100 °C'],
-            ['Fahrenheit', '°F', '32 °F',         '212 °F'],
-            ['Kelvin',     'K',  '273 K (273.15)','373 K (373.15)'],
-            ['Rankine',    '°R', '491.67 °R',     '671.67 °R'],
-        ],
-        col_widths=[USABLE_W*0.22, USABLE_W*0.16, USABLE_W*0.31, USABLE_W*0.31]
-    )]
-    s += [fact('<b>Conversions:</b> K = °C + 273  |  '
-               '°C = (°F − 32) × 5/9  |  °F = (°C × 9/5) + 32')]
-    s += [fact('<b>Absolute zero</b> = 0 K = −273.15°C. '
-               '<b>Normal body temp</b> = 37°C = 98.6°F = 310 K.'), sp()]
-
-    # ─────────────────────────────────────────────────────────────────────────
-    # 9. ELECTRIC CURRENT
-    # ─────────────────────────────────────────────────────────────────────────
-    s += [section('9', 'Electric Current')]
-    s += [p('<b>Electric current (I)</b> = flow of electric charges per unit time. '
-            'SI unit: <b>ampere (A)</b>. Instrument: <b>Ammeter</b>.')]
-    s += [fact('<b>I = Q / t</b>  (Current = Charge ÷ Time). Charge unit = <b>coulomb (C)</b>. '
-               '<b>1 A = 1 coulomb per second</b>.'), sp()]
-
-    # ─────────────────────────────────────────────────────────────────────────
-    # 10. AMOUNT OF SUBSTANCE
-    # ─────────────────────────────────────────────────────────────────────────
-    s += [section('10', 'Amount of Substance')]
-    s += [p('Number of entities (atoms, molecules, ions, electrons, protons). '
-            'SI unit: <b>mole (mol)</b>.')]
-    s += [fact('<b>1 mole = 6.023 × 10²³ entities</b> → called '
-               '<b>Avogadro Number (N<sub>A</sub>)</b>.'), sp()]
-
-    # ─────────────────────────────────────────────────────────────────────────
-    # 11. LUMINOUS INTENSITY
-    # ─────────────────────────────────────────────────────────────────────────
-    s += [section('11', 'Luminous Intensity')]
-    s += [p('Power of light emitted per unit solid angle in a given direction. '
-            'SI unit: <b>candela (cd)</b>. Instrument: <b>Photometer</b>.')]
-    s += [fact('1 common <b>wax candle ≈ 1 candela</b>. '
-               '<b>Luminous flux unit = lumen (lm)</b>. '
-               '<b>1 lm = 1 cd × 1 sr</b>.'), sp()]
-
-    # ─────────────────────────────────────────────────────────────────────────
-    # 12. AREA, VOLUME, DENSITY
-    # ─────────────────────────────────────────────────────────────────────────
-    s += [section('12', 'Area, Volume and Density')]
-
-    s += [subsec('12.1', 'Area Formulas (SI unit: m²)')]
-    s += [dense_table(
-        header=['Shape', 'Formula', 'Shape', 'Formula'],
-        rows=[
-            ['Square',       'A = a²',              'Triangle',    'A = ½ × b × h'],
-            ['Rectangle',    'A = l × b',           'Circle',      'A = π r²  (π = 22/7)'],
-            ['Parallelogram','A = b × h',            'Trapezium',   'A = ½(a+b) × h'],
-        ],
-        col_widths=[USABLE_W*0.20, USABLE_W*0.30, USABLE_W*0.20, USABLE_W*0.30]
-    )]
-    s += [fact('<b>Irregular shapes (graph sheet):</b> M = full, N = more-than-half, '
-               'P = exactly half, Q = less-than-half → '
-               '<b>Area ≈ M + ¾N + ½P + ¼Q</b> cm²')]
-
-    s += [subsec('12.2', 'Volume Formulas (SI unit: m³)')]
-    s += [dense_table(
-        header=['Solid', 'Formula', 'Solid', 'Formula'],
-        rows=[
-            ['Cube',   'V = a³',           'Sphere',     'V = (4/3) π r³'],
-            ['Cuboid', 'V = l × b × h',    'Cylinder',   'V = π r² h'],
-            ['Cone',   'V = (1/3) π r² h', 'Hemisphere', 'V = (2/3) π r³'],
-        ],
-        col_widths=[USABLE_W*0.18, USABLE_W*0.32, USABLE_W*0.18, USABLE_W*0.32]
-    )]
-    s += [p('<b>Irregular solid (stone) — displacement method:</b> V₁ = water level '
-            'before, V₂ = after immersion → <b>Volume = V₂ − V₁</b>. '
-            '(Archimedes\' principle.)')]
-
-    s += [subsec('12.3', 'Density')]
-    s += [fact('<b>D = M / V</b>  |  <b>M = D × V</b>  |  <b>V = M / D</b>. '
-               'SI unit: <b>kg/m³</b>. CGS: g/cm³.  <b>1 g/cm³ = 1000 kg/m³</b>.')]
-    s += [fact('<b>Float / Sink:</b> D(object) &lt; D(fluid) → floats. '
-               'D(object) &gt; D(fluid) → sinks. '
-               'Iron sinks in water (7800 &gt; 1000) but floats in mercury (7800 &lt; 13600).')]
-    s += [dense_table(
-        header=['Material', 'Density', 'Material', 'Density', 'Material', 'Density'],
-        rows=[
-            ['Air',      '1.2',    'Wood',      '770',    'Iron',     '7,800'],
-            ['Kerosene', '800',    'Water',     '1,000',  'Copper',   '8,900'],
-            ['Castor oil','961',   'Aluminium', '2,700',  'Silver',   '10,500'],
-            ['Petrol',   '720',    'Glass',     '2,500',  'Gold',     '19,300'],
-            ['Ice',      '917',    'Brick',     '1,800',  'Mercury',  '13,600'],
-            ['Milk',     '1,030',  'Diamond',   '3,510',  'Platinum', '21,400'],
-        ],
-        col_widths=[USABLE_W/6]*6, font_size=7.5
-    ), sp()]
-
-    # ─────────────────────────────────────────────────────────────────────────
-    # 13. ASTRONOMICAL DISTANCES
-    # ─────────────────────────────────────────────────────────────────────────
-    s += [section('13', 'Measuring Very Long Distances')]
-
-    s += [subsec('13.1', 'Astronomical Unit (AU)')]
-    s += [fact('<b>1 AU = average Earth–Sun distance = 149.6 million km '
-               '= 1.496 × 10¹¹ m</b>. '
-               'Perihelion: 147.1 Mkm. Aphelion: 152.1 Mkm. Neptune ≈ 30 AU.')]
-
-    s += [subsec('13.2', 'Light Year')]
-    s += [fact('<b>1 light year = distance light travels in vacuum in 1 year '
-               '= 9.46 × 10¹⁵ m</b>. '
-               'c = 3 × 10⁸ m/s. 1 year = 3.153 × 10⁷ s.')]
-    s += [dense_table(
-        header=['Stellar Object', 'Distance'],
-        rows=[
-            ['Proxima Centauri (nearest star)', '4.22 light years (= 2,68,770 AU)'],
-            ['Sirius (brightest in night sky)', '8.6 light years'],
-            ['Centre of Milky Way galaxy',      '≈ 25,000 light years'],
-            ['Andromeda Galaxy (M31)',           '≈ 2.5 million light years'],
-        ],
-        col_widths=[USABLE_W*0.52, USABLE_W*0.48]
-    )]
-    s += [dense_table(
-        header=['Unit', 'Equivalent', 'Used For'],
-        rows=[
-            ['Parsec (pc)',   '3.26 light years', 'Astronomy (star distances)'],
-            ['Nautical mile', '1.852 km',         'Aviation, sea transport'],
-            ['Knot',          '1 nautical mile/hr','Speed of ships, planes'],
-            ['Angstrom (Å)',  '10⁻¹⁰ m',          'Atomic / molecular sizes'],
-            ['Fermi (fm)',    '10⁻¹⁵ m',           'Nuclear sizes'],
-        ],
-        col_widths=[USABLE_W*0.22, USABLE_W*0.28, USABLE_W*0.50]
-    ), sp()]
-
-    # ─────────────────────────────────────────────────────────────────────────
-    # 14. ACCURACY, PRECISION, ERROR
-    # ─────────────────────────────────────────────────────────────────────────
-    s += [section('14', 'Accuracy, Precision, Error & Approximation')]
-    s += [dense_table(
-        header=['Term', 'Definition'],
-        rows=[
-            ['<b>Accuracy</b>',     'Closeness of measured value to the <b>true (actual)</b> value.'],
-            ['<b>Precision</b>',    'Closeness of <b>two or more</b> measurements to each other (consistency).'],
-            ['<b>Error</b>',        'Difference between true value and measured value. Error = True − Measured.'],
-            ['<b>Approximation</b>','Estimating a value to a nearby simpler number for easier calculation.'],
-            ['<b>Rounding off</b>', 'Reducing digits while keeping the value close to the original.'],
-            ['<b>Calibration</b>',  'Configuring an instrument to give correct readings within a specified range.'],
-        ],
-        col_widths=[USABLE_W*0.22, USABLE_W*0.78]
-    )]
-    s += [subsec('14.1', 'Rounding Off Rules')]
-    s += [p('(1) Next digit &lt; 5 → drop it.  (Eg: 4.582 → 4.58)<br/>'
-            '(2) Next digit &gt; 5 → round up. (Eg: 4.587 → 4.59)<br/>'
-            '(3) Next digit = 5 → round to nearest <b>even</b> (banker\'s rule). '
-            '(Eg: 4.585 → 4.58, 4.575 → 4.58)'), sp()]
-
-    # ─────────────────────────────────────────────────────────────────────────
-    # 15. SOLVED PROBLEMS
-    # ─────────────────────────────────────────────────────────────────────────
-    s += [section('15', 'Solved Numerical Problems')]
-    s += [problems_table([
-        ('Convert 7875 cm into metres.',
-         '7875 ÷ 100 = <b>78.75 m</b> = 78 m 75 cm'),
-        ('Convert 60° to radian.',
-         '60° = (π × 60)/180 = <b>π/3 rad</b>'),
-        ('Convert π/4 rad to degrees.',
-         'π rad = 180°. So π/4 = <b>45°</b>'),
-        ('Area of rectangle: l=12 m, b=4 m.',
-         'A = l × b = 12 × 4 = <b>48 m²</b>'),
-        ('Area of circle: r=7 m. (π=22/7)',
-         'A = π r² = (22/7) × 49 = <b>154 m²</b>'),
-        ('Volume of cube: side a=3 cm.',
-         'V = a³ = 3³ = <b>27 cm³</b>'),
-        ('Volume of cylinder: r=3 m, h=7 m.',
-         'V = π r² h = (22/7) × 9 × 7 = <b>198 m³</b>'),
-        ('Density: m=280 kg, V=4 m³.',
-         'D = m/V = 280/4 = <b>70 kg/m³</b>'),
-        ('Mass of iron block: V=125 cm³, D=7.8 g/cm³.',
-         'm = D × V = 7.8 × 125 = <b>975 g</b>'),
-        ('Volume of copper sphere: m=3000 kg, D=8900 kg/m³.',
-         'V = m/D = 3000/8900 ≈ <b>0.34 m³</b>'),
-        ('Current: Q=2 C, t=10 s.',
-         'I = Q/t = 2/10 = <b>0.2 A</b>'),
-        ('Convert 100°C to Kelvin.',
-         'K = °C + 273 = <b>373 K</b>'),
-        ('Convert 98.6°F to °C.',
-         '°C = (98.6 − 32) × 5/9 = <b>37°C</b>'),
-    ]), sp()]
-
-    # ─────────────────────────────────────────────────────────────────────────
-    # 16. GLOSSARY
-    # ─────────────────────────────────────────────────────────────────────────
-    s += [section('16', 'Glossary — Key Terms')]
-    s += [two_col_glossary([
-        ('Accuracy',           'Closeness of measured value to the true value.'),
-        ('Ammeter',            'Measures electric current. Unit: ampere (A).'),
-        ('Amount of substance','Number of entities in a substance. Unit: mole.'),
-        ('Approximation',      'Estimating to a nearby simpler number.'),
-        ('AU',                 'Avg. Earth–Sun distance ≈ 1.496 × 10¹¹ m.'),
-        ('Avogadro number',    '6.023 × 10²³ — entities per mole.'),
-        ('Beam balance',       'Compares unknown mass with standard mass.'),
-        ('Calibration',        'Configuring instrument for correct readings.'),
-        ('Candela (cd)',       'SI unit of luminous intensity (≈ 1 candle flame).'),
-        ('Density',            'Mass per unit volume. Unit: kg/m³.'),
-        ('Derived quantity',   'Obtained by combining fundamentals.'),
-        ('Electric current',   'Flow of charges per unit time. Unit: ampere.'),
-        ('Error',              'Difference between true and measured value.'),
-        ('Fundamental qty',    'Cannot be expressed via others (7 in SI).'),
-        ('GMT',                'Greenwich Mean Time — at 0° longitude, London.'),
-        ('GPS',                'Global Positioning System — uses atomic clocks.'),
-        ('IST',                'Indian Standard Time = GMT + 5:30 (at 82.5°E).'),
-        ('Kelvin (K)',          'SI unit of temperature. 0 K = −273°C = absolute zero.'),
-        ('Knot',               '1 nautical mile/hr. Used for ships & planes.'),
-        ('Light year',         'Distance light travels in 1 year ≈ 9.46 × 10¹⁵ m.'),
-        ('Luminous intensity', 'Light power emitted per unit solid angle.'),
-        ('Magnitude',          'Numerical value (size) part of a measurement.'),
-        ('Mass',               'Quantity of matter. Constant everywhere. Unit: kg.'),
-        ('Measurement',        'Comparison of unknown qty with known standard.'),
-        ('Mole (mol)',          'SI unit of substance = 6.023 × 10²³ entities.'),
-        ('Nautical mile',      '1.852 km — used in aviation & sea transport.'),
-        ('Parallax error',     'Wrong reading due to oblique eye position.'),
-        ('Photometer',         'Measures luminous intensity.'),
-        ('Plane angle',        'At intersection of 2 lines/planes. Unit: radian.'),
-        ('Precision',          'Closeness of multiple measurements to each other.'),
-        ('Quartz crystal',     'SiO₂ crystal used in modern clocks; ~32,768 Hz.'),
-        ('Radian (rad)',        'SI unit of plane angle. 2π rad = 360°.'),
-        ('Rounding off',       'Reducing digits while keeping value close.'),
-        ('SI Units',           'Système Internat. d\'Unités — 1960, Paris.'),
-        ('Solid angle',        'At vertex of cone / 3+ planes. Unit: steradian.'),
-        ('Steradian (sr)',      'SI unit of solid angle. 4π sr = full sphere.'),
-        ('Sundial',            'Ancient time device — shadow of stick.'),
-        ('Temperature',        'Avg. kinetic energy of particles. Unit: kelvin.'),
-        ('Time zone',          '15°-wide longitude zone; 24 on Earth; 1 hr apart.'),
-        ('Vernier calipers',   'Precision length; least count 0.01 cm = 0.1 mm.'),
-        ('Volume',             'Space occupied by 3D object. Unit: m³.'),
-        ('Weight',             'Gravitational force on mass. Unit: newton (N).'),
-        ('Zero error',         'Error from misaligned starting mark.'),
+    s += [dyk([
+        'In December 1998, NASA\'s Mars Climate Orbiter (worth $125 million) was lost because one team used FPS units and another used MKS units — unit mismatch caused the spacecraft to approach Mars at wrong altitude and crash.',
+        'SI stands for "Systeme International" — French words. The system was established at the 11th General Conference on Weights and Measures in Paris, France in 1960.',
+        'The metric system was created by the French in 1790.',
     ])]
+    s += [sp(3)]
 
+    # ══════════════════════════════════════════════════════════════════════════
+    # C  SI BASE QUANTITIES — All 7
+    # ══════════════════════════════════════════════════════════════════════════
+    s += [sec('C  ·  SI BASE QUANTITIES — All 7 Fundamental Units'), sp(2)]
+
+    s += [grid(
+        ['Quantity','SI Unit','Symbol','Measuring Instrument','Class'],
+        [
+            ['Length',             'metre',    'm',   'Ruler / Scale / Metre rod / Vernier calliper / Screw gauge', '6,7,8'],
+            ['Mass',               'kilogram', 'kg',  'Beam balance / Electronic balance / Spring balance',         '6,7,8'],
+            ['Time',               'second',   's',   'Clock / Stopwatch / Pendulum',                               '6,7,8'],
+            ['Temperature',        'kelvin',   'K',   'Thermometer (clinical, lab, digital)',                       '8'],
+            ['Electric Current',   'ampere',   'A',   'Ammeter',                                                    '8'],
+            ['Amount of Substance','mole',     'mol', 'Calculated from mass and molar mass',                        '8'],
+            ['Luminous Intensity', 'candela',  'cd',  'Photometer (Luminous Intensity Meter)',                      '8'],
+        ],
+        ws=[36*mm,26*mm,16*mm,68*mm,16*mm]
+    ), sp(2)]
+
+    s += [sub_h('Supplementary Quantities — Plane Angle & Solid Angle'), sp(1)]
+    s += [grid(
+        ['Quantity','Definition','SI Unit','Symbol','Dimension'],
+        [
+            ['Plane Angle', 'Angle at intersection of two straight lines or planes',
+             'radian','rad','2D — two dimensional'],
+            ['Solid Angle', 'Angle at intersection of three or more planes at a common point; also = angle at vertex of a cone',
+             'steradian','sr','3D — three dimensional'],
+        ],
+        ws=[30*mm,68*mm,24*mm,18*mm,34*mm]
+    ), sp(1)]
+
+    s += [one_liners([
+        'π radian = 180°  |  1 radian = 180°/π  |  1° = π/180 radian',
+        'Radian: angle at centre of circle where arc length = radius of circle',
+        'Steradian: solid angle at centre of sphere where surface area = (radius)²',
+        'Until 1995, plane angle and solid angle were "supplementary quantities" — reclassified as derived quantities in 1995',
+    ]), sp(3)]
+
+    # ══════════════════════════════════════════════════════════════════════════
+    # D  LENGTH — Conversions, Instruments, Errors
+    # ══════════════════════════════════════════════════════════════════════════
+    s += [sec('D  ·  LENGTH — Units, Conversions & Measurement'), sp(2)]
+
+    s += [sub_h('Length Conversions — Memorise All'), sp(1)]
+    s += [grid(
+        ['Conversion','Value','Direction'],
+        [
+            ['1 km  →  m',      '1,000 m (10<super>3</super> m)',         'km to m: × 1000'],
+            ['1 m   →  cm',     '100 cm (10<super>2</super> cm)',          'm to cm: × 100'],
+            ['1 cm  →  mm',     '10 mm',                                   'cm to mm: × 10'],
+            ['1 m   →  mm',     '1,000 mm',                               'm to mm: × 1000'],
+            ['1 km  →  cm',     '1,00,000 cm (10<super>5</super> cm)',    'km to cm: × 100,000'],
+            ['1 km  →  mm',     '10,00,000 mm (10<super>6</super> mm)',   'km to mm: × 1,000,000'],
+            ['1 nautical mile', '= 1.852 km',                              'Sea/air navigation'],
+        ],
+        ws=[40*mm,60*mm,74*mm]
+    ), sp(2)]
+
+    s += [sub_h('SI Prefixes — Multiples & Submultiples'), sp(1)]
+    s += [grid(
+        ['Prefix','Symbol','Meaning','Value','For Metre'],
+        [
+            ['Nano',  'n', 'Submultiple: 1/10<super>9</super>', '10<super>-9</super>',  '1,000,000,000 nm = 1 m'],
+            ['Micro', 'μ', 'Submultiple: 1/10<super>6</super>', '10<super>-6</super>',  '10,00,000 μm = 1 m'],
+            ['Milli', 'm', 'Submultiple: 1/1,000',              '10<super>-3</super>',  '1,000 mm = 1 m'],
+            ['Centi', 'c', 'Submultiple: 1/100',                '10<super>-2</super>',  '100 cm = 1 m'],
+            ['Deci',  'd', 'Submultiple: 1/10',                 '10<super>-1</super>',  '10 dm = 1 m'],
+            ['Kilo',  'k', 'Multiple: 1,000',                   '10<super>3</super>',   '1 km = 1,000 m'],
+            ['Mega',  'M', 'Multiple: 10,00,000',               '10<super>6</super>',   '1 Mm = 10<super>6</super> m'],
+        ],
+        ws=[24*mm,18*mm,50*mm,28*mm,54*mm]
+    ), sp(2)]
+
+    s += [sub_h('Measuring Instruments for Length'), sp(1)]
+    s += [one_liners([
+        ('Metre Scale / Ruler',   'Measures straight lengths — range: 0 to 15 cm (small) or 0 to 30 cm (large) or 1 metre'),
+        ('Measuring Tape',        'Flexible tape for curved body measurements (chest, waist) — used by tailors; not for straight lines'),
+        ('Divider Method',        'Measures curved lines by stepping equal segments along the curve then counting segments × length'),
+        ('String Method',         'Place string along curved line, straighten it, then measure with ruler — finds length of curved line'),
+        ('Vernier Callipers',     'Precise measurement of small lengths, inner/outer diameters — least count = 0.1 mm'),
+        ('Screw Gauge',           'Very precise measurement of thin wires, thickness of paper — least count = 0.01 mm'),
+        ('Odometer',              'Device on automobiles that indicates total distance travelled by the vehicle'),
+    ]), sp(2)]
+
+    s += [sub_h('Measurement Errors & Corrections'), sp(1)]
+    s += [one_liners([
+        ('Parallax Error',     'Error due to incorrect eye position — eye must be VERTICALLY ABOVE the measurement point, not tilted'),
+        ('Zero Error',         'Error when the instrument does not read zero when nothing is measured — must be corrected before use'),
+        ('Correct method',     'Head of object at zero of scale | Eye vertically above | Count cm then mm from the end'),
+        'Never hold the thermometer by the bulb; never heat it in flame or sun (for temperature instruments)',
+        'Always keep object PARALLEL to the scale when measuring length',
+        'Standard metre rod: made of platinum-iridium alloy at Bureau of Weights and Measures, Paris, France',
+        'India\'s copy of standard metre rod is at the National Physical Laboratory (NPL), New Delhi',
+    ]), sp(3)]
+
+    # ══════════════════════════════════════════════════════════════════════════
+    # E  MASS — Units, Instruments
+    # ══════════════════════════════════════════════════════════════════════════
+    s += [sec('E  ·  MASS — Definition, Units & Instruments'), sp(2)]
+
+    s += [kv_list([
+        ('Mass',          'Measure of the amount of matter in an object — SI unit: kilogram (kg) — does NOT change with location'),
+        ('Weight',        'Gravitational pull experienced by matter — Weight = mass × g — changes with location (moon vs earth)'),
+        ('Key Difference','Mass = constant everywhere | Weight = varies (1/6 on Moon vs Earth)'),
+    ], bg_L=TEAL, bg_R=TEAL_L), sp(2)]
+
+    s += [sub_h('Mass Conversions'), sp(1)]
+    s += [grid(
+        ['Conversion','Value'],
+        [
+            ['1 kg  →  g',    '1,000 g'],
+            ['1 g   →  mg',   '1,000 mg'],
+            ['1 tonne → kg',  '1,000 kg'],
+            ['1 quintal → kg','100 kg'],
+            ['Standard 1 kg', 'Mass of platinum-iridium bar at International Bureau of Weights and Measures, Sèvres, France (since 1889)'],
+        ],
+        ws=[40*mm,134*mm]
+    ), sp(2)]
+
+    s += [sub_h('Instruments for Mass Measurement'), sp(1)]
+    s += [one_liners([
+        ('Beam Balance',      'Compares unknown mass with known standard masses — works by equilibrium principle'),
+        ('Electronic Balance','Precise digital measurement — used in laboratories for chemicals, in shops for groceries and jewellery'),
+        ('Spring Balance',    'Uses spring extension to measure weight (in Newtons) — not for precise mass measurement'),
+    ]), sp(3)]
+
+    # ══════════════════════════════════════════════════════════════════════════
+    # F  TIME — Units, Clocks
+    # ══════════════════════════════════════════════════════════════════════════
+    s += [sec('F  ·  TIME — Units, Instruments & Clock Types'), sp(2)]
+
+    s += [sub_h('Time Units & Conversions'), sp(1)]
+    s += [grid(
+        ['Conversion','Value'],
+        [
+            ['1 minute',  '= 60 seconds'],
+            ['1 hour',    '= 60 minutes = 3,600 seconds'],
+            ['1 day',     '= 24 hours = 86,400 seconds'],
+            ['1 year',    '= 365 days = 8,760 hours'],
+            ['SI Unit',   'Second (s) — represented as \'s\''],
+        ],
+        ws=[36*mm,138*mm]
+    ), sp(2)]
+
+    s += [sub_h('Types of Clocks (Class 8 — Section 1.3)'), sp(1)]
+
+    s += [two_col(
+        ['<b>By Display Type:</b>',
+         '',
+         '<b>Analog Clock</b>',
+         '▶ Classic clock with three hands',
+         '▶ Hours hand — short and thick',
+         '▶ Minutes hand — long and thin',
+         '▶ Seconds hand — long, very thin; makes 1 rotation per minute; 60 rotations per hour',
+         '▶ Driven by mechanical or electronic mechanism',
+         '',
+         '<b>Digital Clock</b>',
+         '▶ Shows time directly in numerals or symbols',
+         '▶ May display 12-hour or 24-hour format',
+         '▶ Modern digital clocks show date, day, month, year, temperature'],
+        ['<b>By Working Mechanism:</b>',
+         '',
+         '<b>Quartz Clock</b>',
+         '▶ Uses electronic oscillations controlled by a quartz crystal (SiO2)',
+         '▶ Crystal vibration frequency is very precise',
+         '▶ More accurate than mechanical clocks',
+         '▶ Accuracy: 1 second error per 10<super>9</super> seconds',
+         '',
+         '<b>Atomic Clock</b>',
+         '▶ Uses periodic vibrations occurring within atoms',
+         '▶ Most accurate clock ever made',
+         '▶ Accuracy: 1 second error per 10<super>13</super> seconds',
+         '▶ Used in GPS, GLONASS, International Time Distribution Services']
+    ), sp(2)]
+
+    s += [sub_h('Historical & Special Timekeeping'), sp(1)]
+    s += [one_liners([
+        'Ancient time measurement: sand clock (hourglass) and sundial — used during daytime',
+        'Pulse measurement: counting heartbeats (≈75/min) gives approximate time elapsed',
+        ('GMT', 'Greenwich Mean Time — mean solar time at Royal Observatory, Greenwich, London (0° longitude)'),
+        ('IST', 'Indian Standard Time = GMT + 5:30 hours | Reference: Mirzapur, Uttar Pradesh (82.5°E longitude)'),
+        ('Time Zones', 'Earth divided into 24 zones × 15° longitude each | Difference between adjacent zones = 1 hour'),
+    ]), sp(3)]
+
+    # ══════════════════════════════════════════════════════════════════════════
+    # G  ADDITIONAL SI BASE QUANTITIES
+    # ══════════════════════════════════════════════════════════════════════════
+    s += [sec('G  ·  Additional Base Quantities — Temperature, Current, Mole, Candela'), sp(2)]
+
+    s += [one_liners([
+        ('Temperature',        'Measure of average KE of particles — degree of hotness/coldness — SI unit: kelvin (K) — measured by thermometer'),
+        ('Electric Current (I)','Flow of electric charges in a direction | I = Q/t (charge/time) — SI unit: ampere (A) — measured by ammeter'),
+        ('1 Ampere',           'If 1 coulomb of charge flows through conductor in 1 second → current = 1 ampere'),
+        ('Amount of Substance','Measure of number of entities (atoms, molecules, ions) — SI unit: mole (mol)'),
+        ('1 Mole',             '= 6.023 × 10<super>23</super> entities — known as Avogadro Number — mole is used because atoms are too small to count individually'),
+        ('Luminous Intensity', 'Measure of power of emitted light in a particular direction per unit solid angle — SI unit: candela (cd)'),
+        ('1 Candela',          '≈ light emitted by one common wax candle — measured by photometer (Luminous Intensity Meter)'),
+        ('Luminous Flux',      'Measure of total perceived power of light — SI unit: lumen (lm)'),
+        ('Calibration',        'Process of configuring an instrument to measure accurately within a specific range'),
+    ]), sp(3)]
+
+    # ══════════════════════════════════════════════════════════════════════════
+    # H  ACCURACY, PRECISION & APPROXIMATION
+    # ══════════════════════════════════════════════════════════════════════════
+    s += [sec('H  ·  Accuracy, Precision, Approximation & Rounding Off'), sp(2)]
+
+    s += [grid(
+        ['Concept','Definition','Example / Remember'],
+        [
+            ['Error',        'Difference between the real (true) value and the observed (measured) value',
+             'Every measurement has some uncertainty — cannot be completely eliminated'],
+            ['Accuracy',     'Closeness of a measured value to the actual/true value',
+             'Arrows all hitting bullseye = accurate AND precise (best case)'],
+            ['Precision',    'Closeness of two or more measurements to EACH OTHER (repeatability)',
+             'Arrows all hitting same spot (but not centre) = precise but NOT accurate'],
+            ['Approximation','Finding a number acceptably close to exact value by estimation — used when data is inadequate',
+             'Heart beats ≈ 75/min → in a day ≈ 75 × 60 × 24 = 1,08,000 beats (approximate)'],
+            ['Rounding Off', 'Technique to reduce digits in a result to manageable number',
+             '1.864 → 1.86 (next digit < 5, keep 6) | 1.868 → 1.87 (next digit > 5, increase 6 to 7)'],
+        ],
+        ws=[28*mm,72*mm,74*mm]
+    ), sp(2)]
+
+    s += [sub_h('Rules for Rounding Off'), sp(1)]
+    s += [one_liners([
+        'Step 1: Decide which is the LAST DIGIT to keep',
+        'Step 2: If the NEXT digit is less than 5 → keep last digit SAME',
+        'Step 3: If the NEXT digit is 5 or greater than 5 → INCREASE last digit by 1',
+        'Example: Round 4.582 to 2 decimal places → last digit = 8, next = 2 (< 5) → answer: 4.58',
+        'Example: Round 4.586 to 2 decimal places → last digit = 8, next = 6 (> 5) → answer: 4.59',
+    ]), sp(2)]
+
+    s += [note_box('Accuracy vs Precision — TET Trap', [
+        'Accurate = close to TRUE value | Precise = close to EACH OTHER (can be precise but wrong!)',
+        'Good precision + good accuracy = all arrows at bullseye (ideal measurement)',
+        'Good precision + poor accuracy = arrows clustered together but far from centre',
+        'Poor precision + poor accuracy = arrows scattered AND far from centre',
+    ], icon='📌')]
+    s += [sp(3)]
+
+    # ══════════════════════════════════════════════════════════════════════════
+    # I  SOLVED PROBLEMS
+    # ══════════════════════════════════════════════════════════════════════════
+    s += [sec('I  ·  Solved Numerical Problems'), sp(2)]
+
+    probs = [
+        ('1', 'The distance between two cities is 43.65 km. Convert to metres and centimetres.',
+         'd = 43.65 km',
+         'In metres: 43.65 × 1000 = 43,650 m  |  In cm: 43,650 × 100 = 43,65,000 cm',
+         '43,650 m  =  43,65,000 cm'),
+        ('2', 'Length of pencil: scale reading at one end = 2.0 cm, other end = 12.1 cm. Find length.',
+         'Reading 1 = 2.0 cm; Reading 2 = 12.1 cm',
+         'Length = 12.1 – 2.0 = 10.1 cm',
+         '10.1 cm  =  101 mm'),
+        ('3', 'Distance from school to home = 2250 m. Express in kilometres.',
+         'd = 2250 m',
+         'd in km = 2250 / 1000 = 2.250 km',
+         '2.25 km'),
+        ('4', 'Convert 60° into radians.',
+         '1° = π/180 radian',
+         '60° = π/180 × 60 = π/3 radian = 3.14/3 ≈ 1.047 rad',
+         'π/3 radian  ≈  1.047 rad'),
+        ('5', 'If 2 coulombs of charge flows through a circuit for 10 seconds, calculate the current.',
+         'Q = 2 C; t = 10 s',
+         'I = Q/t = 2/10 = 0.2 A',
+         'Current = 0.2 Ampere'),
+        ('6', 'Round off 7875 cm to km and m.',
+         '7875 cm',
+         '7875 cm ÷ 100 = 78.75 m  →  78 m 75 cm  |  78.75 m ÷ 1000 = 0.07875 km',
+         '78 m 75 cm  =  0.07875 km'),
+    ]
+
+    for p in probs:
+        s += [prob(*p), sp(2)]
+
+    s += [sp(2)]
+
+    # ══════════════════════════════════════════════════════════════════════════
+    # J  KEY FACTS — RAPID REVISION
+    # ══════════════════════════════════════════════════════════════════════════
+    s += [sec('J  ·  Key Facts — Rapid Revision  (Numbers, Years & Names only)'), sp(2)]
+
+    s += [P('<b>Values, Formulas & Unit Conversions</b>', BDB), sp(1)]
+    s += [rapid_nums([
+        ['Measurement',              'Number + Unit (two parts)',                           'e.g., 5 kg; 3 metres'],
+        ['1 km',                     '= 1,000 m = 1,00,000 cm = 10,00,000 mm',            'Length'],
+        ['1 m',                      '= 100 cm = 1,000 mm',                                'Length'],
+        ['1 kg',                     '= 1,000 g  |  1,000 kg = 1 tonne',                  'Mass'],
+        ['1 hour',                   '= 3,600 s  |  1 day = 86,400 s',                    'Time'],
+        ['π radian',                 '= 180°  →  1° = π/180 rad',                         'Plane angle'],
+        ['Avogadro Number',          '6.023 × 10<super>23</super> per mole',               'Amount of substance'],
+        ['1 candela',                '≈ light of one common wax candle',                   'Luminous intensity'],
+        ['Electric current',         'I = Q/t  (charge/time)',                             'Ampere (A)'],
+        ['1 Ampere',                 '= 1 coulomb per second',                             'Definition'],
+        ['Quartz clock accuracy',    '1 second error per 10<super>9</super> seconds',      'Class 8'],
+        ['Atomic clock accuracy',    '1 second error per 10<super>13</super> seconds',     'Class 8 — most accurate'],
+        ['IST',                      'GMT + 5:30 hours  |  Reference: 82.5°E longitude',  'Mirzapur, UP'],
+        ['Time zone width',          '15° longitude = 1 hour difference',                  '24 zones for 360°'],
+        ['Body temperature',         '37°C = 98.6°F = 310.15 K',                          'Normal human'],
+        ['Rounding: next digit < 5', 'Keep last digit SAME',                               'Rule'],
+        ['Rounding: next digit ≥ 5', 'Increase last digit by 1',                           'Rule'],
+    ]), sp(3)]
+
+    s += [P('<b>Scientists, Events & Years</b>', BDB), sp(1)]
+    s += [rapid_ppl([
+        ['SI System established',  '11th General Conference on Weights & Measures, Paris, France', '1960 '],
+        ['Metric system created',  'French scientists established the metric system',              '1790 '],
+        ['Standard metre rod',     'Platinum-iridium alloy at Bureau of Weights & Measures, Paris; India\'s copy at NPL, New Delhi', 'Cl. 6'],
+        ['Standard 1 kg',          'Platinum-iridium bar at International Bureau of Weights & Measures, Sèvres, France',             '1889 '],
+        ['Ruler inventor',         'William Bedwell invented the ruler in the 16th century',       '16th century '],
+        ['Odometer',               'Device indicating distance travelled by automobile',            'Cl. 6'],
+        ['Mars Orbiter disaster',  'NASA lost $125M Mars Climate Orbiter due to FPS vs MKS unit mismatch between two teams', 'Sept 23, 1999 '],
+        ['GMT reference',          'Greenwich Mean Time at Royal Observatory, Greenwich, London at 0° longitude', 'Cl. 8'],
+    ]), sp(4)]
+
+    # ══════════════════════════════════════════════════════════════════════════
+    # K  GLOSSARY
+    # ══════════════════════════════════════════════════════════════════════════
+    s += [sec('K  ·  Glossary — Definitions'), sp(2)]
+
+    g = [
+        ('Measurement',          'Comparison of unknown quantity with known standard; result has number + unit'),
+        ('Physical Quantity',    'Any quantity that can be measured — e.g., length, mass, time, temperature'),
+        ('Fundamental Quantity', 'Independent physical quantity — 7 in SI: length, mass, time, temp, current, amount, luminous intensity'),
+        ('Derived Quantity',     'Quantity derived from fundamental quantities — e.g., area, volume, density, speed'),
+        ('SI System',            'International System of Units — "Systeme International" — adopted in 1960 at Paris'),
+        ('FPS System',           'British system: Foot, Pound, Second — NOT a metric system'),
+        ('CGS System',           'Metric system: Centimetre, Gram, Second'),
+        ('MKS System',           'Metric system: Metre, Kilogram, Second — precursor to SI'),
+        ('Metre (m)',             'SI unit of length'),
+        ('Kilogram (kg)',         'SI unit of mass'),
+        ('Second (s)',            'SI unit of time'),
+        ('Kelvin (K)',            'SI unit of temperature'),
+        ('Ampere (A)',            'SI unit of electric current — 1 A = 1 coulomb per second'),
+        ('Mole (mol)',            'SI unit of amount of substance — 1 mol = 6.023 × 10<super>23</super> entities (Avogadro Number)'),
+        ('Candela (cd)',          'SI unit of luminous intensity — ≈ light from one wax candle'),
+        ('Radian (rad)',          'SI unit of plane angle — angle where arc length = radius of circle'),
+        ('Steradian (sr)',        'SI unit of solid angle — 3D angle at vertex of cone / intersection of 3+ planes'),
+        ('Parallax Error',       'Error due to eye not being directly above measurement point — eye displacement causes wrong reading'),
+        ('Zero Error',           'Instrument error when it does not read zero before measurement begins — must be subtracted or added'),
+        ('Accuracy',             'Closeness of measured value to the true value'),
+        ('Precision',            'Closeness of two or more measurements to each other — repeatability'),
+        ('Approximation',        'Process of finding a value acceptably close to exact value by estimation'),
+        ('Rounding Off',         'Reducing digits in a number: if next digit < 5, keep same; if ≥ 5, increase by 1'),
+        ('Calibration',          'Process of configuring an instrument to measure accurately within a specific range'),
+        ('Beam Balance',         'Instrument to measure mass by comparing unknown mass with known standard masses'),
+        ('Electronic Balance',   'Precise digital instrument for measuring mass — used in labs and shops'),
+        ('Vernier Callipers',    'Precise instrument to measure small lengths — least count = 0.1 mm'),
+        ('Screw Gauge',          'Very precise instrument for measuring thin wires — least count = 0.01 mm'),
+        ('Odometer',             'Device in automobiles that records total distance travelled'),
+        ('Quartz Clock',         'Clock using electronic oscillations from quartz crystal — accuracy: 1s error per 10<super>9</super> s'),
+        ('Atomic Clock',         'Most accurate clock using atomic vibrations — accuracy: 1s error per 10<super>13</super> s; used in GPS'),
+        ('GMT',                  'Greenwich Mean Time — mean solar time at Royal Observatory, London, at 0° longitude'),
+        ('IST',                  'Indian Standard Time = GMT + 5:30 hours; reference: Mirzapur (82.5°E), Uttar Pradesh'),
+        ('Avogadro Number',      '6.023 × 10<super>23</super> — number of atoms/molecules in one mole of any substance'),
+        ('Photometer',           'Instrument to measure luminous intensity in candela'),
+        ('Ammeter',              'Instrument to measure electric current in ampere — connected in series in a circuit'),
+    ]
+
+    s += [gloss_2col(g), sp(3)]
+
+    # FOOTER
+    s += [
+        HRFlowable(width=UW, thickness=1, color=TEAL), sp(1),
+        P('ChalkPieceDiary.com  |  TET Paper II Science Handbook  |  P1: Measurement  |  Classes 6 • 7 • 8',
+          S('ft', fontName=FNI, fontSize=8.5, textColor=TEAL, alignment=TA_CENTER)),
+    ]
     return s
 
 
-# ─── BUILD FUNCTION ───────────────────────────────────────────────────────────
-
-def build(out_path: str):
-    """Entry point called by build/build_chapter.py."""
-    from reportlab.platypus import SimpleDocTemplate
-    from shared.theme import L_MARGIN, R_MARGIN, T_MARGIN, B_MARGIN, PAGE_SIZE
-
+def build_pdf(path):
+    def pg(cv, doc):
+        cv.saveState()
+        cv.setFont(FN, 8.5)
+        cv.setFillColor(TEAL)
+        cv.drawRightString(PW-MAR, 11*mm, f'P1  |  Measurement  |  Page {doc.page}')
+        cv.restoreState()
     doc = SimpleDocTemplate(
-        out_path,
-        pagesize=PAGE_SIZE,
-        leftMargin=L_MARGIN,
-        rightMargin=R_MARGIN,
-        topMargin=T_MARGIN,
-        bottomMargin=B_MARGIN,
-        title=f"TET Handbook — {CHAPTER_ID}: {CHAPTER_TITLE}",
-        author="ChalkPieceDiary",
+        path,
+        pagesize=(PW, PH),
+        leftMargin=MAR, rightMargin=MAR,
+        topMargin=MAR, bottomMargin=19*mm,
+        title='TET Handbook P1 Measurement',
+        author='ChalkPieceDiary'
     )
+    doc.build(content(), onFirstPage=pg, onLaterPages=pg)
+    print(f'✅ PDF: {path}')
 
-    chrome = make_page_chrome(CHAPTER_ID, CHAPTER_TITLE)
-    doc.build(content(), onFirstPage=chrome, onLaterPages=chrome)
+
+def build(out_path):
+    build_pdf(out_path)
 
 
-# ─── STANDALONE RUN ───────────────────────────────────────────────────────────
 if __name__ == '__main__':
-    register_fonts()
     out = 'output/P1_Measurement.pdf'
-    os.makedirs('output', exist_ok=True)
+    os.makedirs(os.path.dirname(out), exist_ok=True)
     build(out)
-    size = os.path.getsize(out) / 1024
-    print(f"✅  {out}  ({size:.1f} KB)")
