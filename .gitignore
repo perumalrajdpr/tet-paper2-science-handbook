@@ -216,3 +216,24 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Tamil HTML build artifacts
+chapters_ta_html/__pycache__/
+shared/builders/__pycache__/
+output/*_ta.html
+output/*_SECTION_*.html
+output/*_PREVIEW.*
+
+# Tamil output directory artifacts
+output_ta/*_ta.html
+output_ta/*_PREVIEW.*
+output_ta/*_test.pdf
+output_ta/*_v[0-9].pdf
+output_ta/*_FULL.pdf
+output_ta/*_SECTION_*.pdf
+
+# Test/iteration PDFs in default output
+output/*_test.pdf
+output/*_v[0-9].pdf
+output/*_FULL.pdf
+output/*_SECTION_*.pdf

@@ -1,0 +1,15 @@
+# === ADD THESE LINES TO YOUR EXISTING .gitignore ===
+# (Don't replace the existing .gitignore — just append these)
+
+# Tamil HTML build artifacts (HTML preview is regenerated each build)
+chapters_ta_html/__pycache__/
+shared/builders/__pycache__/
+output/*_ta.html
+output/*_SECTION_*.html
+output/*_PREVIEW.*
+
+# Test/iteration PDFs (only keep final P{N}_*_ta.pdf)
+output/*_test.pdf
+output/*_v[0-9].pdf
+output/*_FULL.pdf
+output/*_SECTION_*.pdf

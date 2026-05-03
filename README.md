@@ -13,13 +13,13 @@
 | ID | Chapter | Status |
 |----|---------|--------|
 | P1 | Measurement | ✅ Complete |
-| P2 | Force, Motion & Pressure | ⏳ In progress |
-| P3 | Heat & Temperature | ⏳ Planned |
-| P4 | Light | ⏳ Planned |
-| P5 | Electricity | ⏳ Planned |
-| P6 | Magnetism | ⏳ Planned |
-| P7 | Sound | ⏳ Planned |
-| P8 | Universe & Space Science | ⏳ Planned |
+| P2 | Force, Motion & Pressure | ✅ Complete |
+| P3 | Heat & Temperature | ✅ Complete |
+| P4 | Light | ✅ Complete |
+| P5 | Electricity | ✅ Complete |
+| P6 | Magnetism | ✅ Complete |
+| P7 | Sound | ✅ Complete |
+| P8 | Universe & Space Science | ✅ Complete |
 
 ### ⚗️ Chemistry (C1–C7)
 | ID | Chapter | Status |
@@ -56,7 +56,8 @@ tet-paper2-science-handbook/
 │   └── page_chrome.py    # Header / footer for every page
 ├── chapters/
 │   ├── P1_measurement.py # ✅ Chapter module (one per chapter)
-│   ├── P2_force_motion.py
+│   ├── P2_force_motion_pressure.py
+│   ├── P3_heat_temperature.py
 │   └── ...
 ├── build/
 │   ├── build_chapter.py  # Build a single chapter
@@ -91,6 +92,17 @@ brew install --cask font-dejavu-sans
 python build/build_chapter.py P1    # Output: output/P1_Measurement.pdf
 python build/build_chapter.py C2    # Output: output/C2_Atomic_Structure.pdf
 ```
+
+### Build a Tamil chapter (HTML/CSS pipeline)
+
+```bash
+python build/build_tamil_chapter.py P1   # Output: output_ta/P1_measurement_ta.pdf
+```
+
+Tamil pipeline docs:
+- `docs/tamil/master_prompt_v2.md`
+- `docs/tamil/chapter_execution_checklist_ta.md`
+- `docs/tamil/weasyprint_windows_setup.md`
 
 ### Build all chapters
 

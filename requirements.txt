@@ -1,3 +1,9 @@
+# Original English chapter dependencies
 reportlab>=4.0.0
 pypdf>=3.0.0
 PyYAML>=6.0
+
+# Tamil chapter dependencies (chapters_ta_html/)
+weasyprint>=60.0          # HTML/CSS → PDF with Pango+HarfBuzz Tamil shaping
+fonttools>=4.50.0         # Font handling for WeasyPrint
+PyMuPDF>=1.23.0           # PDF verification (margin overflow checks)
