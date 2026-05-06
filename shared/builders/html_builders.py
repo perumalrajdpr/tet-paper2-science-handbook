@@ -294,20 +294,24 @@ def prob_grid(problems) -> str:
 
 # ─── RAPID-REVISION TABLES (3 columns) ────────────────────────────────────────
 
-def rapid_3col(rows, headers=None) -> str:
+def rapid_3col(rows, headers=None, col_widths_mm=None) -> str:
     """
     Generic 3-column rapid-revision table.
     rows = [[col1, col2, col3], ...]
-    Fixed column widths optimised for: term | description | tag
+    Defaults to fixed column widths optimised for: term | description | tag.
+    Pass col_widths_mm to override widths for compatibility with denser tables.
     """
-    # 174mm total: 50mm | 96mm | 28mm
-    colgroup = (
-        '  <colgroup>\n'
-        '    <col style="width:50mm;">\n'
-        '    <col style="width:96mm;">\n'
-        '    <col style="width:28mm;">\n'
-        '  </colgroup>\n'
-    )
+    # 174mm total default: 50mm | 96mm | 28mm
+    if col_widths_mm:
+        total = float(sum(col_widths_mm)) or 174.0
+        widths = [w * 174.0 / total for w in col_widths_mm]
+    else:
+        widths = [50.0, 96.0, 28.0]
+
+    colgroup = '  <colgroup>\n'
+    for w in widths:
+        colgroup += f'    <col style="width:{w:.2f}mm;">\n'
+    colgroup += '  </colgroup>\n'
     th = ''
     if headers:
         th = '  <tr>'
