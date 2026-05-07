@@ -1,0 +1,42 @@
+@import url("handbook_ta.css");
+
+body {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px;
+  background: #f8fafc;
+}
+
+.wp-book-title {
+  font-size: 1.8rem;
+  margin: 0 0 12px;
+  color: #0f172a;
+}
+
+.wp-chapter {
+  background: #ffffff;
+  border: 1px solid #dbe3ef;
+  border-radius: 10px;
+  padding: 18px;
+  margin: 0 0 20px;
+}
+
+.wp-chapter-title {
+  font-size: 1.25rem;
+  margin: 0 0 12px;
+  color: #0f172a;
+}
+
+.subject-p .wp-chapter-title { color: #0f4c81; }
+.subject-c .wp-chapter-title { color: #8a4b08; }
+.subject-b .wp-chapter-title { color: #1f6b3a; }
+
+table.kv,
+table.oneliners,
+table.grid,
+table.prob,
+table.rapid,
+.term-pairs {
+  width: 100%;
+  max-width: 100%;
+}

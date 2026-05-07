@@ -9,6 +9,8 @@ __pycache__/
 # Distribution / packaging
 .Python
 build/
+!build/
+!build/*.py
 develop-eggs/
 dist/
 downloads/
@@ -231,6 +233,27 @@ output_ta/*_test.pdf
 output_ta/*_v[0-9].pdf
 output_ta/*_FULL.pdf
 output_ta/*_SECTION_*.pdf
+
+# Tamil print B/W output artifacts
+output_ta_print_bw/*_print_bw.pdf
+output_ta_print_bw/*_print_bw.html
+output_ta_print_bw/*_print_bw_book.pdf
+output_ta_print_bw/*_print_bw_book.html
+output_ta_print_bw/*_PREVIEW.*
+output_ta_print_bw/*_test.pdf
+output_ta_print_bw/*_v[0-9].pdf
+output_ta_print_bw/*_FULL.pdf
+output_ta_print_bw/*_SECTION_*.pdf
+output_ta_print_bw_v2/
+output_ta_print_bw_preview/
+
+# Tamil color and web build artifacts
+output_ta_color/
+output_ta_web/
+
+# Keep only curated final release PDFs
+release/*
+!release/*.pdf
 
 # Test/iteration PDFs in default output
 output/*_test.pdf

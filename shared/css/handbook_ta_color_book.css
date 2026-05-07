@@ -1,0 +1,67 @@
+@import url("handbook_ta_print_bw.css");
+
+/* Subject color scheme for integrated color book */
+
+:root {
+  --p-dark: #0f4c81;
+  --p-soft: #e6f1fb;
+  --c-dark: #8a4b08;
+  --c-soft: #fff1e3;
+  --b-dark: #1f6b3a;
+  --b-soft: #e8f7ee;
+}
+
+.subject-p .sec {
+  background: var(--p-dark);
+  border-left-color: #0b3a63;
+}
+.subject-c .sec {
+  background: var(--c-dark);
+  border-left-color: #6a3806;
+}
+.subject-b .sec {
+  background: var(--b-dark);
+  border-left-color: #14502a;
+}
+
+.subject-p .subh {
+  background: var(--p-soft);
+  border-left-color: #5e95c7;
+}
+.subject-c .subh {
+  background: var(--c-soft);
+  border-left-color: #d08b43;
+}
+.subject-b .subh {
+  background: var(--b-soft);
+  border-left-color: #4fa56f;
+}
+
+.subject-p table.grid th,
+.subject-p table.rapid th {
+  background: #d6e8fa;
+  color: #153a5a;
+}
+.subject-c table.grid th,
+.subject-c table.rapid th {
+  background: #ffe1c2;
+  color: #5f3612;
+}
+.subject-b table.grid th,
+.subject-b table.rapid th {
+  background: #d8f0de;
+  color: #1b4a2b;
+}
+
+.subject-p .dyk-title,
+.subject-p .note-box-title {
+  background: #2f5d8a;
+}
+.subject-c .dyk-title,
+.subject-c .note-box-title {
+  background: #966027;
+}
+.subject-b .dyk-title,
+.subject-b .note-box-title {
+  background: #2e7043;
+}

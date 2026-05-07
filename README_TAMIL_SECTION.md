@@ -49,13 +49,55 @@ shared/                               # Shared infrastructure
 pip install weasyprint fonttools PyMuPDF
 ```
 
-### Build a chapter
+### Build a chapter (color PDF)
 ```bash
 cd /path/to/repo
 python3 chapters_ta_html/P1_measurement_ta.py
 ```
 
 Output PDF: `output/P1_measurement_ta.pdf`
+
+### Build print-ready B/W chapter (press profile)
+```bash
+python build/build_tamil_print_bw.py P1
+```
+
+Output files:
+- `output_ta_print_bw/P1_measurement_ta_print_bw.pdf`
+- `output_ta_print_bw/P1_measurement_ta_print_bw.html`
+
+Print profile spec:
+- Page size: `210mm x 290mm`
+- Margins: `20mm` (usable width `170mm`)
+- Grayscale styling optimized for black-and-white printing
+
+### Build integrated print B/W book (with cover/front-matter/back-cover)
+```bash
+python build/build_tamil_print_bw_book.py P1 P2 P3 P4 P5 P6 P7 P8 C1 C2 C3 C4 C5 C6 C7 B1 B2 B3 B4
+```
+
+Output files:
+- `output_ta_print_bw/Tamil_Science_<SPAN>_print_bw_book.pdf`
+- `output_ta_print_bw/Tamil_Science_<SPAN>_print_bw_book.html`
+
+### Build integrated color book (subject-wise color scheme)
+```bash
+python build/build_tamil_color_book.py P1 P2 P3 P4 P5 P6 P7 P8 C1 C2 C3 C4 C5 C6 C7 B1 B2 B3 B4
+```
+
+Output files:
+- `output_ta_color/Tamil_Science_<SPAN>_color_book.pdf`
+- `output_ta_color/Tamil_Science_<SPAN>_color_book.html`
+
+### Build WordPress-friendly HTML bundle
+```bash
+python build/build_tamil_wordpress.py P1 P2 P3 P4 P5 P6 P7 P8 C1 C2 C3 C4 C5 C6 C7 B1 B2 B3 B4
+```
+
+Output files:
+- `output_ta_web/Tamil_Science_<SPAN>_wordpress_bundle.html` (full page preview)
+- `output_ta_web/Tamil_Science_<SPAN>_wordpress_fragment.html` (paste-ready content)
+- `output_ta_web/chapters/<CHAPTER_ID>.html` (per-chapter fragments)
 
 ---
 

@@ -163,6 +163,12 @@ def fstrip(label: str, formula: str, note: str = '') -> str:
 # ─── DID YOU KNOW BOX ─────────────────────────────────────────────────────────
 
 def dyk(items, title: str = 'உங்களுக்குத் தெரியுமா?') -> str:
+    # Accept both a single string and a list/tuple of strings.
+    if isinstance(items, str):
+        items = [items]
+    elif isinstance(items, tuple):
+        items = list(items)
+
     body = ''
     for it in items:
         body += f'  <div class="dyk-item">• {_safe(it)}</div>\n'
@@ -189,7 +195,8 @@ def note_box(title: str, items) -> str:
 # ─── FOOTER ───────────────────────────────────────────────────────────────────
 
 def footer(text: str) -> str:
-    return f'<div class="footer">{_safe(text)}</div>\n'
+    # Book-level output does not need per-chapter author/topic footer lines.
+    return ''
 
 # ─── PAGE ASSEMBLER ───────────────────────────────────────────────────────────
 
@@ -301,6 +308,13 @@ def rapid_3col(rows, headers=None, col_widths_mm=None) -> str:
     Defaults to fixed column widths optimised for: term | description | tag.
     Pass col_widths_mm to override widths for compatibility with denser tables.
     """
+    # Backward compatibility:
+    # Some chapters call rapid_3col(headers, rows, ...).
+    if rows and isinstance(rows, list):
+        if rows and not isinstance(rows[0], (list, tuple)) and isinstance(headers, list):
+            if headers and isinstance(headers[0], (list, tuple)):
+                rows, headers = headers, rows
+
     # 174mm total default: 50mm | 96mm | 28mm
     if col_widths_mm:
         total = float(sum(col_widths_mm)) or 174.0

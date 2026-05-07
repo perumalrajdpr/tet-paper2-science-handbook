@@ -1,0 +1,874 @@
+/* ============================================================================
+   TET Paper II Science Handbook — Tamil Edition (Print B/W)
+   Profile: Press-ready grayscale, student-readable, page-efficient
+   Target page: 210mm x 290mm, margins 20mm (usable width 170mm)
+   ============================================================================ */
+
+@font-face {
+  font-family: 'NST';
+  src: url('../fonts/NotoSansTamil-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'NST';
+  src: url('../fonts/NotoSansTamil-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
+
+@page {
+  size: 210mm 290mm;
+  margin: 20mm;
+  @top-left {
+    content: "போட்டித்தேர்வு அறிவியல்";
+    font-family: 'NST', sans-serif;
+    font-size: 8pt;
+    color: #3d3d3d;
+  }
+  @top-right {
+    content: string(chapter);
+    font-family: 'NST', sans-serif;
+    font-size: 8pt;
+    color: #3d3d3d;
+  }
+  @bottom-center {
+    content: "P" counter(page);
+    font-family: 'NST', sans-serif;
+    font-size: 8.4pt;
+    color: #444444;
+  }
+}
+
+@page cover {
+  size: 210mm 290mm;
+  margin: 20mm;
+  @top-left { content: none; }
+  @top-right { content: none; }
+  @bottom-center { content: none; }
+}
+
+@page frontmatter {
+  size: 210mm 290mm;
+  margin: 20mm;
+  @top-left { content: none; }
+  @top-right { content: none; }
+  @bottom-center {
+    content: "i." counter(page);
+    font-family: 'NST', sans-serif;
+    font-size: 8pt;
+    color: #4f4f4f;
+  }
+}
+
+@page backcover {
+  size: 210mm 290mm;
+  margin: 20mm;
+  @top-left { content: none; }
+  @top-right { content: none; }
+  @bottom-center { content: none; }
+}
+
+:root {
+  --ink: #111111;
+  --ink-soft: #2e2e2e;
+  --line: #4a4a4a;
+  --line-soft: #b5b5b5;
+  --surface: #f2f2f2;
+  --surface-alt: #f7f7f7;
+  --surface-dark: #d9d9d9;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  font-family: 'NST', sans-serif;
+  font-size: 9.6pt;
+  line-height: 1.34;
+  color: var(--ink);
+  orphans: 3;
+  widows: 3;
+}
+
+/* --- Banner (kept strong but grayscale) --- */
+.banner {
+  display: flex;
+  width: 100%;
+  gap: 1.6mm;
+  background: transparent;
+  color: #1f2328;
+  border: none;
+  margin-bottom: 2.1mm;
+  page-break-after: avoid;
+}
+.banner-code {
+  flex: 0 0 22mm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 17.2pt;
+  font-weight: 700;
+  letter-spacing: 0.25px;
+  padding: 2.5mm 0;
+  color: #ffffff;
+  background: #3f444a;
+  border: 0.45pt solid #666b71;
+  border-radius: 0.55mm;
+}
+.banner-body {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  padding: 2.6mm 3.6mm 2.6mm 3.6mm;
+  background: linear-gradient(to bottom, #f2f4f6 0%, #e8ecf0 100%);
+  border: none;
+  border-radius: 0.55mm;
+  position: relative;
+}
+.banner-body::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1.2mm;
+  background: #9aa1a9;
+  border-radius: 0 0 0.55mm 0.55mm;
+}
+.banner-body::after {
+  content: none;
+}
+.banner-title {
+  font-size: 11.4pt;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.12px;
+  color: #22272d;
+}
+.banner-sub,
+.banner-foot { display: none; }
+
+/* --- Section hierarchy --- */
+.sec {
+  background: #646a71;
+  color: #ffffff;
+  border-left: 1.1mm solid #4f555b;
+  border-radius: 0.45mm;
+  font-size: 9.7pt;
+  font-weight: 700;
+  letter-spacing: 0.1px;
+  padding: 1.45mm 3.1mm;
+  margin: 2.05mm 0 1.05mm 0;
+  page-break-after: avoid;
+  break-after: avoid-page;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+.subh {
+  background: #ededed;
+  color: #101010;
+  border-left: 1.2mm solid #7a7a7a;
+  font-size: 9pt;
+  font-weight: 700;
+  padding: 1.3mm 2.8mm;
+  margin: 1.8mm 0 1mm 0;
+  page-break-after: avoid;
+  break-after: avoid-page;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* --- Core full-width blocks --- */
+table.kv,
+table.oneliners,
+table.grid,
+table.prob,
+.prob-cols,
+table.rapid,
+.term-pairs {
+  width: 170mm;
+  max-width: 170mm;
+}
+
+table.kv,
+table.oneliners,
+table.grid,
+table.prob,
+table.rapid {
+  table-layout: fixed;
+  border-collapse: collapse;
+  margin: 0 0 1.8mm 0;
+  page-break-inside: auto;
+  break-inside: auto;
+}
+
+table.kv { border: 0.45pt solid var(--line); }
+table.kv td {
+  padding: 1mm 1.8mm;
+  border-bottom: 0.26pt solid var(--line-soft);
+  font-size: 9.2pt;
+}
+table.kv tr:last-child td { border-bottom: none; }
+table.kv td.k {
+  background: #d9dde2;
+  color: #20242a;
+  border-right: 0.4pt solid #b3bac2;
+  font-weight: 700;
+}
+table.kv td.v { background: #fbfbfb; color: var(--ink-soft); }
+
+table.oneliners td {
+  padding: 0.78mm 1.6mm;
+  border-bottom: 0.22pt solid #d0d0d0;
+  font-size: 9.05pt;
+  vertical-align: top;
+}
+table.oneliners tr:last-child td { border-bottom: none; }
+table.oneliners td.bul {
+  width: 5.5mm;
+  color: #252525;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* --- Pills / callouts --- */
+.pill {
+  display: block;
+  border: 0.45pt solid #555555;
+  background: #f4f4f4;
+  color: #1a1a1a;
+  padding: 1.6mm 2.8mm;
+  margin: 0 0 1.8mm 0;
+  font-size: 9.2pt;
+  font-weight: 700;
+  page-break-inside: auto;
+  break-inside: auto;
+}
+.pill .icon { margin-right: 1.8mm; }
+.pill.green, .pill.amber, .pill.red, .pill.blue, .pill.purple {
+  background: #f2f2f2;
+  color: #1a1a1a;
+  border-color: #555555;
+}
+
+.dyk,
+.note-box {
+  border: 0.45pt solid var(--line);
+  margin: 0 0 1.8mm 0;
+  page-break-inside: auto;
+  break-inside: auto;
+}
+.dyk { background: #fafafa; }
+.dyk-title,
+.note-box-title {
+  background: #7a828a;
+  color: #ffffff;
+  font-size: 8.9pt;
+  font-weight: 700;
+  padding: 1mm 2.2mm;
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+.dyk-item,
+.note-box-body {
+  font-size: 9.1pt;
+  color: #222222;
+  padding: 1.2mm 2.2mm;
+}
+
+.footer {
+  border-top: 0.42pt solid #8a8a8a;
+  padding-top: 1.4mm;
+  margin-top: 2mm;
+  text-align: center;
+  font-size: 7.8pt;
+  color: #4a4a4a;
+}
+
+/* --- Compact definition strip --- */
+.def-list {
+  border-left: 1mm solid #444444;
+  padding: 1mm 0 1mm 2.6mm;
+  margin: 0 0 1.8mm 0;
+  page-break-inside: auto;
+  break-inside: auto;
+}
+.def-list .dl-item {
+  font-size: 9.3pt;
+  line-height: 1.35;
+  color: #222222;
+  padding: 0.5mm 0;
+  border-bottom: 0.2pt solid #d8d8d8;
+}
+.def-list .dl-item:last-child { border-bottom: none; }
+.def-list .dl-t { font-weight: 700; color: #111111; }
+.def-list .dl-sep { color: #666666; }
+.def-list .dl-d { color: #2e2e2e; }
+
+/* --- Tabular components --- */
+table.grid th,
+table.rapid th {
+  background: #d7dce2;
+  color: #1f242a;
+  border: 0.35pt solid #aeb6bf;
+  font-weight: 700;
+  text-align: left;
+}
+table.grid th { padding: 1.25mm 1.45mm; font-size: 8.95pt; }
+table.rapid th { padding: 1.05mm 1.6mm; font-size: 8.75pt; }
+
+table.grid td,
+table.rapid td {
+  border: 0.3pt solid #c2c2c2;
+  color: #1f1f1f;
+  vertical-align: middle;
+}
+table.grid td { padding: 1.05mm 1.2mm; font-size: 8.75pt; }
+table.rapid td { padding: 0.86mm 1.5mm; font-size: 8.6pt; }
+table.grid tr.alt td,
+table.rapid tr.alt td { background: var(--surface-alt); }
+table.rapid td:first-child { font-weight: 700; color: #181818; }
+table.rapid td:last-child { color: #3d3d3d; }
+
+/* --- Two-column comparison card --- */
+table.twocol {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 2.1mm 0;
+  margin: 0 0 1.8mm 0;
+  page-break-inside: auto;
+  break-inside: auto;
+}
+table.twocol td {
+  width: 50%;
+  vertical-align: top;
+  background: #f7f7f7;
+  border: 0.35pt solid #bdbdbd;
+  color: #1f1f1f;
+  font-size: 8.75pt;
+  padding: 1.25mm 1.7mm;
+}
+table.twocol td div { padding: 0.34mm 0; }
+
+/* --- Solved problems --- */
+table.prob {
+  border: 0.45pt solid #444444;
+  font-size: 9pt;
+}
+table.prob td {
+  padding: 0.7mm 1.7mm;
+  border-bottom: 0.22pt solid #d2d2d2;
+  line-height: 1.3;
+}
+table.prob tr:last-child td { border-bottom: none; }
+table.prob td.pnum {
+  background: #7f8790;
+  color: #ffffff;
+  width: 9mm;
+  text-align: center;
+  font-size: 10pt;
+  font-weight: 700;
+}
+table.prob td.pq { background: #efefef; color: #191919; }
+table.prob td.plbl {
+  background: #f5f5f5;
+  color: #222222;
+  width: 20mm;
+  text-align: center;
+  font-size: 8.6pt;
+  font-weight: 700;
+}
+table.prob td.pans-lbl { background: #767f88; color: #ffffff; }
+.probc .probc-ans-lbl { background: #7b838c; color: #ffffff; }
+table.prob td.pans { background: #ececec; color: #111111; font-weight: 700; }
+
+.prob-cols {
+  column-count: 2;
+  column-gap: 3.2mm;
+  column-fill: balance;
+  margin: 0 0 1.8mm 0;
+}
+.probc {
+  border: 0.4pt solid #525252;
+  margin: 0 0 1.8mm 0;
+  display: block;
+  break-inside: avoid;
+  page-break-inside: avoid;
+  font-size: 8.8pt;
+}
+.probc .probc-head {
+  background: #ededed;
+  border-bottom: 0.32pt solid #5f5f5f;
+  color: #111111;
+  padding: 0.8mm 1.8mm;
+}
+.probc .probc-num {
+  display: inline-block;
+  width: 5.5mm;
+  margin-right: 1.3mm;
+  border-radius: 0.8mm;
+  background: #808992;
+  color: #ffffff;
+  text-align: center;
+  font-weight: 700;
+}
+.probc .probc-q {
+  font-weight: 700;
+  line-height: 1.3;
+}
+.probc .probc-row {
+  padding: 0.58mm 1.6mm;
+  border-bottom: 0.2pt solid #dadada;
+  color: #222222;
+  line-height: 1.26;
+}
+.probc .probc-row:last-child { border-bottom: none; }
+.probc .probc-lbl {
+  display: inline-block;
+  min-width: 14mm;
+  text-align: center;
+  margin-right: 1.2mm;
+  border-radius: 0.7mm;
+  padding: 0.18mm 1.2mm;
+  background: #e4e4e4;
+  color: #1f1f1f;
+  font-size: 8.1pt;
+  font-weight: 700;
+}
+.probc .probc-ans { background: #f0f0f0; }
+.probc .probc-ans .probc-val { color: #111111; font-weight: 700; }
+
+/* --- Glossary / lookup --- */
+.gloss-1col {
+  border-top: 0.45pt solid #555555;
+  border-bottom: 0.45pt solid #555555;
+  padding: 0.9mm 0;
+  margin: 0 0 1.8mm 0;
+}
+.gloss-1col .g1-item {
+  font-size: 8.9pt;
+  line-height: 1.3;
+  padding: 0.45mm 1.4mm;
+  border-bottom: 0.18pt solid #dedede;
+  color: #232323;
+}
+.gloss-1col .g1-item:last-child { border-bottom: none; }
+.gloss-1col .g1-t { font-weight: 700; color: #131313; }
+.gloss-1col .g1-sep { color: #6a6a6a; }
+.gloss-1col .g1-d { color: #2d2d2d; }
+
+.term-pairs {
+  column-gap: 3mm;
+  border-top: 0.45pt solid #555555;
+  border-bottom: 0.45pt solid #555555;
+  padding: 0.9mm 0;
+  margin: 0 0 1.8mm 0;
+}
+.term-pairs .tp-item {
+  font-size: 8.5pt;
+  line-height: 1.28;
+  padding: 0.34mm 1.4mm;
+  border-bottom: 0.16pt solid #e0e0e0;
+  break-inside: avoid;
+  color: #202020;
+}
+.term-pairs .tp-en,
+.term-pairs .tp-ta { font-weight: 700; color: #101010; }
+.term-pairs .tp-eq { color: #7a7a7a; margin: 0 0.8mm; }
+
+/* --- Inline helpers --- */
+b, strong { font-weight: 700; }
+.hl { background: #ececec; padding: 0 0.8mm; }
+.eng { font-style: normal; }
+.unit { font-weight: 700; color: #1b1b1b; }
+sup { font-size: 0.74em; vertical-align: super; }
+sub { font-size: 0.74em; vertical-align: sub; }
+
+p.pbody {
+  margin: 0.4mm 0 0.9mm 0;
+  font-size: 9pt;
+  line-height: 1.36;
+  text-align: justify;
+  color: #252525;
+}
+p.pbold {
+  margin: 1mm 0 0.45mm 0;
+  font-size: 9pt;
+  color: #121212;
+  font-weight: 700;
+}
+
+/* --- Book-level pages --- */
+.cover-page { page: cover; }
+.frontmatter-page { page: frontmatter; }
+.back-cover-page { page: backcover; }
+
+.cover-page,
+.frontmatter-page,
+.back-cover-page {
+  min-height: 240mm;
+}
+
+.cover-box {
+  border: 0.9pt solid #3f3f3f;
+  padding: 10mm 9mm;
+  min-height: 238mm;
+  background:
+    linear-gradient(to bottom, #ffffff 0%, #f7f7f7 58%, #efefef 100%);
+}
+.cover-kicker {
+  font-size: 9.4pt;
+  letter-spacing: 0.7px;
+  color: #3d3d3d;
+  margin-bottom: 3.2mm;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.cover-rule {
+  height: 0;
+  border-top: 1.1pt solid #454545;
+  border-bottom: 0.5pt solid #9c9c9c;
+  margin-bottom: 5.2mm;
+}
+.cover-title {
+  font-size: 25pt;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.5px;
+  color: #1c1c1c;
+  margin-bottom: 3.2mm;
+}
+.cover-sub {
+  font-size: 12pt;
+  color: #202020;
+  margin-bottom: 1.8mm;
+  font-weight: 700;
+}
+.cover-sub2 {
+  font-size: 9.8pt;
+  letter-spacing: 0.55px;
+  color: #474747;
+  margin-bottom: 5.2mm;
+}
+.cover-band {
+  border: 0.5pt solid #8a8a8a;
+  background: #f1f1f1;
+  color: #1d1d1d;
+  padding: 1.8mm 2.4mm;
+  font-size: 8.8pt;
+  font-weight: 700;
+  margin-bottom: 6.2mm;
+}
+.cover-target-list {
+  margin: 0 0 5mm 4.8mm;
+  padding: 0;
+  font-size: 9.2pt;
+  line-height: 1.5;
+  color: #1f1f1f;
+}
+.cover-target-list li {
+  margin: 0 0 1.1mm 0;
+}
+.cover-meta {
+  font-size: 9pt;
+  line-height: 1.5;
+  color: #2a2a2a;
+}
+.ta-main-title {
+  line-height: 1.25;
+  font-size: 21pt;
+}
+.ta-subtitle {
+  line-height: 1.35;
+}
+.cover-meta > div {
+  border-bottom: 0.3pt solid #bdbdbd;
+  padding: 1.3mm 0.4mm;
+}
+.cover-meta > div:last-child {
+  border-bottom: none;
+}
+.cover-footer-strip {
+  margin-top: 13mm;
+  border-top: 0.8pt solid #4f4f4f;
+  border-bottom: 0.4pt solid #7f7f7f;
+  padding: 2.1mm 1.2mm;
+  font-size: 8.8pt;
+  letter-spacing: 0.4px;
+  color: #232323;
+  font-weight: 700;
+  text-align: center;
+  background: #f4f4f4;
+}
+
+.inside-title {
+  font-size: 15pt;
+  font-weight: 700;
+  margin-bottom: 5mm;
+  color: #2a2a2a;
+}
+.inside-text {
+  font-size: 9.6pt;
+  line-height: 1.5;
+  color: #242424;
+  margin-bottom: 2.5mm;
+}
+.copyright-note {
+  margin-top: 5mm;
+  border-top: 0.35pt solid #9f9f9f;
+  padding-top: 2.4mm;
+  font-size: 8.7pt;
+  line-height: 1.45;
+  color: #2f2f2f;
+}
+.foreword-greeting {
+  font-weight: 700;
+}
+.feature-box {
+  border: 0.45pt solid #9f9f9f;
+  background: #f8f8f8;
+  margin: 2.6mm 0 3.2mm 0;
+  padding: 2.2mm 2.5mm;
+}
+.feature-title {
+  font-size: 9.8pt;
+  font-weight: 700;
+  margin-bottom: 1.8mm;
+  color: #191919;
+}
+.feature-list {
+  margin: 0 0 0 4.2mm;
+  padding: 0;
+}
+.feature-list li {
+  margin: 0 0 1.1mm 0;
+  font-size: 9.2pt;
+  line-height: 1.45;
+  color: #202020;
+}
+.foreword-closing {
+  font-weight: 700;
+  margin-top: 2mm;
+}
+.foreword-signoff {
+  white-space: normal;
+  margin-top: 1mm;
+}
+.exam-subtitle {
+  font-weight: 700;
+  margin-bottom: 2.8mm;
+}
+.exam-list {
+  border-top: 0.4pt solid #c1c1c1;
+}
+.exam-card {
+  border-bottom: 0.4pt solid #cfcfcf;
+  padding: 2.1mm 0.5mm;
+}
+.exam-name {
+  font-size: 9.4pt;
+  font-weight: 700;
+  color: #151515;
+  margin-bottom: 1.1mm;
+}
+.exam-desc {
+  font-size: 9pt;
+  line-height: 1.45;
+  color: #2b2b2b;
+}
+.instruction-list {
+  border: 0.4pt solid #bdbdbd;
+  background: #fafafa;
+}
+.instruction-item {
+  border-bottom: 0.3pt solid #cfcfcf;
+  padding: 1.8mm 2.2mm;
+}
+.instruction-item:last-child {
+  border-bottom: none;
+}
+.instruction-step {
+  font-size: 9.3pt;
+  font-weight: 700;
+  color: #181818;
+  margin-bottom: 0.8mm;
+}
+.instruction-detail {
+  font-size: 8.9pt;
+  line-height: 1.45;
+  color: #2f2f2f;
+}
+.legal-box {
+  border: 0.5pt solid #9f9f9f;
+  background: #f7f7f7;
+  margin-bottom: 4mm;
+}
+.legal-row {
+  display: table;
+  width: 100%;
+  border-bottom: 0.3pt solid #c9c9c9;
+}
+.legal-row:last-child {
+  border-bottom: none;
+}
+.legal-row > span {
+  display: table-cell;
+  padding: 1.5mm 2mm;
+  font-size: 9pt;
+  color: #2c2c2c;
+  vertical-align: top;
+}
+.legal-row > span:first-child {
+  width: 32mm;
+  font-weight: 700;
+  background: #ececec;
+}
+
+.toc-title {
+  font-size: 15pt;
+  font-weight: 700;
+  margin-bottom: 4mm;
+  color: #111111;
+}
+.toc-table {
+  width: 170mm;
+  border-collapse: collapse;
+  font-size: 9.5pt;
+}
+.toc-table th,
+.toc-table td {
+  border: 0.35pt solid #bcbcbc;
+  padding: 1.2mm 2mm;
+  text-align: left;
+}
+.toc-table th {
+  background: #cbd2d9;
+  color: #1f242a;
+  font-weight: 700;
+}
+.toc-table tr:nth-child(even) td {
+  background: #f7f7f7;
+}
+.toc-table tr.toc-section td {
+  background: #e3e7ec;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+.toc-id {
+  width: 18mm;
+  font-weight: 700;
+}
+
+.chapter-break {
+  page-break-before: always;
+}
+.chapter-marker {
+  string-set: chapter content(text);
+  margin: 0;
+  padding: 0;
+  font-size: 0;
+  line-height: 0;
+  color: transparent;
+}
+
+/* --- Pagination efficiency rules --- */
+table.kv thead,
+table.grid thead,
+table.rapid thead,
+table.prob thead {
+  display: table-header-group;
+}
+table.kv tr,
+table.oneliners tr,
+table.grid tr,
+table.rapid tr,
+table.prob tr {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.dyk-item,
+.note-box-body > div,
+.def-list .dl-item,
+.probc .probc-row {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* Headings should not force large whitespace blocks. */
+.sec,
+.subh {
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+/* Keep heading with the next major block.
+   If there is no room for both, move both to next page. */
+.sec + table.kv,
+.sec + table.oneliners,
+.sec + table.grid,
+.sec + table.rapid,
+.sec + table.prob,
+.sec + .dyk,
+.sec + .note-box,
+.sec + .def-list,
+.sec + .term-pairs,
+.sec + .prob-cols,
+.subh + table.kv,
+.subh + table.oneliners,
+.subh + table.grid,
+.subh + table.rapid,
+.subh + table.prob,
+.subh + .dyk,
+.subh + .note-box,
+.subh + .def-list,
+.subh + .term-pairs,
+.subh + .prob-cols {
+  page-break-before: avoid;
+  break-before: avoid-page;
+}
+
+.back-cover-box {
+  border: 0.8pt solid #4e4e4e;
+  padding: 10mm;
+  min-height: 238mm;
+  background: linear-gradient(to bottom, #ffffff 0%, #f7f7f7 100%);
+}
+.back-title {
+  font-size: 16pt;
+  font-weight: 700;
+  margin-bottom: 2.8mm;
+  color: #202020;
+}
+.back-tag {
+  border: 0.4pt solid #969696;
+  background: #efefef;
+  color: #2f2f2f;
+  font-size: 8.7pt;
+  letter-spacing: 0.45px;
+  font-weight: 700;
+  padding: 1.4mm 1.8mm;
+  margin-bottom: 5mm;
+}
+.back-points {
+  font-size: 9.5pt;
+  line-height: 1.62;
+  color: #232323;
+  margin-bottom: 8mm;
+}
+.back-note {
+  margin-top: 10mm;
+  border-top: 0.4pt solid #9e9e9e;
+  padding-top: 3mm;
+  font-size: 9.3pt;
+  color: #3a3a3a;
+}
+.back-footer-strip {
+  margin-top: 9mm;
+  text-align: center;
+  border-top: 0.7pt solid #5f5f5f;
+  border-bottom: 0.3pt solid #9b9b9b;
+  padding: 2mm 1.2mm;
+  background: #f2f2f2;
+  color: #2d2d2d;
+  font-size: 8.8pt;
+  font-weight: 700;
+}
