@@ -1,67 +1,128 @@
 @import url("handbook_ta_print_bw.css");
 
-/* Subject color scheme for integrated color book */
+/* Keep the proven B/W pagination + cover/front-matter layout.
+   Only apply subject-wise color identity to chapter content blocks. */
 
 :root {
-  --p-dark: #0f4c81;
-  --p-soft: #e6f1fb;
-  --c-dark: #8a4b08;
-  --c-soft: #fff1e3;
-  --b-dark: #1f6b3a;
-  --b-soft: #e8f7ee;
+  --p-main: #1d4ed8; /* Physics */
+  --p-alt: #4338ca;
+  --p-soft: #eaf1ff;
+
+  --c-main: #c2410c; /* Chemistry */
+  --c-alt: #d97706;
+  --c-soft: #fff3e8;
+
+  --b-main: #0f766e; /* Biology */
+  --b-alt: #15803d;
+  --b-soft: #eaf9f2;
 }
 
-.subject-p .sec {
-  background: var(--p-dark);
-  border-left-color: #0b3a63;
+/* Physics */
+.subject-p .banner-code { background: var(--p-main); border-color: #1e40af; }
+.subject-p .banner-body { background: linear-gradient(to right, #f1f6ff, #e8efff); }
+.subject-p .banner-body::before { background: #8eb4f2; }
+.subject-p .sec { background: linear-gradient(90deg, var(--p-main), var(--p-alt)); border-left-color: #1e3a8a; }
+.subject-p .subh { background: var(--p-soft); color: #1e3a8a; border-left-color: #93c5fd; }
+.subject-p table.oneliners td.bul { color: #1d4ed8; }
+
+/* Chemistry */
+.subject-c .banner-code { background: var(--c-main); border-color: #9a3412; }
+.subject-c .banner-body { background: linear-gradient(to right, #fff7ef, #fff2e2); }
+.subject-c .banner-body::before { background: #e1ad7a; }
+.subject-c .sec { background: linear-gradient(90deg, var(--c-main), var(--c-alt)); border-left-color: #7c2d12; }
+.subject-c .subh { background: var(--c-soft); color: #7c2d12; border-left-color: #fdba74; }
+.subject-c table.oneliners td.bul { color: #c2410c; }
+
+/* Biology */
+.subject-b .banner-code { background: var(--b-main); border-color: #0f5d57; }
+.subject-b .banner-body { background: linear-gradient(to right, #effaf4, #e7f8f0); }
+.subject-b .banner-body::before { background: #82c8a7; }
+.subject-b .sec { background: linear-gradient(90deg, var(--b-main), var(--b-alt)); border-left-color: #14532d; }
+.subject-b .subh { background: var(--b-soft); color: #14532d; border-left-color: #86efac; }
+.subject-b table.oneliners td.bul { color: #0f766e; }
+
+/* Original chapter-style color language for tables and info boxes */
+table.kv { border-color: #0f766e; }
+table.kv td.k {
+  background: #0f766e;
+  color: #ffffff;
+  border-right-color: #0f766e;
 }
-.subject-c .sec {
-  background: var(--c-dark);
-  border-left-color: #6a3806;
+table.kv td.v { background: #ccfbf1; color: #1e293b; }
+
+table.grid th {
+  background: #0f766e;
+  color: #ffffff;
 }
-.subject-b .sec {
-  background: var(--b-dark);
-  border-left-color: #14502a;
+table.grid tr.alt td { background: #f3f4f6; }
+
+table.rapid th {
+  background: #134e4a;
+  color: #ffffff;
+}
+table.rapid tr.alt td { background: #f0fdfa; }
+table.rapid td:first-child { color: #134e4a; }
+table.rapid td:last-child { color: #64748b; }
+
+.dyk {
+  background: #ede9fe;
+  border-color: #4c1d95;
+}
+.dyk-title {
+  background: #4c1d95;
+  color: #ffffff;
 }
 
-.subject-p .subh {
-  background: var(--p-soft);
-  border-left-color: #5e95c7;
+.note-box { border-color: #b45309; }
+.note-box-title {
+  background: #b45309;
+  color: #ffffff;
 }
-.subject-c .subh {
-  background: var(--c-soft);
-  border-left-color: #d08b43;
-}
-.subject-b .subh {
-  background: var(--b-soft);
-  border-left-color: #4fa56f;
+.note-box-body { background: #fef3c7; color: #1e293b; }
+
+.def-list { border-left-color: #0f766e; }
+.def-list .dl-t { color: #0f766e; }
+
+.fstrip {
+  background: #1e3a8a;
+  color: #ffffff;
 }
 
-.subject-p table.grid th,
-.subject-p table.rapid th {
-  background: #d6e8fa;
-  color: #153a5a;
-}
-.subject-c table.grid th,
-.subject-c table.rapid th {
-  background: #ffe1c2;
-  color: #5f3612;
-}
-.subject-b table.grid th,
-.subject-b table.rapid th {
-  background: #d8f0de;
-  color: #1b4a2b;
-}
+.pill.green { background: #dcfce7; color: #14532d; border-color: #14532d; }
+.pill.amber { background: #fef3c7; color: #b45309; border-color: #b45309; }
+.pill.red { background: #fee2e2; color: #b91c1c; border-color: #b91c1c; }
+.pill.blue { background: #dbeafe; color: #1e3a8a; border-color: #1e3a8a; }
+.pill.purple { background: #ede9fe; color: #4c1d95; border-color: #4c1d95; }
 
-.subject-p .dyk-title,
-.subject-p .note-box-title {
-  background: #2f5d8a;
+/* solved numerical problems (original look) */
+table.prob { border-color: #1d4ed8; }
+table.prob td.pnum { background: #1d4ed8; color: #ffffff; }
+table.prob td.pq { background: #dbeafe; color: #1e3a8a; }
+table.prob td.plbl { background: #f3f4f6; color: #1e293b; }
+table.prob td.pans-lbl { background: #15803d; color: #ffffff; }
+table.prob td.pans { background: #dcfce7; color: #14532d; }
+
+.probc { border-color: #1d4ed8; }
+.probc .probc-head {
+  background: #dbeafe;
+  border-bottom-color: #1d4ed8;
+  color: #1e3a8a;
 }
-.subject-c .dyk-title,
-.subject-c .note-box-title {
-  background: #966027;
-}
-.subject-b .dyk-title,
-.subject-b .note-box-title {
-  background: #2e7043;
-}
+.probc .probc-num { background: #1d4ed8; color: #ffffff; }
+.probc .probc-lbl { background: #f3f4f6; color: #1e293b; }
+.probc .probc-ans { background: #dcfce7; }
+.probc .probc-ans-lbl { background: #15803d; color: #ffffff; }
+
+/* solved numericals (Biology) */
+.subject-b table.prob { border-color: #22c55e; }
+.subject-b table.prob td.pnum { background: #059669; }
+.subject-b table.prob td.pq { background: #dcfce7; color: #14532d; }
+.subject-b table.prob td.plbl { background: #f0fdf4; color: #14532d; }
+.subject-b table.prob td.pans-lbl { background: #15803d; color: #ffffff; }
+.subject-b table.prob td.pans { background: #e9fbe9; color: #14532d; }
+.subject-b .probc { border-color: #22c55e; }
+.subject-b .probc .probc-head { background: #dcfce7; border-bottom-color: #22c55e; color: #14532d; }
+.subject-b .probc .probc-num { background: #059669; }
+.subject-b .probc .probc-lbl { background: #f0fdf4; color: #14532d; }
+.subject-b .probc .probc-ans { background: #e9fbe9; }
+.subject-b .probc .probc-ans-lbl { background: #15803d; color: #ffffff; }

@@ -1,0 +1,577 @@
+/* ============================================================================
+   TET Paper II Science Handbook — Tamil Edition
+   Master Stylesheet (handbook_ta.css)
+   Pattern: P3_heat_temperature.py reference standard, ported to CSS
+   Engine: WeasyPrint (Pango + HarfBuzz for proper Tamil shaping)
+   ============================================================================ */
+
+/* --- FONTS --- */
+@font-face {
+  font-family: 'NST';
+  src: url('../fonts/NotoSansTamil-Regular.ttf') format('truetype');
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'NST';
+  src: url('../fonts/NotoSansTamil-Bold.ttf') format('truetype');
+  font-weight: bold;
+}
+
+/* --- PAGE --- */
+@page {
+  size: A4 portrait;
+  margin: 18mm;
+  @bottom-center {
+    content: counter(page);
+    font-family: 'NST', sans-serif;
+    font-size: 8.5pt;
+    color: #64748B;
+  }
+}
+
+/* --- ROOT --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  font-family: 'NST', sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.5;
+  color: #374151;
+}
+
+/* --- BANNER --- */
+.banner {
+  display: table;
+  width: 100%;
+  background: #134E4A;
+  color: white;
+  margin-bottom: 4mm;
+  page-break-after: avoid;
+}
+.banner-code {
+  display: table-cell;
+  width: 28mm;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 26pt;
+  font-weight: bold;
+  padding: 5mm 0;
+  line-height: 1;
+}
+.banner-body {
+  display: table-cell;
+  vertical-align: middle;
+  padding: 5mm 4mm 5mm 4mm;
+}
+.banner-title {
+  font-size: 16pt;
+  font-weight: bold;
+  line-height: 1.2;
+}
+.banner-sub {
+  font-size: 9.5pt;
+  color: #5EEAD4;
+  margin-top: 1.5mm;
+}
+.banner-foot {
+  font-size: 8.5pt;
+  color: #CCFBF1;
+  margin-top: 2mm;
+}
+
+/* --- SECTION HEADER (white on teal) --- */
+.sec {
+  background: #0F766E;
+  color: white;
+  font-size: 11pt;
+  font-weight: bold;
+  padding: 2.5mm 5mm;
+  margin: 4mm 0 2mm 0;
+  page-break-after: avoid;
+}
+
+/* --- SUB-HEADER --- */
+.subh {
+  background: #0D9488;
+  color: white;
+  font-size: 9.5pt;
+  font-weight: bold;
+  padding: 2mm 4mm;
+  margin: 3mm 0 2mm 0;
+  page-break-after: avoid;
+}
+
+/* --- KV LIST (definition table) --- */
+table.kv {
+  width: 174mm;
+  max-width: 174mm;
+  table-layout: fixed;
+  border-collapse: collapse;
+  border: 0.6pt solid #0F766E;
+  margin: 0 0 3mm 0;
+  page-break-inside: avoid;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+table.kv td {
+  padding: 2mm 3mm;
+  font-size: 10pt;
+  vertical-align: middle;
+  border-bottom: 0.3pt solid #D1D5DB;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+table.kv tr:last-child td { border-bottom: none; }
+table.kv td.k {
+  background: #0F766E;
+  color: white;
+  font-weight: bold;
+  border-right: 0.6pt solid #0F766E;
+}
+table.kv td.v {
+  background: #CCFBF1;
+  color: #1E293B;
+}
+
+/* --- ONE-LINERS (bulleted compact rows) --- */
+table.oneliners {
+  width: 174mm;
+  max-width: 174mm;
+  table-layout: fixed;
+  border-collapse: collapse;
+  margin: 0 0 3mm 0;
+  page-break-inside: avoid;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+table.oneliners td {
+  padding: 1.5mm 2.5mm;
+  font-size: 10pt;
+  vertical-align: top;
+  color: #1E293B;
+  border-bottom: 0.25pt solid #D1D5DB;
+}
+table.oneliners tr:last-child td { border-bottom: none; }
+table.oneliners td.bul {
+  width: 6mm;
+  color: #0F766E;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* --- PILL (single-line highlight box) --- */
+.pill {
+  display: block;
+  padding: 2.5mm 4mm;
+  margin: 0 0 3mm 0;
+  font-size: 10pt;
+  font-weight: bold;
+  border: 0.5pt solid;
+  page-break-inside: avoid;
+}
+.pill .icon { margin-right: 2mm; font-weight: bold; }
+.pill.green { background: #DCFCE7; color: #14532D; border-color: #14532D; }
+.pill.amber { background: #FEF3C7; color: #B45309; border-color: #B45309; }
+.pill.red   { background: #FEE2E2; color: #B91C1C; border-color: #B91C1C; }
+.pill.blue  { background: #DBEAFE; color: #1E3A8A; border-color: #1E3A8A; }
+.pill.purple{ background: #EDE9FE; color: #4C1D95; border-color: #4C1D95; }
+
+/* --- FORMULA STRIP --- */
+.fstrip {
+  background: #1E3A8A;
+  color: white;
+  padding: 2.5mm 4mm;
+  margin: 0 0 3mm 0;
+  font-size: 12pt;
+  page-break-inside: avoid;
+}
+.fstrip .label  { font-weight: bold; margin-right: 3mm; }
+.fstrip .formula{ font-weight: bold; }
+.fstrip .note   { font-size: 8.5pt; color: #94A3B8; margin-left: 3mm; }
+
+/* --- DID YOU KNOW (purple box) --- */
+.dyk {
+  background: #EDE9FE;
+  border: 0.5pt solid #4C1D95;
+  padding: 2.5mm 4mm;
+  margin: 0 0 3mm 0;
+  page-break-inside: avoid;
+}
+.dyk-title {
+  background: #4C1D95;
+  color: white;
+  font-size: 9.5pt;
+  font-weight: bold;
+  padding: 1.5mm 3mm;
+  margin: -2.5mm -4mm 2mm -4mm;
+}
+.dyk-item {
+  font-size: 10pt;
+  color: #1E293B;
+  padding: 1mm 0;
+}
+
+/* --- NOTE BOX (amber) --- */
+.note-box {
+  border: 0.5pt solid #B45309;
+  margin: 0 0 3mm 0;
+  page-break-inside: avoid;
+}
+.note-box-title {
+  background: #B45309;
+  color: white;
+  font-size: 9.5pt;
+  font-weight: bold;
+  padding: 1.5mm 3mm;
+}
+.note-box-body {
+  background: #FEF3C7;
+  padding: 2mm 3mm;
+  font-size: 10pt;
+  color: #1E293B;
+}
+
+/* --- FOOTER --- */
+.footer {
+  border-top: 0.5pt solid #D1D5DB;
+  padding-top: 2mm;
+  margin-top: 4mm;
+  text-align: center;
+  font-size: 8pt;
+  color: #64748B;
+}
+
+/* --- INLINE DEFINITION LIST (compact alternative to kv_list) --- */
+.def-list {
+  border-left: 3pt solid #0F766E;
+  padding: 1.5mm 0 1.5mm 4mm;
+  margin: 0 0 3mm 0;
+  page-break-inside: avoid;
+}
+.def-list .dl-item {
+  font-size: 10pt;
+  line-height: 1.45;
+  padding: 0.8mm 0;
+  color: #1E293B;
+  border-bottom: 0.25pt solid #E5E7EB;
+}
+.def-list .dl-item:last-child { border-bottom: none; }
+.def-list .dl-t {
+  font-weight: bold;
+  color: #0F766E;
+}
+.def-list .dl-sep {
+  color: #64748B;
+}
+.def-list .dl-d {
+  color: #374151;
+}
+
+/* --- GLOSSARY (1-col compact — denser than 2-col for Tamil) --- */
+.gloss-1col {
+  border-top: 0.6pt solid #0F766E;
+  border-bottom: 0.6pt solid #0F766E;
+  padding: 1.5mm 0;
+  margin: 0 0 3mm 0;
+}
+.gloss-1col .g1-item {
+  font-size: 9.5pt;
+  line-height: 1.4;
+  padding: 0.6mm 2mm;
+  border-bottom: 0.2pt solid #E5E7EB;
+  color: #374151;
+}
+.gloss-1col .g1-item:last-child { border-bottom: none; }
+.gloss-1col .g1-t {
+  font-weight: bold;
+  color: #0F766E;
+}
+.gloss-1col .g1-sep { color: #94A3B8; }
+.gloss-1col .g1-d { color: #374151; }
+
+/* --- TERM PAIRS (English ↔ Tamil compact lookup, multi-column flow) --- */
+.term-pairs {
+  width: 174mm;
+  column-gap: 4mm;
+  margin: 0 0 3mm 0;
+  border-top: 0.6pt solid #0F766E;
+  border-bottom: 0.6pt solid #0F766E;
+  padding: 1.5mm 0;
+}
+.term-pairs .tp-item {
+  font-size: 9pt;
+  line-height: 1.35;
+  padding: 0.5mm 2mm;
+  border-bottom: 0.2pt solid #E5E7EB;
+  break-inside: avoid;
+  color: #1E293B;
+}
+.term-pairs .tp-en {
+  font-weight: bold;
+  color: #1E3A8A;
+}
+.term-pairs .tp-eq {
+  color: #94A3B8;
+  margin: 0 1mm;
+}
+.term-pairs .tp-ta {
+  color: #0F766E;
+  font-weight: bold;
+}
+
+/* --- INLINE HELPERS --- */
+b, strong { font-weight: bold; }
+.hl       { background: #FEF3C7; padding: 0 1mm; }
+.eng      { font-style: normal; }  /* English in brackets — stays normal */
+.unit     { font-weight: bold; color: #1E3A8A; }
+sup       { font-size: 0.75em; vertical-align: super; }
+sub       { font-size: 0.75em; vertical-align: sub; }
+
+/* --- GRID (multi-column comparison table) --- */
+table.grid {
+  width: 174mm;          /* exact usable width */
+  max-width: 174mm;
+  table-layout: fixed;   /* CRITICAL: respect colgroup widths */
+  border-collapse: collapse;
+  margin: 0 0 3mm 0;
+  page-break-inside: avoid;
+  font-size: 9.5pt;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+table.grid th {
+  background: #0F766E;
+  color: white;
+  font-weight: bold;
+  padding: 2mm 2mm;
+  font-size: 9.5pt;
+  text-align: left;
+  vertical-align: middle;
+  border: 0.4pt solid #D1D5DB;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+table.grid td {
+  padding: 2mm 2mm;
+  font-size: 9.5pt;
+  vertical-align: middle;
+  color: #374151;
+  border: 0.4pt solid #D1D5DB;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+table.grid tr.alt td { background: #F3F4F6; }
+
+/* --- TWO COLUMN BLOCK --- */
+table.twocol {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 3mm 0;
+  margin: 0 0 3mm 0;
+  page-break-inside: avoid;
+}
+table.twocol td {
+  width: 50%;
+  vertical-align: top;
+  background: #F0FDFA;
+  border: 0.4pt solid #5EEAD4;
+  padding: 2.5mm 3mm;
+  font-size: 9.5pt;
+  color: #1E293B;
+}
+table.twocol td div { padding: 0.6mm 0; }
+
+/* --- SOLVED PROBLEM (single column, full width — compact) --- */
+table.prob {
+  width: 174mm;
+  max-width: 174mm;
+  table-layout: fixed;
+  border-collapse: collapse;
+  border: 0.5pt solid #1D4ED8;
+  margin: 0 0 2mm 0;             /* was 3mm — tighter inter-problem gap */
+  page-break-inside: avoid;
+  font-size: 10pt;
+}
+table.prob td {
+  padding: 1mm 3mm;              /* was 1.5mm — tighter row padding */
+  vertical-align: top;
+  border-bottom: 0.3pt solid #DBEAFE;
+  line-height: 1.4;
+}
+table.prob tr:last-child td { border-bottom: none; }
+table.prob td.pnum {
+  background: #1D4ED8;
+  color: white;
+  font-weight: bold;
+  font-size: 12pt;
+  width: 10mm;                   /* was 12mm — narrower number column */
+  text-align: center;
+  vertical-align: middle;
+}
+table.prob td.pq {
+  background: #DBEAFE;
+  color: #1E3A8A;
+  padding: 1.2mm 3mm;            /* slightly more for question header */
+}
+table.prob td.plbl {
+  background: #F3F4F6;
+  color: #1E293B;
+  font-weight: bold;
+  width: 24mm;                   /* was 30mm — narrower label column */
+  font-size: 9.5pt;
+  text-align: center;
+}
+table.prob td.pans-lbl {
+  background: #15803D;
+  color: white;
+}
+table.prob td.pans {
+  background: #DCFCE7;
+  color: #14532D;
+  font-weight: bold;
+}
+
+/* --- 2-COLUMN PROBLEM FLOW (newspaper-style: fill col 1 top-down, then col 2) --- */
+.prob-cols {
+  width: 174mm;
+  column-count: 2;
+  column-gap: 4mm;
+  column-fill: balance;
+  margin: 0 0 2mm 0;
+}
+
+.probc {
+  border: 0.5pt solid #1D4ED8;
+  font-size: 9.5pt;
+  page-break-inside: avoid;
+  break-inside: avoid;       /* Prevent splitting a problem across columns */
+  margin: 0 0 2.5mm 0;
+  display: block;
+}
+.probc .probc-head {
+  background: #DBEAFE;
+  padding: 1mm 2.5mm;
+  border-bottom: 0.4pt solid #1D4ED8;
+  color: #1E3A8A;
+}
+.probc .probc-num {
+  display: inline-block;
+  background: #1D4ED8;
+  color: white;
+  font-weight: bold;
+  width: 6mm;
+  text-align: center;
+  margin-right: 2mm;
+  border-radius: 1mm;
+}
+.probc .probc-q {
+  font-weight: bold;
+  font-size: 9.5pt;
+  line-height: 1.35;
+}
+.probc .probc-row {
+  padding: 0.8mm 2.5mm;
+  border-bottom: 0.25pt solid #E5E7EB;
+  font-size: 9pt;
+  line-height: 1.35;
+  color: #1E293B;
+}
+.probc .probc-row:last-child { border-bottom: none; }
+.probc .probc-lbl {
+  display: inline-block;
+  font-weight: bold;
+  color: #1E293B;
+  background: #F3F4F6;
+  padding: 0.2mm 1.8mm;
+  margin-right: 2mm;
+  font-size: 8.5pt;
+  border-radius: 1mm;
+  min-width: 18mm;
+  text-align: center;
+}
+.probc .probc-val {
+  color: #1E293B;
+}
+.probc .probc-ans {
+  background: #DCFCE7;
+}
+.probc .probc-ans-lbl {
+  background: #15803D;
+  color: white;
+}
+.probc .probc-ans .probc-val {
+  color: #14532D;
+  font-weight: bold;
+}
+
+/* --- RAPID REVISION TABLE --- */
+table.rapid {
+  width: 174mm;
+  max-width: 174mm;
+  table-layout: fixed;
+  border-collapse: collapse;
+  margin: 0 0 3mm 0;
+  page-break-inside: avoid;
+  font-size: 9.5pt;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+table.rapid th {
+  background: #134E4A;
+  color: white;
+  padding: 1.8mm 2.5mm;
+  font-weight: bold;
+  text-align: left;
+  border: 0.3pt solid #D1D5DB;
+}
+table.rapid td {
+  padding: 1.5mm 2.5mm;
+  vertical-align: middle;
+  color: #1E293B;
+  border: 0.3pt solid #D1D5DB;
+}
+table.rapid tr.alt td { background: #F0FDFA; }
+table.rapid td:first-child { font-weight: bold; color: #134E4A; }
+table.rapid td:last-child { font-size: 9pt; color: #64748B; font-style: italic; }
+
+/* --- GLOSSARY (2-col layout) --- */
+table.gloss-wrap {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 3mm 0;
+  margin: 0 0 3mm 0;
+}
+table.gloss-wrap > tbody > tr > td {
+  vertical-align: top;
+  width: 50%;
+}
+table.glcol {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9pt;
+}
+table.glcol td {
+  padding: 1.2mm 2mm;
+  vertical-align: top;
+  border-bottom: 0.25pt solid #E5E7EB;
+}
+table.glcol td.gt {
+  width: 28mm;
+  color: #0F766E;
+  font-weight: bold;
+}
+table.glcol td.gd {
+  color: #374151;
+}
+
+/* --- PARAGRAPH STYLES --- */
+p.pbody {
+  margin: 1mm 0 2mm 0;
+  font-size: 10pt;
+  color: #374151;
+}
+p.pbold {
+  margin: 2mm 0 1mm 0;
+  font-size: 10pt;
+  color: #1E293B;
+  font-weight: bold;
+}
