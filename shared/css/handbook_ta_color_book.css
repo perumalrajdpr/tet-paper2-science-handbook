@@ -1,128 +1,293 @@
 @import url("handbook_ta_print_bw.css");
 
-/* Keep the proven B/W pagination + cover/front-matter layout.
-   Only apply subject-wise color identity to chapter content blocks. */
+/* ============================================================================
+   Tamil Color Book — Palette: "Scholar Modern"
+   Sophisticated jewel tones (Indigo / Burnt-Orange / Forest) + soft tints.
+   Inherits B/W print pagination, cover & front-matter from handbook_ta_print_bw.css.
+   ============================================================================ */
 
 :root {
-  --p-main: #1d4ed8; /* Physics */
-  --p-alt: #4338ca;
-  --p-soft: #eaf1ff;
+  /* Physics — Indigo */
+  --p-main: #3730a3;
+  --p-alt:  #6366f1;
+  --p-soft: #eef2ff;
+  --p-deep: #1e1b4b;
+  --p-line: #c7d2fe;
 
-  --c-main: #c2410c; /* Chemistry */
-  --c-alt: #d97706;
-  --c-soft: #fff3e8;
+  /* Chemistry — Burnt orange */
+  --c-main: #9a3412;
+  --c-alt:  #ea580c;
+  --c-soft: #fff7ed;
+  --c-deep: #7c2d12;
+  --c-line: #fed7aa;
 
-  --b-main: #0f766e; /* Biology */
-  --b-alt: #15803d;
-  --b-soft: #eaf9f2;
+  /* Biology — Forest */
+  --b-main: #166534;
+  --b-alt:  #16a34a;
+  --b-soft: #f0fdf4;
+  --b-deep: #14532d;
+  --b-line: #bbf7d0;
+
+  /* Neutral accents (subject-agnostic blocks) */
+  --n-ink:    #0f172a;
+  --n-soft:   #f8fafc;
+  --n-line:   #cbd5e1;
+  --n-line-2: #e2e8f0;
 }
+
+/* =====================================================
+   Subject identity — banner, sec, subh, oneliners bullet
+   ===================================================== */
 
 /* Physics */
-.subject-p .banner-code { background: var(--p-main); border-color: #1e40af; }
-.subject-p .banner-body { background: linear-gradient(to right, #f1f6ff, #e8efff); }
-.subject-p .banner-body::before { background: #8eb4f2; }
-.subject-p .sec { background: linear-gradient(90deg, var(--p-main), var(--p-alt)); border-left-color: #1e3a8a; }
-.subject-p .subh { background: var(--p-soft); color: #1e3a8a; border-left-color: #93c5fd; }
-.subject-p table.oneliners td.bul { color: #1d4ed8; }
+.subject-p .banner-code {
+  background: var(--p-main);
+  border-color: var(--p-deep);
+  color: #ffffff;
+}
+.subject-p .banner-body {
+  background: linear-gradient(to right, #f5f7ff, #eef2ff);
+}
+.subject-p .banner-body::before { background: var(--p-alt); }
+.subject-p .banner-title { color: var(--p-deep); }
+
+.subject-p .sec {
+  background: linear-gradient(90deg, var(--p-main), var(--p-alt));
+  border-left-color: var(--p-deep);
+  color: #ffffff;
+}
+.subject-p .subh {
+  background: var(--p-soft);
+  color: var(--p-deep);
+  border-left-color: var(--p-alt);
+}
+.subject-p table.oneliners td.bul { color: var(--p-main); }
 
 /* Chemistry */
-.subject-c .banner-code { background: var(--c-main); border-color: #9a3412; }
-.subject-c .banner-body { background: linear-gradient(to right, #fff7ef, #fff2e2); }
-.subject-c .banner-body::before { background: #e1ad7a; }
-.subject-c .sec { background: linear-gradient(90deg, var(--c-main), var(--c-alt)); border-left-color: #7c2d12; }
-.subject-c .subh { background: var(--c-soft); color: #7c2d12; border-left-color: #fdba74; }
-.subject-c table.oneliners td.bul { color: #c2410c; }
+.subject-c .banner-code {
+  background: var(--c-main);
+  border-color: var(--c-deep);
+  color: #ffffff;
+}
+.subject-c .banner-body {
+  background: linear-gradient(to right, #fffaf3, #fff7ed);
+}
+.subject-c .banner-body::before { background: var(--c-alt); }
+.subject-c .banner-title { color: var(--c-deep); }
+
+.subject-c .sec {
+  background: linear-gradient(90deg, var(--c-main), var(--c-alt));
+  border-left-color: var(--c-deep);
+  color: #ffffff;
+}
+.subject-c .subh {
+  background: var(--c-soft);
+  color: var(--c-deep);
+  border-left-color: var(--c-alt);
+}
+.subject-c table.oneliners td.bul { color: var(--c-main); }
 
 /* Biology */
-.subject-b .banner-code { background: var(--b-main); border-color: #0f5d57; }
-.subject-b .banner-body { background: linear-gradient(to right, #effaf4, #e7f8f0); }
-.subject-b .banner-body::before { background: #82c8a7; }
-.subject-b .sec { background: linear-gradient(90deg, var(--b-main), var(--b-alt)); border-left-color: #14532d; }
-.subject-b .subh { background: var(--b-soft); color: #14532d; border-left-color: #86efac; }
-.subject-b table.oneliners td.bul { color: #0f766e; }
+.subject-b .banner-code {
+  background: var(--b-main);
+  border-color: var(--b-deep);
+  color: #ffffff;
+}
+.subject-b .banner-body {
+  background: linear-gradient(to right, #f4fbf6, #f0fdf4);
+}
+.subject-b .banner-body::before { background: var(--b-alt); }
+.subject-b .banner-title { color: var(--b-deep); }
 
-/* Original chapter-style color language for tables and info boxes */
-table.kv { border-color: #0f766e; }
+.subject-b .sec {
+  background: linear-gradient(90deg, var(--b-main), var(--b-alt));
+  border-left-color: var(--b-deep);
+  color: #ffffff;
+}
+.subject-b .subh {
+  background: var(--b-soft);
+  color: var(--b-deep);
+  border-left-color: var(--b-alt);
+}
+.subject-b table.oneliners td.bul { color: var(--b-main); }
+
+/* =====================================================
+   Tables — subject-aware tinting (kv, grid, rapid, prob)
+   ===================================================== */
+
+/* --- kv (key/value) --- */
+table.kv { border-color: var(--n-line); }
 table.kv td.k {
-  background: #0f766e;
+  background: var(--n-ink);
   color: #ffffff;
-  border-right-color: #0f766e;
+  border-right-color: var(--n-ink);
+  font-weight: 700;
 }
-table.kv td.v { background: #ccfbf1; color: #1e293b; }
+table.kv td.v { background: #ffffff; color: #1e293b; }
 
+.subject-p table.kv { border-color: var(--p-line); }
+.subject-p table.kv td.k { background: var(--p-main); border-right-color: var(--p-main); }
+.subject-p table.kv td.v { background: var(--p-soft); color: var(--p-deep); }
+
+.subject-c table.kv { border-color: var(--c-line); }
+.subject-c table.kv td.k { background: var(--c-main); border-right-color: var(--c-main); }
+.subject-c table.kv td.v { background: var(--c-soft); color: var(--c-deep); }
+
+.subject-b table.kv { border-color: var(--b-line); }
+.subject-b table.kv td.k { background: var(--b-main); border-right-color: var(--b-main); }
+.subject-b table.kv td.v { background: var(--b-soft); color: var(--b-deep); }
+
+/* --- grid --- */
 table.grid th {
-  background: #0f766e;
+  background: var(--n-ink);
   color: #ffffff;
+  border-color: var(--n-ink);
 }
-table.grid tr.alt td { background: #f3f4f6; }
+table.grid td { border-color: var(--n-line-2); }
+table.grid tr.alt td { background: var(--n-soft); }
 
+.subject-p table.grid th { background: var(--p-main); border-color: var(--p-deep); }
+.subject-p table.grid td { border-color: var(--p-line); }
+.subject-p table.grid tr.alt td { background: var(--p-soft); }
+
+.subject-c table.grid th { background: var(--c-main); border-color: var(--c-deep); }
+.subject-c table.grid td { border-color: var(--c-line); }
+.subject-c table.grid tr.alt td { background: var(--c-soft); }
+
+.subject-b table.grid th { background: var(--b-main); border-color: var(--b-deep); }
+.subject-b table.grid td { border-color: var(--b-line); }
+.subject-b table.grid tr.alt td { background: var(--b-soft); }
+
+/* --- rapid --- */
 table.rapid th {
-  background: #134e4a;
+  background: var(--n-ink);
   color: #ffffff;
+  border-color: var(--n-ink);
 }
-table.rapid tr.alt td { background: #f0fdfa; }
-table.rapid td:first-child { color: #134e4a; }
-table.rapid td:last-child { color: #64748b; }
+table.rapid td { border-color: var(--n-line-2); }
+table.rapid tr.alt td { background: var(--n-soft); }
+table.rapid td:first-child { color: var(--n-ink); }
+table.rapid td:last-child { color: #475569; }
 
+.subject-p table.rapid th { background: var(--p-deep); }
+.subject-p table.rapid tr.alt td { background: var(--p-soft); }
+.subject-p table.rapid td:first-child { color: var(--p-deep); }
+
+.subject-c table.rapid th { background: var(--c-deep); }
+.subject-c table.rapid tr.alt td { background: var(--c-soft); }
+.subject-c table.rapid td:first-child { color: var(--c-deep); }
+
+.subject-b table.rapid th { background: var(--b-deep); }
+.subject-b table.rapid tr.alt td { background: var(--b-soft); }
+.subject-b table.rapid td:first-child { color: var(--b-deep); }
+
+/* --- twocol comparison --- */
+.subject-p table.twocol td { background: var(--p-soft); border-color: var(--p-line); color: var(--p-deep); }
+.subject-c table.twocol td { background: var(--c-soft); border-color: var(--c-line); color: var(--c-deep); }
+.subject-b table.twocol td { background: var(--b-soft); border-color: var(--b-line); color: var(--b-deep); }
+
+/* =====================================================
+   Info boxes — dyk, note-box, fstrip, def-list
+   ===================================================== */
+
+/* dyk — Violet (subject-agnostic, intentionally distinct) */
 .dyk {
-  background: #ede9fe;
-  border-color: #4c1d95;
+  background: #f5f3ff;
+  border-color: #ddd6fe;
 }
 .dyk-title {
-  background: #4c1d95;
+  background: #6d28d9;
   color: #ffffff;
 }
+.dyk-item { color: #2e1065; }
 
-.note-box { border-color: #b45309; }
+/* note-box — Amber */
+.note-box { border-color: #fcd34d; }
 .note-box-title {
   background: #b45309;
   color: #ffffff;
 }
-.note-box-body { background: #fef3c7; color: #1e293b; }
+.note-box-body { background: #fffbeb; color: #78350f; }
 
-.def-list { border-left-color: #0f766e; }
-.def-list .dl-t { color: #0f766e; }
+/* def-list — neutral with subject left-bar */
+.def-list { border-left-color: var(--n-ink); }
+.def-list .dl-t { color: var(--n-ink); }
+.subject-p .def-list { border-left-color: var(--p-main); }
+.subject-p .def-list .dl-t { color: var(--p-main); }
+.subject-c .def-list { border-left-color: var(--c-main); }
+.subject-c .def-list .dl-t { color: var(--c-main); }
+.subject-b .def-list { border-left-color: var(--b-main); }
+.subject-b .def-list .dl-t { color: var(--b-main); }
 
+/* fstrip — slate-900 (premium neutral) */
 .fstrip {
-  background: #1e3a8a;
+  background: var(--n-ink);
   color: #ffffff;
 }
 
-.pill.green { background: #dcfce7; color: #14532d; border-color: #14532d; }
-.pill.amber { background: #fef3c7; color: #b45309; border-color: #b45309; }
-.pill.red { background: #fee2e2; color: #b91c1c; border-color: #b91c1c; }
-.pill.blue { background: #dbeafe; color: #1e3a8a; border-color: #1e3a8a; }
-.pill.purple { background: #ede9fe; color: #4c1d95; border-color: #4c1d95; }
+/* =====================================================
+   Pills — Tailwind 100/700 pairs (low-bg, high-contrast text)
+   ===================================================== */
+.pill.green  { background: #dcfce7; color: #15803d; border-color: #86efac; }
+.pill.amber  { background: #fef3c7; color: #b45309; border-color: #fcd34d; }
+.pill.red    { background: #fee2e2; color: #b91c1c; border-color: #fca5a5; }
+.pill.blue   { background: #dbeafe; color: #1d4ed8; border-color: #93c5fd; }
+.pill.purple { background: #ede9fe; color: #6d28d9; border-color: #c4b5fd; }
 
-/* solved numerical problems (original look) */
-table.prob { border-color: #1d4ed8; }
-table.prob td.pnum { background: #1d4ed8; color: #ffffff; }
-table.prob td.pq { background: #dbeafe; color: #1e3a8a; }
-table.prob td.plbl { background: #f3f4f6; color: #1e293b; }
-table.prob td.pans-lbl { background: #15803d; color: #ffffff; }
-table.prob td.pans { background: #dcfce7; color: #14532d; }
+/* =====================================================
+   Solved problems — subject-aware (prob, probc)
+   Default = Physics-flavor blue (most numericals are in Physics)
+   ===================================================== */
 
-.probc { border-color: #1d4ed8; }
+table.prob { border-color: var(--p-main); }
+table.prob td.pnum { background: var(--p-main); color: #ffffff; }
+table.prob td.pq { background: var(--p-soft); color: var(--p-deep); }
+table.prob td.plbl { background: #f1f5f9; color: #1e293b; }
+table.prob td.pans-lbl { background: var(--b-main); color: #ffffff; }
+table.prob td.pans { background: var(--b-soft); color: var(--b-deep); }
+
+.probc { border-color: var(--p-main); }
 .probc .probc-head {
-  background: #dbeafe;
-  border-bottom-color: #1d4ed8;
-  color: #1e3a8a;
+  background: var(--p-soft);
+  border-bottom-color: var(--p-main);
+  color: var(--p-deep);
 }
-.probc .probc-num { background: #1d4ed8; color: #ffffff; }
-.probc .probc-lbl { background: #f3f4f6; color: #1e293b; }
-.probc .probc-ans { background: #dcfce7; }
-.probc .probc-ans-lbl { background: #15803d; color: #ffffff; }
+.probc .probc-num { background: var(--p-main); color: #ffffff; }
+.probc .probc-lbl { background: #f1f5f9; color: #1e293b; }
+.probc .probc-ans { background: var(--b-soft); }
+.probc .probc-ans-lbl { background: var(--b-main); color: #ffffff; }
 
-/* solved numericals (Biology) */
-.subject-b table.prob { border-color: #22c55e; }
-.subject-b table.prob td.pnum { background: #059669; }
-.subject-b table.prob td.pq { background: #dcfce7; color: #14532d; }
-.subject-b table.prob td.plbl { background: #f0fdf4; color: #14532d; }
-.subject-b table.prob td.pans-lbl { background: #15803d; color: #ffffff; }
-.subject-b table.prob td.pans { background: #e9fbe9; color: #14532d; }
-.subject-b .probc { border-color: #22c55e; }
-.subject-b .probc .probc-head { background: #dcfce7; border-bottom-color: #22c55e; color: #14532d; }
-.subject-b .probc .probc-num { background: #059669; }
-.subject-b .probc .probc-lbl { background: #f0fdf4; color: #14532d; }
-.subject-b .probc .probc-ans { background: #e9fbe9; }
-.subject-b .probc .probc-ans-lbl { background: #15803d; color: #ffffff; }
+/* Chemistry overrides for solved problems */
+.subject-c table.prob { border-color: var(--c-main); }
+.subject-c table.prob td.pnum { background: var(--c-main); }
+.subject-c table.prob td.pq { background: var(--c-soft); color: var(--c-deep); }
+.subject-c .probc { border-color: var(--c-main); }
+.subject-c .probc .probc-head { background: var(--c-soft); border-bottom-color: var(--c-main); color: var(--c-deep); }
+.subject-c .probc .probc-num { background: var(--c-main); }
+
+/* Biology overrides for solved problems */
+.subject-b table.prob { border-color: var(--b-main); }
+.subject-b table.prob td.pnum { background: var(--b-main); color: #ffffff; }
+.subject-b table.prob td.pq { background: var(--b-soft); color: var(--b-deep); }
+.subject-b table.prob td.plbl { background: #f0fdf4; color: var(--b-deep); }
+.subject-b table.prob td.pans-lbl { background: var(--b-deep); color: #ffffff; }
+.subject-b table.prob td.pans { background: #ecfdf5; color: var(--b-deep); }
+.subject-b .probc { border-color: var(--b-main); }
+.subject-b .probc .probc-head { background: var(--b-soft); border-bottom-color: var(--b-main); color: var(--b-deep); }
+.subject-b .probc .probc-num { background: var(--b-main); color: #ffffff; }
+.subject-b .probc .probc-lbl { background: #f0fdf4; color: var(--b-deep); }
+.subject-b .probc .probc-ans { background: #ecfdf5; }
+.subject-b .probc .probc-ans-lbl { background: var(--b-deep); color: #ffffff; }
+
+/* =====================================================
+   Glossary / term-pairs — subject-aware borders
+   ===================================================== */
+.subject-p .gloss-1col,
+.subject-p .term-pairs { border-color: var(--p-line); }
+.subject-c .gloss-1col,
+.subject-c .term-pairs { border-color: var(--c-line); }
+.subject-b .gloss-1col,
+.subject-b .term-pairs { border-color: var(--b-line); }
+
+/* Inline highlight */
+.hl { background: #fef3c7; color: #78350f; }
