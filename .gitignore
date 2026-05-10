@@ -266,3 +266,6 @@ output/*_SECTION_*.pdf
 
 # Claude worktree state
 .claude/
+
+# Local design source assets
+*.psd
