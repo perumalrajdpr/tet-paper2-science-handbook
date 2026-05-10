@@ -109,6 +109,13 @@ def main() -> int:
         out_html, out_fragment = build_wordpress_bundle(requested)
         print(f"Built WordPress bundle: {out_html}")
         print(f"Built WordPress fragment: {out_fragment}")
+
+        import shutil
+        release_dir = ROOT / "release" / "web"
+        release_dir.mkdir(parents=True, exist_ok=True)
+        for src in (out_html, out_fragment):
+            shutil.copy2(src, release_dir / src.name)
+        print(f"\n>>> FINAL RELEASE BUNDLE: {release_dir}")
     except Exception as exc:
         print(f"ERROR: {exc}")
         return 1

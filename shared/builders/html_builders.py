@@ -39,9 +39,20 @@ def _safe(text: str) -> str:
 
 def banner(code: str, title: str, sub: str = '', foot: str = '') -> str:
     foot = foot or 'போட்டித் தேர்வுகளுக்கான அறிவியல் கையேடு'
+    # Split chapter code into letter (P/C/B) + digits so CSS can size them
+    # differently — letter larger, digits slightly smaller.
+    code_str = code.strip()
+    letter = ''.join(ch for ch in code_str if ch.isalpha())
+    digits = ''.join(ch for ch in code_str if not ch.isalpha())
+    code_html = (
+        f'<span class="bc-letter">{_esc(letter)}</span>'
+        f'<span class="bc-num">{_esc(digits)}</span>'
+        if letter and digits
+        else _esc(code_str)
+    )
     return f'''
 <div class="banner">
-  <div class="banner-code">{_esc(code)}</div>
+  <div class="banner-code">{code_html}</div>
   <div class="banner-body">
     <div class="banner-title">{_safe(title)}</div>
     <div class="banner-sub">{_safe(sub)}</div>
@@ -125,7 +136,7 @@ def one_liners(items) -> str:
             key, val = it
             rows += (
                 f'  <tr>'
-                f'<td class="bul" style="font-weight:bold;color:#0F766E;">▸</td>'
+                f'<td class="bul" style="font-weight:bold;">▸</td>'
                 f'<td><b>{_safe(key)}</b> &nbsp;—&nbsp; {_safe(val)}</td>'
                 f'</tr>\n'
             )
@@ -328,17 +339,18 @@ def rapid_3col(rows, headers=None, col_widths_mm=None) -> str:
     colgroup += '  </colgroup>\n'
     th = ''
     if headers:
-        th = '  <tr>'
+        th = '<thead>\n  <tr>'
         for h in headers:
             th += f'<th>{_safe(h)}</th>'
-        th += '</tr>\n'
-    body = ''
+        th += '</tr>\n</thead>\n'
+    body = '<tbody>\n'
     for i, row in enumerate(rows):
         cls = ' class="alt"' if i % 2 == 0 else ''
         body += f'  <tr{cls}>'
         for cell in row:
             body += f'<td>{_safe(str(cell))}</td>'
         body += '</tr>\n'
+    body += '</tbody>\n'
     return f'<table class="rapid">\n{colgroup}{th}{body}</table>\n'
 
 # ─── GLOSSARY (2-column) ──────────────────────────────────────────────────────

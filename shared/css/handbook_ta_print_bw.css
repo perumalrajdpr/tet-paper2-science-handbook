@@ -14,6 +14,24 @@
   src: url('../fonts/NotoSansTamil-Bold.ttf') format('truetype');
   font-weight: 700;
 }
+/* Heading display font — Noto Serif Tamil (local TTF files).
+   Same Noto family as body NST → uniform metrics across the book.
+   The 'ATM345' alias is kept so any rule referencing ATM345 still resolves. */
+@font-face {
+  font-family: 'Noto Serif Tamil';
+  src: url('../fonts/NotoSerifTamil-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Noto Serif Tamil';
+  src: url('../fonts/NotoSerifTamil-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'ATM345';
+  src: url('../fonts/NotoSerifTamil-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
 
 @page {
   size: 210mm 290mm;
@@ -31,7 +49,7 @@
     color: #3d3d3d;
   }
   @bottom-center {
-    content: "P" counter(page);
+    content: counter(page);
     font-family: 'NST', sans-serif;
     font-size: 8.4pt;
     color: #444444;
@@ -40,7 +58,7 @@
 
 @page cover {
   size: 210mm 290mm;
-  margin: 20mm;
+  margin: 0;
   @top-left { content: none; }
   @top-right { content: none; }
   @bottom-center { content: none; }
@@ -61,7 +79,7 @@
 
 @page backcover {
   size: 210mm 290mm;
-  margin: 20mm;
+  margin: 0;
   @top-left { content: none; }
   @top-right { content: none; }
   @bottom-center { content: none; }
@@ -174,6 +192,31 @@ html, body {
   break-after: avoid-page;
   page-break-inside: avoid;
   break-inside: avoid;
+}
+
+/* Heading-only decorative font */
+.banner-title,
+.sec,
+.subh,
+.inside-title,
+.toc-title,
+table.prob td.pq,
+table.prob td.pnum,
+.insert-main-title,
+.insert-main-sub,
+.insert-main-exams,
+.insert-main-brand,
+.insert-pub-title,
+.insert-pub-sub {
+  font-family: 'Noto Serif Tamil', 'ATM345', 'NST', serif;
+}
+
+/* Keep table column headers in Noto Sans Tamil */
+table.kv th,
+table.grid th,
+table.rapid th,
+.toc-table th {
+  font-family: 'NST', sans-serif;
 }
 
 /* --- Core full-width blocks --- */
@@ -507,6 +550,125 @@ p.pbold {
   min-height: 240mm;
 }
 
+.cover-art-page {
+  padding: 0;
+  margin: 0;
+}
+
+.cover-art-image {
+  display: block;
+  width: 210mm;
+  height: 290mm;
+  object-fit: cover;
+  border: 0;
+}
+
+.insert-page {
+  padding: 22mm 18mm;
+  background: #ffffff;
+  position: relative;                      /* containing block for absolute brand strip */
+}
+.insert-page-body {
+  min-height: 246mm;
+}
+
+.insert-page-one {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;            /* let margin-top values control grouping */
+  min-height: 246mm;
+  height: 246mm;                          /* fixed page height so margin-top:auto on brand works */
+}
+/* Group 1 — Title block (title + sub + note) */
+.insert-main-title {
+  margin-top: 36mm;                        /* push from top edge */
+  font-size: 18pt;
+  font-weight: 700;
+  color: #111111;
+}
+.insert-main-sub {
+  margin-top: 4mm;
+  font-size: 26pt;                         /* will be bumped in calibration block */
+  line-height: 1.05;
+  font-weight: 800;
+  color: #0f0f0f;
+}
+.insert-main-note {
+  margin-top: 3mm;
+  font-size: 10pt;
+  font-weight: 600;
+  color: #1f1f1f;
+}
+
+/* Group 2 — Exams block (exams + exam-note) */
+.insert-main-exams {
+  margin-top: 22mm;                        /* big visual gap from group 1 */
+  font-size: 15pt;
+  letter-spacing: 0.4px;
+  font-weight: 700;
+  color: #111111;
+}
+.insert-main-exam-note {
+  margin-top: 2mm;
+  font-size: 11pt;
+  font-weight: 600;
+  color: #222222;
+}
+
+/* Group 3 — Author block (label + name) */
+.insert-main-author {
+  margin-top: 22mm;                        /* big visual gap from group 2 */
+  font-size: 11pt;
+  color: #2b2b2b;
+}
+.insert-main-author-name {
+  margin-top: 2mm;
+  font-size: 15pt;
+  font-weight: 700;
+  color: #111111;
+}
+
+/* Brand strip — pinned to bottom of insert page via absolute positioning */
+.insert-main-brand {
+  position: absolute;
+  left: 18mm;
+  right: 18mm;
+  bottom: 22mm;
+  text-align: center;
+  font-size: 16pt;
+  font-weight: 700;
+  color: #111111;
+}
+
+.insert-page-two {
+  text-align: left;
+  padding: 8mm 6mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;          /* distribute content groups vertically across page */
+  min-height: 246mm;
+  height: 246mm;
+}
+.insert-pub-title {
+  font-size: 13pt;
+  font-weight: 700;
+  color: #151515;
+}
+.insert-pub-sub {
+  margin-top: 1.2mm;
+  font-size: 15pt;
+  font-weight: 700;
+  color: #111111;
+}
+.insert-pub-block {
+  margin-top: 0;                           /* flex space-between handles vertical distribution */
+  font-size: 10.5pt;
+  line-height: 1.55;
+  color: #1a1a1a;
+}
+
 .cover-box {
   border: 0.9pt solid #3f3f3f;
   padding: 10mm 9mm;
@@ -599,6 +761,81 @@ p.pbold {
   background: #f4f4f4;
 }
 
+/* --- Cover V2 (grayscale fallback for BW profile) --- */
+.cover-page.cover-v2 {
+  position: relative;
+  text-align: center;
+  background: #ffffff;
+  min-height: 248mm;
+}
+.cover-v2 .cv-corner { display: none; }
+.cv-brand {
+  display: inline-block;
+  border: 0.6pt solid #5b5b5b;
+  background: #efefef;
+  border-radius: 30mm;
+  padding: 2.2mm 6mm;
+  font-size: 12pt;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 6mm auto 8mm auto;
+}
+.cv-leaf { width: 4.4mm; height: 4.4mm; vertical-align: middle; margin-right: 1.6mm; }
+.cv-title { font-weight: 800; color: #111; line-height: 1.05; margin-bottom: 6mm; }
+.cv-title-line { font-size: 30pt; }
+.cv-title-accent {
+  display: inline-block;
+  font-size: 26pt;
+  border: 0.5pt solid #444;
+  background: #f1f1f1;
+  border-radius: 1.4mm;
+  padding: 0.6mm 5mm 1mm 5mm;
+  margin-top: 1.6mm;
+}
+.cv-subtitle {
+  display: inline-block;
+  background: #1a1a1a;
+  color: #ffffff;
+  border-radius: 30mm;
+  padding: 2.2mm 7mm;
+  font-size: 10.5pt;
+  font-weight: 600;
+  margin-bottom: 8mm;
+}
+.cv-hero { width: 78mm; height: 78mm; margin: 0 auto 9mm auto; }
+.cv-hero-svg { width: 100%; height: 100%; display: block; }
+.cv-exams {
+  display: table;
+  table-layout: fixed;
+  width: 160mm;
+  margin: 0 auto;
+  border-collapse: separate;
+  border-spacing: 4mm 0;
+}
+.cv-exam { display: table-cell; text-align: center; vertical-align: top; }
+.cv-exam-circle {
+  width: 22mm; height: 22mm;
+  border-radius: 50%;
+  background: #1a1a1a;
+  border: 0.8mm solid #aaaaaa;
+  margin: 0 auto 1.6mm auto;
+  display: table;
+}
+.cv-exam-name {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  color: #ffffff;
+  font-size: 12pt;
+  font-weight: 800;
+}
+.cv-exam-sub {
+  font-size: 7.4pt;
+  color: #1a1a1a;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
 .inside-title {
   font-size: 15pt;
   font-weight: 700;
@@ -621,36 +858,131 @@ p.pbold {
 }
 .foreword-greeting {
   font-weight: 700;
+  margin-bottom: 1.8mm;
+}
+/* Foreword + inline how-to: compact natural flow, signoff anchored bottom
+   with extra footer breathing space. */
+.foreword-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 246mm;
+  height: 246mm;
+  padding-bottom: 18mm;                    /* extra footer breathing room */
+}
+.foreword-page .foreword-bottom {
+  margin-top: auto;                        /* push closing + signoff toward bottom */
+}
+.foreword-page .foreword-top .inside-title {
+  font-size: 14pt;
+  margin-bottom: 3mm;
+}
+.foreword-top { margin-bottom: 2mm; }
+.foreword-greeting {
+  margin-bottom: 2.5mm;
+}
+.foreword-body .inside-text {
+  margin-bottom: 2.5mm;
+  line-height: 1.55;
+  font-size: 9.4pt;
+}
+.foreword-page .feature-box {
+  margin: 3mm 0 3mm 0;
+  padding: 3mm 4mm;
 }
 .feature-box {
   border: 0.45pt solid #9f9f9f;
   background: #f8f8f8;
-  margin: 2.6mm 0 3.2mm 0;
-  padding: 2.2mm 2.5mm;
+  margin: 2.2mm 0 2.6mm 0;
+  padding: 2.4mm 2.8mm;
+}
+.foreword-page .feature-title {
+  font-size: 10pt;
+  margin-bottom: 2mm;
 }
 .feature-title {
-  font-size: 9.8pt;
+  font-size: 10pt;
   font-weight: 700;
-  margin-bottom: 1.8mm;
+  margin-bottom: 1.6mm;
   color: #191919;
 }
 .feature-list {
   margin: 0 0 0 4.2mm;
   padding: 0;
 }
+.foreword-page .feature-list li {
+  margin: 0 0 1.4mm 0;
+  font-size: 9pt;
+  line-height: 1.5;
+}
 .feature-list li {
   margin: 0 0 1.1mm 0;
   font-size: 9.2pt;
-  line-height: 1.45;
+  line-height: 1.42;
   color: #202020;
 }
 .foreword-closing {
   font-weight: 700;
-  margin-top: 2mm;
+  margin-top: 0.5mm;
+  margin-bottom: 0.3mm;
+  font-size: 9pt;
 }
 .foreword-signoff {
   white-space: normal;
-  margin-top: 1mm;
+  margin-top: 0.35mm;
+  text-align: right;
+  font-size: 8.75pt;
+  line-height: 1.38;
+}
+.foreword-bottom {
+  border-top: 0.35pt solid #bdbdbd;
+  padding-top: 1.8mm;
+}
+.foreword-page .foreword-bottom {
+  border-top: 0.3pt solid #bdbdbd;
+  padding-top: 0.8mm;
+  margin-top: 0.5mm;
+}
+.howto-inline {
+  margin-top: 2.2mm;
+}
+.foreword-page .howto-inline {
+  margin-top: 4mm;
+}
+.howto-inline-title {
+  font-size: 12pt;
+  margin-bottom: 1.8mm;
+}
+.foreword-page .howto-inline-title {
+  font-size: 10.6pt;
+  margin-bottom: 2.5mm;
+}
+.foreword-page .howto-intro {
+  margin-bottom: 2.5mm;
+  line-height: 1.36;
+}
+.foreword-page .instruction-list {
+  margin-bottom: 0;
+}
+.foreword-page .instruction-item {
+  padding: 2mm 3mm 2mm 9mm;
+  margin-bottom: 1.5mm;
+}
+.foreword-page .instruction-num {
+  left: 2.2mm;
+  top: 1.8mm;
+  width: 5mm;
+  height: 5mm;
+  font-size: 8pt;
+  line-height: 4.6mm;
+}
+.foreword-page .instruction-step {
+  margin-bottom: 1mm;
+  font-size: 9.5pt;
+}
+.foreword-page .instruction-detail {
+  font-size: 9pt;
+  line-height: 1.5;
 }
 .exam-subtitle {
   font-weight: 700;
@@ -675,25 +1007,48 @@ p.pbold {
   color: #2b2b2b;
 }
 .instruction-list {
-  border: 0.4pt solid #bdbdbd;
+  border: 0.45pt solid #b3b3b3;
   background: #fafafa;
+  border-radius: 1.2mm;
+  overflow: hidden;
+}
+.howto-page .inside-title { margin-bottom: 2.6mm; }
+.howto-intro {
+  margin-bottom: 2.4mm;
+  line-height: 1.42;
 }
 .instruction-item {
-  border-bottom: 0.3pt solid #cfcfcf;
-  padding: 1.8mm 2.2mm;
+  border-bottom: 0.3pt solid #cdcdcd;
+  padding: 1.9mm 2.2mm 1.9mm 9.5mm;
+  position: relative;
 }
 .instruction-item:last-child {
   border-bottom: none;
 }
+.instruction-num {
+  position: absolute;
+  left: 2.2mm;
+  top: 1.9mm;
+  width: 5.2mm;
+  height: 5.2mm;
+  border-radius: 50%;
+  border: 0.4pt solid #8d8d8d;
+  font-size: 8.4pt;
+  line-height: 4.7mm;
+  text-align: center;
+  font-weight: 700;
+  color: #222222;
+  background: #f2f2f2;
+}
 .instruction-step {
-  font-size: 9.3pt;
+  font-size: 9.4pt;
   font-weight: 700;
   color: #181818;
-  margin-bottom: 0.8mm;
+  margin-bottom: 0.7mm;
 }
 .instruction-detail {
-  font-size: 8.9pt;
-  line-height: 1.45;
+  font-size: 9pt;
+  line-height: 1.42;
   color: #2f2f2f;
 }
 .legal-box {
@@ -756,6 +1111,21 @@ p.pbold {
   width: 18mm;
   font-weight: 700;
 }
+.toc-page {
+  width: 16mm;
+  text-align: right;
+}
+.toc-link {
+  color: inherit;
+  text-decoration: none;
+}
+.toc-page-ref {
+  color: #111111;
+  text-decoration: none;
+}
+.toc-page-ref::after {
+  content: target-counter(attr(href), page);
+}
 
 .chapter-break {
   page-break-before: always;
@@ -775,6 +1145,17 @@ table.grid thead,
 table.rapid thead,
 table.prob thead {
   display: table-header-group;
+}
+table.kv thead tr,
+table.grid thead tr,
+table.rapid thead tr,
+table.prob thead tr,
+table.twocol thead tr,
+table.cmp thead tr {
+  page-break-after: avoid;
+  break-after: avoid;
+  page-break-inside: avoid;
+  break-inside: avoid;
 }
 table.kv tr,
 table.oneliners tr,
@@ -872,3 +1253,27 @@ table.prob tr {
   font-size: 8.8pt;
   font-weight: 700;
 }
+
+/* Heading sizes — calibrated for Noto Serif Tamil (metric-matched to NST sans).
+   Earlier boosts (+2 / +6) compensated for ATM345 optical shrinkage and are
+   no longer needed. Now sized for proper visual hierarchy:
+     banner-title > insert-main-sub > toc-title / inside-title >
+     insert-main-title > insert-pub-sub > sec > insert-pub-title >
+     prob.pq > subh > body. */
+.banner-title { font-size: 16pt; }
+.insert-main-title { font-size: 20pt; }
+.insert-main-sub { font-size: 46pt; }    /* HERO: "அறிவியல்" — biggest text on page */
+.insert-pub-title { font-size: 16pt; }
+.insert-pub-sub { font-size: 19pt; }
+
+.sec { font-size: 11.4pt; }
+.subh { font-size: 10pt; }                /* smaller than sec — proper hierarchy */
+.inside-title { font-size: 17pt; }
+.toc-title { font-size: 18pt; }
+table.kv th { font-size: 7.8pt; }
+table.grid th { font-size: 7.8pt; }
+table.rapid th { font-size: 7.6pt; }
+table.prob td.pq { font-size: 10.5pt; }
+table.prob td.pnum { font-size: 14.2pt; } /* மற்ற தலைப்புகள் +2 */
+.insert-main-exams { font-size: 19pt; }   /* மற்ற தலைப்புகள் +2 */
+.insert-main-brand { font-size: 20pt; }   /* மற்ற தலைப்புகள் +2 */

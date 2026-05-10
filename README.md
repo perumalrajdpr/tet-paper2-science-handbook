@@ -1,13 +1,13 @@
 # TET Paper II Science Handbook
 
 > **Comprehensive TN-TET Paper II Science preparation handbook**  
-> Covering Classes 6, 7 & 8 syllabus across 22 TET-aligned chapters.  
+> Covering Classes 6, 7 & 8 syllabus across 23 TET-aligned chapters.  
 > Memorization-focused, fact-dense PDFs built with Python + ReportLab.  
 > **By [ChalkPieceDiary](https://chalkpiecediary.com)**
 
 ---
 
-## 📚 Chapter Structure (22 Chapters)
+## 📚 Chapter Structure (23 Chapters)
 
 ### ⚡ Physics (P1–P8)
 | ID | Chapter | Status |
@@ -32,7 +32,7 @@
 | C6 | Acids, Bases & Salts | ⏳ Planned |
 | C7 | Chemistry in Daily Life | ⏳ Planned |
 
-### 🌱 Biology (B1–B7)
+### 🌱 Biology (B1–B8)
 | ID | Chapter | Status |
 |----|---------|--------|
 | B1 | Plant Kingdom | ⏳ Planned |
@@ -42,6 +42,7 @@
 | B5 | Health, Hygiene & Adolescence | ⏳ Planned |
 | B6 | Crop Production & Management | ⏳ Planned |
 | B7 | Environment & Ecology | ⏳ Planned |
+| B8 | Environment & Conservation | ⏳ Planned |
 
 ---
 
@@ -63,7 +64,15 @@ tet-paper2-science-handbook/
 │   ├── build_chapter.py  # Build a single chapter
 │   ├── build_all.py      # Build all 22 chapters
 │   └── combine.py        # Merge all into master PDF
-├── output/               # Generated PDFs (gitignored)
+├── output/               # English working PDFs (gitignored)
+├── output_ta/            # Tamil per-chapter color PDFs (gitignored)
+├── output_ta_web/        # Tamil web/HTML bundle (gitignored)
+├── output_ta_color/      # Tamil full-book color PDF (gitignored)
+├── output_ta_print_bw/   # Tamil full-book B/W print PDF (gitignored)
+├── release/
+│   ├── web/              # Final Tamil web bundle
+│   ├── color/            # Final Tamil color PDF
+│   └── print/            # Final Tamil B/W print PDF
 ├── requirements.txt
 └── .github/workflows/
     └── build.yml         # GitHub Actions auto-build
@@ -93,11 +102,40 @@ python build/build_chapter.py P1    # Output: output/P1_Measurement.pdf
 python build/build_chapter.py C2    # Output: output/C2_Atomic_Structure.pdf
 ```
 
-### Build a Tamil chapter (HTML/CSS pipeline)
+### Tamil edition — three output formats
+
+The Tamil pipeline (HTML/CSS → WeasyPrint) produces **three distinct deliverables**
+from the same chapter sources in `chapters_ta_html/`:
+
+| # | Format | Purpose | Build script | Stylesheet | Working dir | Final release |
+|---|--------|---------|--------------|------------|-------------|---------------|
+| 1 | **Web** (HTML) | வலைத்தளம் / WordPress publishing | `build/build_tamil_wordpress.py` | `shared/css/handbook_ta_web.css` | `output_ta_web/` | `release/web/` |
+| 2 | **Color PDF** | படிக்க — on-screen / e-reader (Scholar Modern palette: Indigo / Burnt-Orange / Forest) | `build/build_tamil_color_book.py` | `shared/css/handbook_ta_color_book.css` | `output_ta_color/` | `release/color/` |
+| 3 | **B/W Print PDF** | அச்சுக்காக — cost-effective print (210 × 290 mm, grayscale ramp) | `build/build_tamil_print_bw_book.py` (whole book) / `build/build_tamil_print_bw.py` (single chapter) | `shared/css/handbook_ta_print_bw.css` | `output_ta_print_bw/` | `release/print/` |
+
+The color stylesheet `@import`s the print B/W stylesheet and overlays only the
+subject palette — pagination, cover, and front-matter are identical between
+the color and print editions, so layout proofing can be done on either.
 
 ```bash
-python build/build_tamil_chapter.py P1   # Output: output_ta/P1_measurement_ta.pdf
+# 1. Web (HTML bundle for WordPress)
+python build/build_tamil_wordpress.py
+
+# 2. Color PDF (full book)
+python build/build_tamil_color_book.py
+
+# 3. B/W Print PDF (full book)
+python build/build_tamil_print_bw_book.py
+
+# Single chapter (color PDF, default pipeline)
+python build/build_tamil_chapter.py P1     # → output_ta/P1_measurement_ta.pdf
+
+# Single chapter (B/W print)
+python build/build_tamil_print_bw.py P1    # → output_ta_print_bw/P1_measurement_ta.pdf
 ```
+
+When a build is final, copy the artifact from its `output_ta_*` working dir
+into the matching `release/<format>/` folder.
 
 Tamil pipeline docs:
 - `docs/tamil/master_prompt_v2.md`
@@ -123,7 +161,7 @@ python build/combine.py
 
 | Element | Value |
 |---------|-------|
-| Page size | A5 (148 × 210 mm) |
+| Page size | 210 × 290 mm (custom, near A4) — two-column layout, 20 mm margins |
 | Primary color | `#0F766E` (Deep teal-green) |
 | Accent | `#F59E0B` (Amber — ★ fact boxes) |
 | Font | DejaVu Sans (full Unicode support) |

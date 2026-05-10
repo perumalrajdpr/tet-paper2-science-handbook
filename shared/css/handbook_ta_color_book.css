@@ -1,32 +1,60 @@
 @import url("handbook_ta_print_bw.css");
 
 /* ============================================================================
-   Tamil Color Book — Palette: "Scholar Modern"
-   Sophisticated jewel tones (Indigo / Burnt-Orange / Forest) + soft tints.
+   Tamil Color Book — Palette: "ChalkPieceDiary Theme System"
+   Each subject = primary + companion accent + callout (semantic third).
+   Eye-friendly (saturation ~45%, brightness ~35% for primary) for long
+   reading sessions. WCAG AA/AAA-aligned contrast, print-safe.
+
+     • Physics   — Cosmic Indigo  (#1E2A78 + #6366F1, callout #0891B2)
+     • Chemistry — Refined Royal  (#7D3268 + #BE3F7C, callout #4F86C6)
+     • Biology   — Marine Aqua (#134E4A + #06B6D4, callout #E11D48 rose)
+
+   Body text #374151 globally · Table separator #E5E7EB.
    Inherits B/W print pagination, cover & front-matter from handbook_ta_print_bw.css.
    ============================================================================ */
 
 :root {
-  /* Physics — Indigo */
-  --p-main: #3730a3;
-  --p-alt:  #6366f1;
-  --p-soft: #eef2ff;
-  --p-deep: #1e1b4b;
-  --p-line: #c7d2fe;
+  /* ============================================================
+     ChalkPieceDiary "Refined Royal / Cosmic Indigo / Eucalyptus" theme
+     — Each subject = primary + companion (accent) + callout (semantic)
+     — body_text #374151 globally, table_separator #E5E7EB
+     ============================================================ */
 
-  /* Chemistry — Burnt orange */
-  --c-main: #9a3412;
-  --c-alt:  #ea580c;
-  --c-soft: #fff7ed;
-  --c-deep: #7c2d12;
-  --c-line: #fed7aa;
+  /* Physics — Cosmic Indigo */
+  --p-main:           #1E2A78;   /* header_bg */
+  --p-alt:            #6366F1;   /* subheading_accent */
+  --p-soft:           #EEF0FC;   /* subheading_bg */
+  --p-deep:           #1E2A78;   /* heading_text */
+  --p-line:           #C7D2FE;   /* light line */
+  --p-tint:           #E0E7FF;   /* companion soft tint */
+  --p-callout:        #0891B2;   /* callout_border (cyan) */
+  --p-callout-bg:     #ECFEFF;   /* callout_bg */
+  --p-callout-text:   #155E75;   /* callout_text */
 
-  /* Biology — Forest */
-  --b-main: #166534;
-  --b-alt:  #16a34a;
-  --b-soft: #f0fdf4;
-  --b-deep: #14532d;
-  --b-line: #bbf7d0;
+  /* Chemistry — Refined Royal */
+  --c-main:           #7D3268;   /* header_bg (plum) */
+  --c-alt:            #BE3F7C;   /* subheading_accent (magenta) */
+  --c-soft:           #FDF2F8;   /* subheading_bg */
+  --c-deep:           #5C214B;   /* deeper plum */
+  --c-line:           #F5D0E5;
+  --c-tint:           #FCE7F3;   /* companion soft tint */
+  --c-callout:        #4F86C6;   /* callout_border (blue) */
+  --c-callout-bg:     #EFF6FF;   /* callout_bg */
+  --c-callout-text:   #234876;   /* callout_text */
+
+  /* Biology — Marine Aqua (deep teal + cyan + rose-red callout)
+     "கடல் உயிரியல் / microbiology" feel: deep ocean teal primary,
+     fresh aqua accents, vivid rose-600 callout for "blood/life" energy. */
+  --b-main:           #134E4A;   /* teal-900 — deep ocean primary */
+  --b-alt:            #06B6D4;   /* cyan-500 — fresh aqua accent */
+  --b-soft:           #CFFAFE;   /* cyan-100 — subheading bg */
+  --b-deep:           #042F2E;   /* deeper teal-near-black */
+  --b-line:           #A5F3FC;   /* cyan-200 — light line */
+  --b-tint:           #ECFEFF;   /* cyan-50 — companion soft tint */
+  --b-callout:        #E11D48;   /* rose-600 — vital "blood/life" striking complement */
+  --b-callout-bg:     #FFF1F2;   /* rose-50 */
+  --b-callout-text:   #9F1239;   /* rose-800 — deep readable */
 
   /* Neutral accents (subject-agnostic blocks) */
   --n-ink:    #0f172a;
@@ -37,77 +65,135 @@
 
 /* =====================================================
    Subject identity — banner, sec, subh, oneliners bullet
+   Banner: ONE unified full-width header bar in subject primary,
+   chapter code + title flowing inline, class info as right-aligned
+   translucent pill. No two-tone split.
    ===================================================== */
 
-/* Physics */
-.subject-p .banner-code {
-  background: var(--p-main);
-  border-color: var(--p-deep);
-  color: #ffffff;
+/* Shared banner shell — HERO NUMBER design.
+   Deep subject bg with very large chapter code as design element +
+   serif title beside it. Companion-color thin accent rule at bottom.
+   Magazine / academic publication feel. */
+.banner {
+  background: var(--p-main);              /* default Physics; overridden below */
+  border-radius: 1.4mm;
+  padding: 5mm 10mm 5mm 7mm;              /* extra right padding so long titles don't overflow */
+  display: flex;
+  align-items: center;
+  gap: 12mm;                               /* extra breathing room between code and title */
+  margin-bottom: 3.5mm;
+  border: none;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 0.7mm solid var(--p-alt);
 }
-.subject-p .banner-body {
-  background: linear-gradient(to right, #f5f7ff, #eef2ff);
+.banner-code {
+  flex: 0 0 auto;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0;
+  color: #FCD34D !important;               /* soft cream-gold — luminance contrast on dark bg */
+  font-size: 42pt;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  font-family: 'Noto Serif Tamil', 'ATM345', 'NST', serif;
+  display: inline-flex;
+  align-items: baseline;
 }
-.subject-p .banner-body::before { background: var(--p-alt); }
-.subject-p .banner-title { color: var(--p-deep); }
+.banner-code .bc-letter {
+  font-size: 1em;                          /* letter at full hero size */
+}
+.banner-code .bc-num {
+  font-size: 0.72em;                       /* digits slightly smaller than letter */
+  margin-left: 1mm;
+  letter-spacing: -1px;
+}
+.banner-body {
+  flex: 1 1 auto;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 0 0 9mm !important;
+  border-left: 0.4pt solid rgba(255,255,255,0.30) !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.banner-body::before,
+.banner-body::after { content: none !important; }
+.banner-title {
+  color: #ffffff !important;
+  font-size: 18pt;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.1px;
+  font-family: 'Noto Serif Tamil', 'ATM345', 'NST', serif;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+.banner-sub,
+.banner-foot { display: none !important; }
+
+/* Subject overrides — chapter code stays universal gold across subjects */
+.subject-p .banner { background: var(--p-main); border-bottom-color: var(--p-alt); }
+.subject-p .banner-code { color: #FCD34D !important; }
 
 .subject-p .sec {
-  background: linear-gradient(90deg, var(--p-main), var(--p-alt));
-  border-left-color: var(--p-deep);
+  background: var(--p-main);
   color: #ffffff;
+  border-left: 1.4mm solid var(--p-deep);
+  font-weight: 700;
+  padding: 2mm 4mm;
 }
 .subject-p .subh {
   background: var(--p-soft);
-  color: var(--p-deep);
-  border-left-color: var(--p-alt);
+  color: var(--p-main);
+  border-left: 1.6mm solid var(--p-alt);
+  font-weight: 700;
+  padding: 1.4mm 3mm;
 }
 .subject-p table.oneliners td.bul { color: var(--p-main); }
 
 /* Chemistry */
-.subject-c .banner-code {
-  background: var(--c-main);
-  border-color: var(--c-deep);
-  color: #ffffff;
-}
-.subject-c .banner-body {
-  background: linear-gradient(to right, #fffaf3, #fff7ed);
-}
-.subject-c .banner-body::before { background: var(--c-alt); }
-.subject-c .banner-title { color: var(--c-deep); }
+.subject-c .banner { background: var(--c-main); border-bottom-color: var(--c-alt); }
+.subject-c .banner-code { color: #FCD34D !important; }
 
 .subject-c .sec {
-  background: linear-gradient(90deg, var(--c-main), var(--c-alt));
-  border-left-color: var(--c-deep);
+  background: var(--c-main);
   color: #ffffff;
+  border-left: 1.4mm solid var(--c-deep);
+  font-weight: 700;
+  padding: 2mm 4mm;
 }
 .subject-c .subh {
   background: var(--c-soft);
-  color: var(--c-deep);
-  border-left-color: var(--c-alt);
+  color: var(--c-main);
+  border-left: 1.6mm solid var(--c-alt);
+  font-weight: 700;
+  padding: 1.4mm 3mm;
 }
 .subject-c table.oneliners td.bul { color: var(--c-main); }
 
 /* Biology */
-.subject-b .banner-code {
-  background: var(--b-main);
-  border-color: var(--b-deep);
-  color: #ffffff;
-}
-.subject-b .banner-body {
-  background: linear-gradient(to right, #f4fbf6, #f0fdf4);
-}
-.subject-b .banner-body::before { background: var(--b-alt); }
-.subject-b .banner-title { color: var(--b-deep); }
+.subject-b .banner { background: var(--b-main); border-bottom-color: var(--b-alt); }
+.subject-b .banner-code { color: #FCD34D !important; }
 
 .subject-b .sec {
-  background: linear-gradient(90deg, var(--b-main), var(--b-alt));
-  border-left-color: var(--b-deep);
+  background: var(--b-main);
   color: #ffffff;
+  border-left: 1.4mm solid var(--b-deep);
+  font-weight: 700;
+  padding: 2mm 4mm;
 }
 .subject-b .subh {
   background: var(--b-soft);
-  color: var(--b-deep);
-  border-left-color: var(--b-alt);
+  color: var(--b-main);
+  border-left: 1.6mm solid var(--b-alt);
+  font-weight: 700;
+  padding: 1.4mm 3mm;
 }
 .subject-b table.oneliners td.bul { color: var(--b-main); }
 
@@ -116,26 +202,38 @@
    ===================================================== */
 
 /* --- kv (key/value) --- */
-table.kv { border-color: var(--n-line); }
-table.kv td.k {
-  background: var(--n-ink);
-  color: #ffffff;
-  border-right-color: var(--n-ink);
-  font-weight: 700;
+/* kv (definition list) — light & airy
+   Plain-text label in subject primary, value in body-text.
+   No filled bg blocks. Rows separated by hairline. */
+table.kv {
+  border: none;
+  border-collapse: collapse;
+  border-top: 0.4pt solid #E5E7EB;
+  border-bottom: 0.4pt solid #E5E7EB;
 }
-table.kv td.v { background: #ffffff; color: #1e293b; }
+table.kv td {
+  border: none;
+  border-bottom: 0.4pt solid #E5E7EB;
+  padding: 1.6mm 2.6mm;
+  vertical-align: top;
+}
+table.kv tr:last-child td { border-bottom: none; }
+table.kv td.k {
+  background: transparent;
+  color: var(--n-ink);
+  font-weight: 600;
+  border-right: none;
+}
+table.kv td.v { background: transparent; color: #374151; }
 
-.subject-p table.kv { border-color: var(--p-line); }
-.subject-p table.kv td.k { background: var(--p-main); border-right-color: var(--p-main); }
-.subject-p table.kv td.v { background: var(--p-soft); color: var(--p-deep); }
+.subject-p table.kv td.k { color: var(--p-main); background: transparent; border-right: none; }
+.subject-p table.kv td.v { color: #374151; background: transparent; }
 
-.subject-c table.kv { border-color: var(--c-line); }
-.subject-c table.kv td.k { background: var(--c-main); border-right-color: var(--c-main); }
-.subject-c table.kv td.v { background: var(--c-soft); color: var(--c-deep); }
+.subject-c table.kv td.k { color: var(--c-main); background: transparent; border-right: none; }
+.subject-c table.kv td.v { color: #374151; background: transparent; }
 
-.subject-b table.kv { border-color: var(--b-line); }
-.subject-b table.kv td.k { background: var(--b-main); border-right-color: var(--b-main); }
-.subject-b table.kv td.v { background: var(--b-soft); color: var(--b-deep); }
+.subject-b table.kv td.k { color: var(--b-main); background: transparent; border-right: none; }
+.subject-b table.kv td.v { color: #374151; background: transparent; }
 
 /* --- grid --- */
 table.grid th {
@@ -148,15 +246,15 @@ table.grid tr.alt td { background: var(--n-soft); }
 
 .subject-p table.grid th { background: var(--p-main); border-color: var(--p-deep); }
 .subject-p table.grid td { border-color: var(--p-line); }
-.subject-p table.grid tr.alt td { background: var(--p-soft); }
+.subject-p table.grid tr.alt td { background: #F9FAFB; }
 
 .subject-c table.grid th { background: var(--c-main); border-color: var(--c-deep); }
 .subject-c table.grid td { border-color: var(--c-line); }
-.subject-c table.grid tr.alt td { background: var(--c-soft); }
+.subject-c table.grid tr.alt td { background: #F9FAFB; }
 
 .subject-b table.grid th { background: var(--b-main); border-color: var(--b-deep); }
 .subject-b table.grid td { border-color: var(--b-line); }
-.subject-b table.grid tr.alt td { background: var(--b-soft); }
+.subject-b table.grid tr.alt td { background: #F9FAFB; }
 
 /* --- rapid --- */
 table.rapid th {
@@ -170,15 +268,15 @@ table.rapid td:first-child { color: var(--n-ink); }
 table.rapid td:last-child { color: #475569; }
 
 .subject-p table.rapid th { background: var(--p-deep); }
-.subject-p table.rapid tr.alt td { background: var(--p-soft); }
+.subject-p table.rapid tr.alt td { background: #F9FAFB; }
 .subject-p table.rapid td:first-child { color: var(--p-deep); }
 
 .subject-c table.rapid th { background: var(--c-deep); }
-.subject-c table.rapid tr.alt td { background: var(--c-soft); }
+.subject-c table.rapid tr.alt td { background: #F9FAFB; }
 .subject-c table.rapid td:first-child { color: var(--c-deep); }
 
 .subject-b table.rapid th { background: var(--b-deep); }
-.subject-b table.rapid tr.alt td { background: var(--b-soft); }
+.subject-b table.rapid tr.alt td { background: #F9FAFB; }
 .subject-b table.rapid td:first-child { color: var(--b-deep); }
 
 /* --- twocol comparison --- */
@@ -188,26 +286,95 @@ table.rapid td:last-child { color: #475569; }
 
 /* =====================================================
    Info boxes — dyk, note-box, fstrip, def-list
+   Strategy: semantic boxes adopt the SUBJECT COMPANION hue
+   (--*-alt + --*-tint) so they harmonize with surrounding chapter
+   content instead of clashing. Distinct from .sec / .subh which use
+   the subject PRIMARY hue.
    ===================================================== */
 
-/* dyk — Violet (subject-agnostic, intentionally distinct) */
+/* dyk — neutral default; subject-aware overrides below */
 .dyk {
-  background: #f5f3ff;
-  border-color: #ddd6fe;
+  background: #f8fafc;
+  border-color: #cbd5e1;
 }
 .dyk-title {
-  background: #6d28d9;
+  background: #475569;
   color: #ffffff;
 }
-.dyk-item { color: #2e1065; }
+.dyk-item { color: #1e293b; }
 
-/* note-box — Amber */
-.note-box { border-color: #fcd34d; }
+/* note-box — neutral default; subject-aware overrides below */
+.note-box { border-color: #cbd5e1; }
 .note-box-title {
-  background: #b45309;
+  background: #475569;
   color: #ffffff;
 }
-.note-box-body { background: #fffbeb; color: #78350f; }
+.note-box-body { background: #f8fafc; color: #1e293b; }
+
+/* DYK / note-box callout style — INLINE heading (no separate title bar)
+   Just: bg + thin colored left border + inline bold heading + body. */
+
+/* Shared inline-callout shell across all subjects */
+.dyk,
+.note-box {
+  border: 0.4pt solid transparent;
+  border-left-width: 1.2mm;
+  border-radius: 1mm;
+  padding: 0;
+  margin: 0 0 2.5mm 0;
+}
+.dyk-title,
+.note-box-title {
+  background: transparent !important;
+  font-weight: 700;
+  font-size: 9.6pt;
+  padding: 2mm 3.5mm 0.6mm 3.5mm;
+  letter-spacing: 0.1px;
+}
+.dyk-item,
+.note-box-body {
+  padding: 0.4mm 3.5mm 2mm 3.5mm;
+  font-size: 9.1pt;
+  line-height: 1.45;
+}
+.dyk-item:not(:last-child) { padding-bottom: 0.6mm; }
+
+/* Physics — Cyan callout */
+.subject-p .dyk,
+.subject-p .note-box {
+  background: var(--p-callout-bg);
+  border-left-color: var(--p-callout);
+  border-color: rgba(8, 145, 178, 0.18);
+  border-left-color: var(--p-callout);
+}
+.subject-p .dyk-title,
+.subject-p .note-box-title { color: var(--p-callout); }
+.subject-p .dyk-item,
+.subject-p .note-box-body { color: var(--p-callout-text); }
+
+/* Chemistry — Blue callout */
+.subject-c .dyk,
+.subject-c .note-box {
+  background: var(--c-callout-bg);
+  border-color: rgba(79, 134, 198, 0.20);
+  border-left-color: var(--c-callout);
+}
+.subject-c .dyk-title,
+.subject-c .note-box-title { color: var(--c-callout); }
+.subject-c .dyk-item,
+.subject-c .note-box-body { color: var(--c-callout-text); }
+
+/* Biology — Amber callout */
+.subject-b .dyk,
+.subject-b .note-box {
+  background: var(--b-callout-bg);
+  border-color: rgba(217, 119, 6, 0.20);
+  border-left-color: var(--b-callout);
+}
+.subject-b .dyk-title,
+.subject-b .note-box-title { color: var(--b-callout); }
+.subject-b .dyk-item,
+.subject-b .note-box-body { color: var(--b-callout-text); }
 
 /* def-list — neutral with subject left-bar */
 .def-list { border-left-color: var(--n-ink); }
@@ -219,20 +386,90 @@ table.rapid td:last-child { color: #475569; }
 .subject-b .def-list { border-left-color: var(--b-main); }
 .subject-b .def-list .dl-t { color: var(--b-main); }
 
-/* fstrip — slate-900 (premium neutral) */
+/* fstrip (formula strip) — subject-aware light tint with primary border-left.
+   Was slate-900 dark — too dense. Now matches subject palette: light bg +
+   colored left border + dark colored text. Elegant + readable. */
 .fstrip {
-  background: var(--n-ink);
-  color: #ffffff;
+  background: #F8FAFC;
+  color: #1E293B;
+  border-left: 1.6mm solid var(--n-ink);
+  border-radius: 0 1mm 1mm 0;
+  padding: 1.4mm 3mm;
 }
+.subject-p .fstrip {
+  background: var(--p-soft);
+  color: var(--p-main);
+  border-left-color: var(--p-main);
+}
+.subject-c .fstrip {
+  background: var(--c-soft);
+  color: var(--c-main);
+  border-left-color: var(--c-main);
+}
+.subject-b .fstrip {
+  background: var(--b-soft);
+  color: var(--b-main);
+  border-left-color: var(--b-main);
+}
+.fstrip .label,
+.fstrip .formula,
+.fstrip .note { color: inherit; }
 
 /* =====================================================
-   Pills — Tailwind 100/700 pairs (low-bg, high-contrast text)
+   Pills — subject-aware (instead of fixed semantic colors).
+   The chapter author's color hint (amber/red/blue/etc.) is
+   visually flattened into the subject palette so pages don't
+   show clashing yellow/red/green blocks. The semantic intent
+   stays in the ICON (★ ⚠ ⓘ etc.) which the author already
+   passes alongside.
    ===================================================== */
-.pill.green  { background: #dcfce7; color: #15803d; border-color: #86efac; }
-.pill.amber  { background: #fef3c7; color: #b45309; border-color: #fcd34d; }
-.pill.red    { background: #fee2e2; color: #b91c1c; border-color: #fca5a5; }
-.pill.blue   { background: #dbeafe; color: #1d4ed8; border-color: #93c5fd; }
-.pill.purple { background: #ede9fe; color: #6d28d9; border-color: #c4b5fd; }
+
+/* Default (no subject context) — neutral slate */
+.pill,
+.pill.green, .pill.amber, .pill.red, .pill.blue, .pill.purple, .pill.slate {
+  background: #F8FAFC;
+  color: #1E293B;
+  border-color: #CBD5E1;
+}
+
+/* Physics — Indigo tint */
+.subject-p .pill,
+.subject-p .pill.green,
+.subject-p .pill.amber,
+.subject-p .pill.red,
+.subject-p .pill.blue,
+.subject-p .pill.purple,
+.subject-p .pill.slate {
+  background: var(--p-soft);
+  color: var(--p-main);
+  border-color: var(--p-line);
+}
+
+/* Chemistry — Plum/Magenta tint */
+.subject-c .pill,
+.subject-c .pill.green,
+.subject-c .pill.amber,
+.subject-c .pill.red,
+.subject-c .pill.blue,
+.subject-c .pill.purple,
+.subject-c .pill.slate {
+  background: var(--c-soft);
+  color: var(--c-main);
+  border-color: var(--c-line);
+}
+
+/* Biology — Emerald tint */
+.subject-b .pill,
+.subject-b .pill.green,
+.subject-b .pill.amber,
+.subject-b .pill.red,
+.subject-b .pill.blue,
+.subject-b .pill.purple,
+.subject-b .pill.slate {
+  background: var(--b-soft);
+  color: var(--b-main);
+  border-color: var(--b-line);
+}
 
 /* =====================================================
    Solved problems — subject-aware (prob, probc)
@@ -257,7 +494,23 @@ table.prob td.pans { background: var(--b-soft); color: var(--b-deep); }
 .probc .probc-ans { background: var(--b-soft); }
 .probc .probc-ans-lbl { background: var(--b-main); color: #ffffff; }
 
-/* Chemistry overrides for solved problems */
+/* Physics solved problems — pure indigo identity
+   (question and answer both in indigo family, differentiated by depth). */
+.subject-p table.prob { border-color: var(--p-main); }
+.subject-p table.prob td.pnum { background: var(--p-main); color: #ffffff; }
+.subject-p table.prob td.pq { background: var(--p-soft); color: var(--p-deep); }
+.subject-p table.prob td.plbl { background: #F1F5F9; color: #1E293B; }
+.subject-p table.prob td.pans-lbl { background: var(--p-deep); color: #ffffff; }
+.subject-p table.prob td.pans { background: var(--p-tint); color: var(--p-deep); }
+.subject-p .probc { border-color: var(--p-main); }
+.subject-p .probc .probc-head { background: var(--p-soft); border-bottom-color: var(--p-main); color: var(--p-deep); }
+.subject-p .probc .probc-num { background: var(--p-main); }
+.subject-p .probc .probc-lbl { background: #F1F5F9; color: #1E293B; }
+.subject-p .probc .probc-ans { background: var(--p-tint); }
+.subject-p .probc .probc-ans-lbl { background: var(--p-deep); color: #ffffff; }
+
+/* Chemistry overrides for solved problems
+   (plum question + biology-green answer = "purple+green" combo user approved) */
 .subject-c table.prob { border-color: var(--c-main); }
 .subject-c table.prob td.pnum { background: var(--c-main); }
 .subject-c table.prob td.pq { background: var(--c-soft); color: var(--c-deep); }
@@ -289,5 +542,354 @@ table.prob td.pans { background: var(--b-soft); color: var(--b-deep); }
 .subject-b .gloss-1col,
 .subject-b .term-pairs { border-color: var(--b-line); }
 
-/* Inline highlight */
-.hl { background: #fef3c7; color: #78350f; }
+/* Inline highlight — subject-aware (was clashing yellow+red) */
+.hl { background: #F1F5F9; color: #1E293B; padding: 0 0.8mm; border-radius: 0.5mm; }
+.subject-p .hl { background: var(--p-tint); color: var(--p-main); }
+.subject-c .hl { background: var(--c-soft); color: var(--c-main); }
+.subject-b .hl { background: var(--b-tint); color: var(--b-main); }
+
+/* =====================================================
+   Subject divider pages (full-page intros before P1/C1/B1)
+   Two-color identity: main → companion gradient backdrop,
+   crisp white card with chapter list.
+   ===================================================== */
+.subject-divider {
+  page: subjectdiv;
+  page-break-before: always;
+  page-break-after: always;
+  break-before: page;
+  break-after: page;
+  width: 210mm;
+  height: 290mm;
+  min-height: 290mm;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  position: relative;
+  padding: 28mm 18mm 32mm 18mm;
+  color: #ffffff;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+/* Solid companion-color footer band at the bottom of every divider page.
+   Fills the visual "footer / margin" zone with the subject's secondary hue. */
+.subject-divider::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 22mm;
+  z-index: 0;
+}
+.subject-divider.subject-p::after { background: var(--p-alt); }
+.subject-divider.subject-c::after { background: var(--c-alt); }
+.subject-divider.subject-b::after { background: var(--b-alt); }
+
+/* Inner content stays above the footer band */
+.subject-divider > * { position: relative; z-index: 1; }
+
+@page subjectdiv {
+  size: 210mm 290mm;
+  margin: 0;
+  @top-left { content: none; }
+  @top-right { content: none; }
+  @bottom-center { content: none; }
+}
+
+.subject-divider .sd-eyebrow {
+  font-size: 11pt;
+  letter-spacing: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  opacity: 0.85;
+  margin-bottom: 6mm;
+}
+.subject-divider .sd-mark {
+  font-size: 96pt;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -2px;
+  margin-bottom: 4mm;
+}
+.subject-divider .sd-title {
+  font-size: 38pt;
+  font-weight: 800;
+  line-height: 1.05;
+  margin-bottom: 3mm;
+}
+.subject-divider .sd-en {
+  font-size: 14pt;
+  font-weight: 500;
+  letter-spacing: 1.2px;
+  opacity: 0.92;
+  margin-bottom: 12mm;
+}
+.subject-divider .sd-rule {
+  width: 30mm;
+  height: 1.2mm;
+  background: rgba(255,255,255,0.7);
+  border: none;
+  margin: 0 0 9mm 0;
+}
+.subject-divider .sd-tagline {
+  font-size: 12pt;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.5;
+  opacity: 0.88;
+  margin-bottom: 10mm;
+  max-width: 130mm;
+}
+.subject-divider .sd-toc {
+  background: #FFFFFF;                    /* solid white — RGBA can render as black in dark-mode viewers */
+  border-radius: 1.2mm;
+  padding: 7mm 8mm 6mm 8mm;
+  color: #0f172a;
+  margin-top: auto;
+}
+.subject-divider .sd-toc-title {
+  font-size: 10pt;
+  font-weight: 700;
+  letter-spacing: 2.4px;
+  text-transform: uppercase;
+  margin-bottom: 4mm;
+}
+.subject-divider .sd-toc ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  columns: 2;
+  column-gap: 9mm;
+}
+.subject-divider .sd-toc li {
+  font-size: 10.5pt;
+  font-weight: 600;
+  padding: 1.4mm 0;
+  break-inside: avoid;
+  display: flex;
+  gap: 3mm;
+  align-items: baseline;
+}
+.subject-divider .sd-toc li .sd-cid {
+  font-weight: 800;
+  min-width: 8mm;
+}
+
+/* =====================================================
+   Cover / Front-matter / Back-cover
+   Original print_bw layout is intentionally preserved (grayscale-elegant).
+   The color book adds ONLY subtle accents (navy section titles, thin gold
+   rules) — never overrides the layout or replaces backgrounds.
+   ===================================================== */
+:root {
+  --accent-navy: #1E3A8A;   /* deep navy — premium academic */
+  --accent-gold: #92400E;   /* dark amber/bronze — readable warm accent (was light gold) */
+}
+
+.inside-title { color: var(--accent-navy); }
+.toc-title { color: var(--accent-navy); }
+.feature-title { color: var(--accent-navy); }
+.exam-name { color: var(--accent-navy); }
+.toc-table tr.toc-section td { color: var(--accent-navy); }
+
+/* =====================================================
+   Insert pages 1 & 2 — COLOR profile only
+   Keep B/W layout intact; overlay navy + gold brand identity
+   so the first three pages (cover image + 2 inserts) feel like
+   a unified color edition.
+   ===================================================== */
+.insert-page.insert-color {
+  background: #FFFFFF;                    /* pure white — no light shade */
+}
+
+/* Decorative top + bottom gold rules on insert pages */
+.insert-page.insert-color .insert-page-body {
+  position: relative;
+}
+.insert-page.insert-color .insert-page-body::before,
+.insert-page.insert-color .insert-page-body::after {
+  content: "";
+  display: block;
+  height: 0.7mm;
+  background: linear-gradient(to right,
+    transparent 0%, var(--accent-gold) 18%, var(--accent-gold) 82%, transparent 100%);
+  opacity: 0.85;
+}
+.insert-page.insert-color .insert-page-body::before { margin: 0 0 8mm 0; }
+.insert-page.insert-color .insert-page-body::after  { margin: 8mm 0 0 0; }
+
+/* --- Page 2 (insert-page-one — main title page) --- */
+.insert-color .insert-main-title {
+  color: var(--accent-navy);
+  letter-spacing: 0.8px;
+}
+.insert-color .insert-main-sub {
+  color: var(--accent-navy);              /* solid navy — WeasyPrint doesn't support background-clip:text */
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+.insert-color .insert-main-note { color: #475569; }
+.insert-color .insert-main-exams {
+  color: var(--accent-gold);
+  border-top: 0.5pt solid var(--accent-gold);
+  border-bottom: 0.5pt solid var(--accent-gold);
+  padding: 2mm 0;
+  letter-spacing: 1.5px;
+}
+.insert-color .insert-main-exam-note { color: #334155; }
+.insert-color .insert-main-author { color: #64748B; letter-spacing: 1px; }
+.insert-color .insert-main-author-name { color: var(--accent-navy); }
+.insert-color .insert-main-brand {
+  color: #FFFFFF;
+  background: linear-gradient(135deg, var(--accent-navy), #2A4FBF);
+  padding: 3mm 6mm;
+  border-radius: 1mm;
+  border-top: 0.6pt solid var(--accent-gold);
+  border-bottom: 0.6pt solid var(--accent-gold);
+}
+
+/* --- Page 3 (insert-page-two — publisher info) --- */
+.insert-color .insert-pub-title { color: var(--accent-navy); }
+.insert-color .insert-pub-sub {
+  color: var(--accent-gold);
+  border-bottom: 0.6pt solid var(--accent-gold);
+  padding-bottom: 1.5mm;
+}
+.insert-color .insert-pub-block {
+  border-left: 1.2mm solid var(--accent-gold);
+  padding-left: 4mm;
+  background: #FAFBFC;
+}
+.insert-color .insert-pub-block:first-of-type {
+  background: transparent;
+  border-left: none;
+  padding-left: 0;
+}
+
+/* =====================================================
+   Page 4 — Foreword (color-only treatment)
+   ===================================================== */
+.foreword-page {
+  position: relative;
+}
+.foreword-page .foreword-top .inside-title {
+  color: var(--accent-navy);
+  border-bottom: 0.7pt solid var(--accent-gold);
+  padding-bottom: 1.8mm;
+}
+.foreword-page .foreword-greeting {
+  color: var(--accent-navy);
+}
+.foreword-page .foreword-body .inside-text {
+  color: #2A3340;
+}
+.foreword-page .feature-box {
+  background: #F6F9FF;
+  border: 0.5pt solid #C7D2FE;
+  border-left: 1.4mm solid var(--accent-gold);
+}
+.foreword-page .feature-title {
+  color: var(--accent-navy);
+}
+.foreword-page .foreword-closing {
+  color: var(--accent-gold);
+  font-weight: 700;
+}
+.foreword-page .foreword-signoff {
+  color: var(--accent-navy);
+}
+.foreword-page .howto-inline-title {
+  color: var(--accent-navy);
+  border-left: 1.2mm solid var(--accent-gold);
+  padding-left: 3mm;
+}
+.foreword-page .instruction-step {
+  background: var(--accent-navy);
+  color: #FFFFFF;
+}
+.foreword-page .instruction-detail {
+  color: #2A3340;
+}
+
+/* =====================================================
+   Page 5 — Table of Contents (color-only treatment)
+   ===================================================== */
+.toc-title {
+  color: var(--accent-navy);
+  border-bottom: 0.7pt solid var(--accent-gold);
+  padding-bottom: 2mm;
+}
+.toc-table {
+  border: 0.4pt solid #CBD5E1;
+}
+.toc-table th {
+  background: var(--accent-navy);
+  color: #FFFFFF;
+  border-color: var(--accent-navy);
+}
+.toc-table tr.toc-section td {
+  background: #F6F9FF;
+  color: var(--accent-navy);
+  font-weight: 700;
+  border-top: 0.7pt solid var(--accent-gold);
+  border-bottom: 0.4pt solid #C7D2FE;
+}
+.toc-table tr:nth-child(even):not(.toc-section) td {
+  background: #FAFBFC;
+}
+.toc-table td.toc-id {
+  color: var(--accent-navy);
+  font-weight: 700;
+}
+.toc-table td.toc-page {
+  color: var(--accent-gold);
+  font-weight: 700;
+  text-align: right;
+}
+.toc-table td.toc-page-ref,
+.toc-table a.toc-page-ref {
+  color: var(--accent-gold);
+  text-decoration: none;
+}
+
+/* Subject-tinted dividers */
+.subject-divider.subject-p {
+  background: linear-gradient(135deg, var(--p-main) 0%, var(--p-deep) 55%, var(--p-alt) 100%);
+}
+.subject-divider.subject-p .sd-toc-title { color: var(--p-main); }
+.subject-divider.subject-p .sd-toc li .sd-cid { color: var(--p-main); }
+
+.subject-divider.subject-c {
+  background: linear-gradient(135deg, var(--c-main) 0%, var(--c-deep) 55%, var(--c-alt) 100%);
+}
+.subject-divider.subject-c .sd-toc-title { color: var(--c-main); }
+.subject-divider.subject-c .sd-toc li .sd-cid { color: var(--c-main); }
+
+.subject-divider.subject-b {
+  background: linear-gradient(135deg, var(--b-main) 0%, var(--b-deep) 55%, var(--b-alt) 100%);
+}
+.subject-divider.subject-b .sd-toc-title { color: var(--b-main); }
+.subject-divider.subject-b .sd-toc li .sd-cid { color: var(--b-main); }
+
+/* =====================================================
+   Page-edge subject identity strip (subtle running tint)
+   Adds a thin colored bar at top-right of every chapter page.
+   ===================================================== */
+.subject-chapter::before {
+  content: "";
+  display: block;
+  height: 1.2mm;
+  margin: -2mm 0 3mm 0;
+  border-radius: 0 0 0.6mm 0.6mm;
+}
+.subject-p.subject-chapter::before {
+  background: linear-gradient(to right, var(--p-main), var(--p-alt));
+}
+.subject-c.subject-chapter::before {
+  background: linear-gradient(to right, var(--c-main), var(--c-alt));
+}
+.subject-b.subject-chapter::before {
+  background: linear-gradient(to right, var(--b-main), var(--b-alt));
+}

@@ -29,22 +29,26 @@ COLOR_CSS_REL = "shared/css/handbook_ta_color_book.css"
 PRINT_SCALE = 170.0 / 174.0
 ANONYMIZE_BOOK_OUTPUT = False
 
-DEFAULT_CHAPTERS = ["P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8"]
+DEFAULT_CHAPTERS = [
+    "P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8",
+    "C1", "C2", "C3", "C4", "C5", "C6", "C7",
+    "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8",
+]
 
 COVER_PAGE = {
-    "tagline": "வெற்றியின் திறவுகோல்",
-    "main_title": "போட்டித்தேர்வு அறிவியல் களஞ்சியம்",
-    "subtitle": "முழுமையான வழிகாட்டி\n(6, 7, 8 ஆம் வகுப்பு சமச்சீர் கல்வி பாடத்திட்டம்)",
-    "target_exams": [
-        "ஆசிரியர் தகுதித் தேர்வு (TET - Paper II Science)",
-        "TNPSC (Group 2, 2A, 4 & VAO)",
-        "ஆசிரியர் தேர்வு வாரியம் (TRB)",
-        "தேசிய வருவாய் வழி மற்றும் திறன் படிப்புதவித் தொகைத் தேர்வு (NMMS)",
+    "brand_name": "தமிழ்நண்பன் அகாடமி",
+    "main_title_lines": ["போட்டித் தேர்வு", "அறிவியல்"],
+    "main_title_accent": "களஞ்சியம்",
+    "subtitle": "(6, 7, 8 வகுப்பு அறிவியல் பாடநூல்களின் அடிப்படையில்)",
+    "exam_badges": [
+        {"name": "TET", "sub": "Paper II Science"},
+        {"name": "TNPSC", "sub": "Group 2, 2A, 4 & VAO"},
+        {"name": "TRB", "sub": ""},
+        {"name": "NMMS", "sub": ""},
     ],
-    "author_name": "தொகுப்பு: ChalkPieceDiary",
-    "author_brand": "Exclusively for தமிழ் நண்பன் அகாடமி",
-    "website": "https://chalkpiecediary.com",
 }
+FRONT_COVER_IMAGE_REL = "assets/cover_front.png"
+BACK_COVER_IMAGE_REL = "assets/cover_back.png"
 
 DEDICATION_PAGE = {
     "dedication": {
@@ -59,12 +63,11 @@ DEDICATION_PAGE = {
 }
 
 FOREWORD_PAGE = {
-    "title": "வெற்றியை நோக்கி... ★",
+    "title": "வெற்றியை நோக்கி உங்களுடன்",
     "greeting": "அன்பார்ந்த மாணவர்களுக்கும், போட்டித் தேர்வர்களுக்கும் வணக்கம்!",
     "paragraphs": [
         "உங்கள் கல்வி மற்றும் லட்சியப் பயணத்தில் வெற்றிபெற எங்களின் மனமார்ந்த வாழ்த்துகள். இந்தப் பயணத்தில் உங்களுக்கு வழிகாட்டும் ஒரு துணையாக இந்தக் கையேட்டை மிகுந்த அக்கறையுடன் உருவாக்கியுள்ளோம்.",
-        "அரசு வேலை என்பது பலரின் கனவு. அந்தக் கனவை நனவாக்கக் கடின உழைப்பும், சரியான வழிகாட்டுதலும் அவசியம். TNPSC, TET, NMMS உள்ளிட்ட எந்தவொரு போட்டித் தேர்வாக இருந்தாலும், அறிவியலில் முழு மதிப்பெண்கள் பெற 6 முதல் 8 ஆம் வகுப்பு வரையிலான அறிவியல் பாடங்களை ஆழமாகக் கற்பது மிகவும் முக்கியம்.",
-        "சமூக அறிவியலைப் போல அல்லாமல், அறிவியலில் ஆண்டுகள், அறிவியலாளர்கள் பெயர்கள், விதிகள், மற்றும் அளவீடுகளை (Fact-dense data) துல்லியமாக நினைவில் வைத்துக்கொள்வது அவசியம். பள்ளிப் பாடப்புத்தகங்களை முழுமையாக வாசிக்க நேரமில்லாதவர்களுக்கும், இறுதி நேர மீள்பார்வைக்கும் (Revision) இது ஒரு சிறந்த அடிப்படை ஆதாரமாக விளங்கும்.",
+        "அறிவியலில் ஆண்டுகள், அறிவியலாளர்கள் பெயர்கள், விதிகள், மற்றும் அளவீடுகளை (Fact-dense data) துல்லியமாக நினைவில் வைத்துக்கொள்வது அவசியம். பள்ளிப் பாடப்புத்தகங்களை முழுமையாக வாசிக்க நேரமில்லாதவர்களுக்கும், இறுதி நேர மீள்பார்வைக்கும் (Revision) இது ஒரு சிறந்த அடிப்படை ஆதாரமாக விளங்கும்.",
     ],
     "features": {
         "title": "இக்கையேட்டின் சிறப்பம்சங்கள்:",
@@ -102,10 +105,6 @@ HOW_TO_USE_PAGE = {
     "title": "இந்தக் கையேட்டைப் பயன்படுத்துவது எப்படி?",
     "intro": "வெற்றியை உறுதி செய்ய, இந்தக் கையேட்டைக் கீழ்க்கண்டவாறு பயன்படுத்துங்கள்:",
     "instructions": [
-        {
-            "step": "ஒருங்கிணைந்த வாசிப்பு",
-            "detail": "முதலில் ஒரு தலைப்பை எடுத்துக் கொண்டால் (உதாரணமாக அளவீடுகள்), 6, 7, 8 எனத் தொடர்ச்சியாகப் படியுங்கள். இது பாடங்களின் தொடர்ச்சியைப் புரிந்துகொள்ள உதவும்.",
-        },
         {
             "step": "முக்கியக் குறிப்புகளை அடிக்கோடிடுக",
             "detail": "படிக்கும்போது உங்களுக்குப் புதிதாகத் தோன்றும் தகவல்களை அல்லது எண்களை 'Highlighter' கொண்டு குறித்துக் கொள்ளுங்கள்.",
@@ -248,6 +247,58 @@ def _subject_class(chapter_id: str) -> str:
     return "subject-generic"
 
 
+_SUBJECT_DIVIDER_META = {
+    "P": {
+        "part": "முதல் பகுதி",
+        "mark": "P",
+        "title": "இயற்பியல்",
+        "en": "PHYSICS",
+        "tagline": "அளவீடு, விசை, இயக்கம், ஒளி, ஒலி, மின்சாரம் — இயற்கையின் அடிப்படை விதிகளைப் புரிந்துகொள்ள.",
+    },
+    "C": {
+        "part": "இரண்டாம் பகுதி",
+        "mark": "C",
+        "title": "வேதியியல்",
+        "en": "CHEMISTRY",
+        "tagline": "பொருளின் கட்டமைப்பு, அணுக்கள், மாற்றங்கள், அமிலம்-காரம் — பொருட்களின் இயல்பை ஆராய.",
+    },
+    "B": {
+        "part": "மூன்றாம் பகுதி",
+        "mark": "B",
+        "title": "உயிரியியல்",
+        "en": "BIOLOGY",
+        "tagline": "உயிரணு, தாவரங்கள், விலங்குகள், மனிதர், சுற்றுச்சூழல் — உயிரின உலகின் கட்டமைப்பு மற்றும் இயக்கம்.",
+    },
+}
+
+
+def _subject_divider(
+    prefix: str, chapter_ids: list[str], chapter_titles: list[str]
+) -> str:
+    meta = _SUBJECT_DIVIDER_META.get(prefix)
+    if not meta:
+        return ""
+    cls = {"P": "subject-p", "C": "subject-c", "B": "subject-b"}[prefix]
+    items = "".join(
+        f'<li><span class="sd-cid">{cid}</span><span>{title}</span></li>'
+        for cid, title in zip(chapter_ids, chapter_titles)
+    )
+    return (
+        f'<section class="subject-divider {cls}">'
+        f'  <div class="sd-eyebrow">{meta["part"]}</div>'
+        f'  <div class="sd-mark">{meta["mark"]}</div>'
+        f'  <div class="sd-title">{meta["title"]}</div>'
+        f'  <div class="sd-en">{meta["en"]}</div>'
+        f'  <hr class="sd-rule">'
+        f'  <div class="sd-tagline">{meta["tagline"]}</div>'
+        f'  <div class="sd-toc">'
+        f'    <div class="sd-toc-title">இந்தப் பகுதி அத்தியாயங்கள்</div>'
+        f'    <ol>{items}</ol>'
+        f'  </div>'
+        f'</section>'
+    )
+
+
 def _profile_css(profile: str) -> str:
     if profile == "color":
         return COLOR_CSS_REL
@@ -314,29 +365,76 @@ def _render_multiline(text: str) -> str:
     return "<br>".join(escape(line) for line in text.split("\n"))
 
 
-def _render_cover_page() -> str:
-    target_exams = "".join(
-        f"<li>{escape(exam)}</li>" for exam in COVER_PAGE["target_exams"]
+def _render_cover_art_page(page_class: str, image_rel_path: str) -> str:
+    return (
+        f'<section class="{page_class}">'
+        f'<img class="cover-art-image" src="{escape(image_rel_path)}" alt="Cover Art">'
+        "</section>"
     )
-    return f"""
-<section class="cover-page">
-  <div class="cover-box">
-    <div class="cover-kicker">{escape(COVER_PAGE["tagline"])}</div>
-    <div class="cover-rule"></div>
-    <div class="cover-title ta-main-title">{escape(COVER_PAGE["main_title"])}</div>
-    <div class="cover-sub ta-subtitle">{_render_multiline(COVER_PAGE["subtitle"])}</div>
-    <div class="cover-band">முக்கிய இலக்கு தேர்வுகள்</div>
-    <ul class="cover-target-list">
-      {target_exams}
-    </ul>
-    <div class="cover-meta">
-      <div>{escape(COVER_PAGE["author_name"])}</div>
-      <div>{escape(COVER_PAGE["author_brand"])}</div>
-      <div>{escape(COVER_PAGE["website"])}</div>
+
+
+def _render_cover_page() -> str:
+    return _render_cover_art_page("cover-page cover-art-page", FRONT_COVER_IMAGE_REL)
+
+
+def _render_after_cover_pages(profile: str) -> list[str]:
+    tone_class = "insert-color" if profile == "color" else "insert-bw"
+    page1 = f"""
+<section class="cover-page chapter-break insert-page {tone_class}">
+  <div class="insert-page-body insert-page-one">
+    <div class="insert-main-title">போட்டித் தேர்வு களஞ்சியம்</div>
+    <div class="insert-main-sub">அறிவியல்</div>
+    <div class="insert-main-note">(6,7,8 அறிவியல் பாடநூல்களின் அடிப்படையில்)</div>
+
+    <div class="insert-main-exams">TET, TRB, NMMS, TNPSC</div>
+    <div class="insert-main-exam-note">அனைத்துப் போட்டித் தேர்வுகளுக்குமான கையேடு</div>
+
+    <div class="insert-main-author">தொகுப்பு</div>
+    <div class="insert-main-author-name">சாக்பீஸ் டைரி</div>
+
+    <div class="insert-main-brand">தமிழ் நண்பன் அகாடமி</div>
+  </div>
+</section>
+"""
+    page2 = f"""
+<section class="cover-page chapter-break insert-page {tone_class}">
+  <div class="insert-page-body insert-page-two">
+    <div class="insert-pub-title">போட்டித்தேர்வு களஞ்சியம்</div>
+    <div class="insert-pub-sub">அறிவியல்</div>
+
+    <div class="insert-pub-block">
+      <div>தொகுப்பு: சாக்பீஸ்டைரி</div>
+      <div>பக்கங்கள்: 240</div>
+      <div>முதற் பதிப்பு: 2026</div>
+    </div>
+
+    <div class="insert-pub-block">
+      <div>© சாக்பீஸ் டைரி</div>
+      <div>இந்த நூலின் எப்பகுதியையும் எழுத்துப்பூர்வமான முன் அனுமதியின்றி</div>
+      <div>எவ்வகையிலும் மீண்டும் பதிப்பிக்கக் கூடாது.</div>
+    </div>
+
+    <div class="insert-pub-block">
+      <div>வெளியீடு:</div>
+      <div>தமிழ் நண்பன் அகாடமி,</div>
+      <div>விளாத்திகுளம், தூத்துக்குடி மாவட்டம்.</div>
+      <div>63693 71452, 88076 56338</div>
+      <div>chalkpiecefoundation@gmail.com</div>
+    </div>
+
+    <div class="insert-pub-block">
+      <div>விலை: ₹ 480</div>
+    </div>
+
+    <div class="insert-pub-block">
+      <div>வடிவமைப்பு:</div>
+      <div>பிரியம் மீடியா, பட்டீஸ்வரம்.</div>
+      <div>82204 71077.</div>
     </div>
   </div>
 </section>
 """
+    return [page1, page2]
 
 
 def _render_dedication_page() -> str:
@@ -361,17 +459,38 @@ def _render_foreword_page() -> str:
     feature_points = "".join(
         f"<li>{escape(point)}</li>" for point in FOREWORD_PAGE["features"]["points"]
     )
+    instruction_rows = "".join(
+        (
+            '<div class="instruction-item">'
+            f'<div class="instruction-num">{idx}</div>'
+            f'<div class="instruction-step">{escape(item["step"])}</div>'
+            f'<div class="instruction-detail">{escape(item["detail"])}</div>'
+            "</div>"
+        )
+        for idx, item in enumerate(HOW_TO_USE_PAGE["instructions"], start=1)
+    )
     return f"""
-<section class="frontmatter-page">
-  <div class="inside-title">{escape(FOREWORD_PAGE["title"])}</div>
-  <p class="inside-text foreword-greeting">{escape(FOREWORD_PAGE["greeting"])}</p>
-  {paragraphs}
+<section class="frontmatter-page foreword-page">
+  <div class="foreword-top">
+    <div class="inside-title">{escape(FOREWORD_PAGE["title"])}</div>
+    <p class="inside-text foreword-greeting">{escape(FOREWORD_PAGE["greeting"])}</p>
+  </div>
+  <div class="foreword-body">
+    {paragraphs}
+  </div>
   <div class="feature-box">
     <div class="feature-title">{escape(FOREWORD_PAGE["features"]["title"])}</div>
     <ul class="feature-list">{feature_points}</ul>
   </div>
-  <p class="inside-text foreword-closing">{escape(FOREWORD_PAGE["closing"])}</p>
-  <p class="inside-text foreword-signoff">{_render_multiline(FOREWORD_PAGE["sign_off"])}</p>
+  <div class="howto-inline">
+    <div class="inside-title howto-inline-title">{escape(HOW_TO_USE_PAGE["title"])}</div>
+    <p class="inside-text howto-intro">{escape(HOW_TO_USE_PAGE["intro"])}</p>
+    <div class="instruction-list">{instruction_rows}</div>
+  </div>
+  <div class="foreword-bottom">
+    <p class="inside-text foreword-closing">{escape(FOREWORD_PAGE["closing"])}</p>
+    <p class="inside-text foreword-signoff">{_render_multiline(FOREWORD_PAGE["sign_off"])}</p>
+  </div>
 </section>
 """
 
@@ -399,16 +518,17 @@ def _render_how_to_use_page() -> str:
     instruction_rows = "".join(
         (
             '<div class="instruction-item">'
+            f'<div class="instruction-num">{idx}</div>'
             f'<div class="instruction-step">{escape(item["step"])}</div>'
             f'<div class="instruction-detail">{escape(item["detail"])}</div>'
             "</div>"
         )
-        for item in HOW_TO_USE_PAGE["instructions"]
+        for idx, item in enumerate(HOW_TO_USE_PAGE["instructions"], start=1)
     )
     return f"""
-<section class="frontmatter-page">
+<section class="frontmatter-page howto-page">
   <div class="inside-title">{escape(HOW_TO_USE_PAGE["title"])}</div>
-  <p class="inside-text">{escape(HOW_TO_USE_PAGE["intro"])}</p>
+  <p class="inside-text howto-intro">{escape(HOW_TO_USE_PAGE["intro"])}</p>
   <div class="instruction-list">{instruction_rows}</div>
 </section>
 """
@@ -423,9 +543,11 @@ def _render_toc_page(chapter_ids: list[str]) -> str:
             cid = chapter["id"]
             if cid not in selected:
                 continue
+            chapter_anchor = f"#chapter-{cid.lower()}"
             section_rows += (
                 f'<tr><td class="toc-id">{escape(cid)}</td>'
-                f'<td>{escape(chapter["title"])}</td><td>—</td></tr>'
+                f'<td><a class="toc-link" href="{chapter_anchor}">{escape(chapter["title"])}</a></td>'
+                f'<td class="toc-page"><a class="toc-page-ref" href="{chapter_anchor}"></a></td></tr>'
             )
         if section_rows:
             toc_rows += (
@@ -445,40 +567,26 @@ def _render_toc_page(chapter_ids: list[str]) -> str:
 """
 
 
-def _front_matter(chapter_ids: list[str], chapter_titles: list[str]) -> list[str]:
+def _front_matter(chapter_ids: list[str], chapter_titles: list[str], profile: str) -> list[str]:
     del chapter_titles
-    return [
+    pages = [
         _render_cover_page(),
-        _with_break(_render_dedication_page()),
-        _with_break(_render_foreword_page()),
-        _with_break(_render_exam_intro_page()),
-        _with_break(_render_how_to_use_page()),
-        _with_break(_render_toc_page(chapter_ids)),
     ]
+    pages.extend(_render_after_cover_pages(profile))
+    pages.extend([
+        _with_break(_render_foreword_page()),
+        _with_break(_render_toc_page(chapter_ids)),
+    ])
+    return pages
 
 
 def _back_cover() -> str:
-    return """
-<section class="back-cover-page chapter-break">
-  <div class="back-cover-box">
-    <div class="back-title">இந்த பதிப்பின் முக்கிய அம்சங்கள்</div>
-    <div class="back-tag">EXAM-READY · PRINT-READY · REVISION-READY</div>
-    <div class="back-points">
-      • கருப்பு-வெள்ளை அச்சுக்கேற்ற தெளிவான grayscale contrast<br>
-      • குறைந்த அலங்காரம், அதிக வாசிப்பு தெளிவு, தேர்வுக்கேற்ற சுருக்க அமைப்பு<br>
-      • அட்டவணை, fact-box, solved problems அனைத்தும் ஒரே print-safe design மொழியில்<br>
-      • page geometry lock: 210 × 290 mm + 20 mm margins
-    </div>
-    <div class="back-note">
-      TET / TNPSC / TRB / NMMS / NTSE போன்ற போட்டித் தேர்வுகளுக்கான
-      தமிழ்மூல அறிவியல் தயார் கையேடு.
-    </div>
-    <div class="back-footer-strip">
-      தொடர்ந்து மீள்பார்க்க · தெளிவாக நினைவில் கொள்ள · நம்பிக்கையுடன் எழுத
-    </div>
-  </div>
-</section>
-"""
+    return (
+        _render_cover_art_page(
+            "back-cover-page chapter-break cover-art-page",
+            BACK_COVER_IMAGE_REL,
+        )
+    )
 
 
 def build_book(
@@ -499,12 +607,32 @@ def build_book(
     ]
 
     fragments: list[str] = []
-    fragments.extend(_front_matter(chapter_ids, chapter_titles))
+    fragments.extend(_front_matter(chapter_ids, chapter_titles, profile))
 
+    insert_dividers = profile == "color"
+    if insert_dividers:
+        subject_groups: dict[str, list[int]] = {}
+        for idx, cid in enumerate(chapter_ids):
+            subject_groups.setdefault(cid[:1].upper(), []).append(idx)
+
+    last_prefix: str | None = None
     for idx, ch in enumerate(chapters):
+        prefix = chapter_ids[idx][:1].upper()
+        if insert_dividers and prefix != last_prefix and prefix in _SUBJECT_DIVIDER_META:
+            indices = subject_groups[prefix]
+            fragments.append(
+                _subject_divider(
+                    prefix,
+                    [chapter_ids[i] for i in indices],
+                    [chapter_titles[i] for i in indices],
+                )
+            )
+        last_prefix = prefix
+
         marker = f"{chapter_ids[idx]} · {_short_running_title(chapter_titles[idx])}"
+        chapter_anchor_id = f'chapter-{chapter_ids[idx].lower()}'
         fragments.append(
-            f'<h1 class="chapter-marker{" chapter-break" if idx == 0 else " chapter-break"}">{marker}</h1>'
+            f'<h1 id="{chapter_anchor_id}" class="chapter-marker{" chapter-break" if idx == 0 else " chapter-break"}">{marker}</h1>'
         )
         fragments.append(f'<section class="subject-chapter {_subject_class(chapter_ids[idx])}">')
         fragments.extend(ch.content())
@@ -568,6 +696,14 @@ def main() -> int:
         size_kb = out_pdf.stat().st_size / 1024
         print(f"Built integrated book: {out_pdf} ({size_kb:.1f} KB)")
         print(f"HTML source: {out_html}")
+
+        import shutil
+        release_subdir = "color" if profile == "color" else "print"
+        release_dir = ROOT / "release" / release_subdir
+        release_dir.mkdir(parents=True, exist_ok=True)
+        release_pdf = release_dir / out_pdf.name
+        shutil.copy2(out_pdf, release_pdf)
+        print(f"\n>>> FINAL RELEASE PDF: {release_pdf}")
     except Exception as exc:
         print(f"ERROR: {exc}")
         return 1

@@ -260,3 +260,9 @@ output/*_test.pdf
 output/*_v[0-9].pdf
 output/*_FULL.pdf
 output/*_SECTION_*.pdf
+
+# Local preview rendering cache
+.preview/
+
+# Claude worktree state
+.claude/
