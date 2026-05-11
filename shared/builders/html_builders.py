@@ -63,11 +63,26 @@ def banner(code: str, title: str, sub: str = '', foot: str = '') -> str:
 
 # ─── SECTION HEADERS ──────────────────────────────────────────────────────────
 
+import re as _re
+
+_LEADING_MARKER = _re.compile(r'^([A-Za-z]+(?:\.\d+)*|\d+(?:\.\d+)*)(\s*[·•—-])')
+
+def _wrap_marker(title: str, css_class: str) -> str:
+    """If title starts with an alphabetical/numeric marker followed by a
+    bullet/separator (e.g. 'A · ...', 'A.1 • ...', '3 · ...'), wrap that
+    marker in a <span class="<class>-marker"> for visual enlargement."""
+    m = _LEADING_MARKER.match(title)
+    if not m:
+        return _safe(title)
+    marker = m.group(1)
+    rest = title[m.start(2):]
+    return f'<span class="{css_class}-marker">{_safe(marker)}</span>{_safe(rest)}'
+
 def sec(title: str) -> str:
-    return f'<div class="sec">{_safe(title)}</div>\n'
+    return f'<div class="sec">{_wrap_marker(title, "sec")}</div>\n'
 
 def subh(title: str) -> str:
-    return f'<div class="subh">{_safe(title)}</div>\n'
+    return f'<div class="subh">{_wrap_marker(title, "subh")}</div>\n'
 
 # ─── KV LIST ──────────────────────────────────────────────────────────────────
 

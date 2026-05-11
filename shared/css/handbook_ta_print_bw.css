@@ -27,6 +27,37 @@
   src: url('../fonts/NotoSerifTamil-Bold.ttf') format('truetype');
   font-weight: 700;
 }
+
+/* Heading-optimized family: same font, but Latin/Basic chars are size-adjusted
+   to visually match Tamil x-height (Noto Serif Tamil's Latin glyphs are
+   notably smaller than its Tamil glyphs at the same point size). */
+@font-face {
+  font-family: 'NotoSerifTamilHead';
+  src: url('../fonts/NotoSerifTamil-Regular.ttf') format('truetype');
+  unicode-range: U+0B80-0BFF;
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'NotoSerifTamilHead';
+  src: url('../fonts/NotoSerifTamil-Bold.ttf') format('truetype');
+  unicode-range: U+0B80-0BFF;
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'NotoSerifTamilHead';
+  src: url('../fonts/NotoSerifTamil-Regular.ttf') format('truetype');
+  unicode-range: U+0020-024F, U+2000-206F, U+2070-209F, U+20A0-20CF;
+  font-weight: 400;
+  size-adjust: 135%;
+}
+@font-face {
+  font-family: 'NotoSerifTamilHead';
+  src: url('../fonts/NotoSerifTamil-Bold.ttf') format('truetype');
+  unicode-range: U+0020-024F, U+2000-206F, U+2070-209F, U+20A0-20CF;
+  font-weight: 700;
+  size-adjust: 135%;
+}
+
 @font-face {
   font-family: 'ATM345';
   src: url('../fonts/NotoSerifTamil-Bold.ttf') format('truetype');
@@ -98,8 +129,8 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body {
   font-family: 'NST', sans-serif;
-  font-size: 9.6pt;
-  line-height: 1.34;
+  font-size: 10.5pt;                       /* Tamil minimum readable for print */
+  line-height: 1.55;                     /* industry-standard body line-height */
   color: var(--ink);
   orphans: 3;
   widows: 3;
@@ -170,7 +201,7 @@ html, body {
   color: #ffffff;
   border-left: 1.1mm solid #4f555b;
   border-radius: 0.45mm;
-  font-size: 9.7pt;
+  font-size: 10.5pt;
   font-weight: 700;
   letter-spacing: 0.1px;
   padding: 1.45mm 3.1mm;
@@ -184,7 +215,7 @@ html, body {
   background: #ededed;
   color: #101010;
   border-left: 1.2mm solid #7a7a7a;
-  font-size: 9pt;
+  font-size: 10.5pt;
   font-weight: 700;
   padding: 1.3mm 2.8mm;
   margin: 1.8mm 0 1mm 0;
@@ -208,7 +239,7 @@ table.prob td.pnum,
 .insert-main-brand,
 .insert-pub-title,
 .insert-pub-sub {
-  font-family: 'Noto Serif Tamil', 'ATM345', 'NST', serif;
+  font-family: 'NotoSerifTamilHead', 'Noto Serif Tamil', 'ATM345', 'NST', serif;
 }
 
 /* Keep table column headers in Noto Sans Tamil */
@@ -245,9 +276,10 @@ table.rapid {
 
 table.kv { border: 0.45pt solid var(--line); }
 table.kv td {
-  padding: 1mm 1.8mm;
+  padding: 1.4mm 2.2mm;
   border-bottom: 0.26pt solid var(--line-soft);
-  font-size: 9.2pt;
+  font-size: 10.5pt;                          /* Tamil-readable body */
+  line-height: 1.5;
 }
 table.kv tr:last-child td { border-bottom: none; }
 table.kv td.k {
@@ -259,9 +291,10 @@ table.kv td.k {
 table.kv td.v { background: #fbfbfb; color: var(--ink-soft); }
 
 table.oneliners td {
-  padding: 0.78mm 1.6mm;
+  padding: 1.1mm 2mm;
   border-bottom: 0.22pt solid #d0d0d0;
-  font-size: 9.05pt;
+  font-size: 10.5pt;                          /* Tamil-readable body */
+  line-height: 1.5;
   vertical-align: top;
 }
 table.oneliners tr:last-child td { border-bottom: none; }
@@ -280,7 +313,7 @@ table.oneliners td.bul {
   color: #1a1a1a;
   padding: 1.6mm 2.8mm;
   margin: 0 0 1.8mm 0;
-  font-size: 9.2pt;
+  font-size: 10.5pt;
   font-weight: 700;
   page-break-inside: auto;
   break-inside: auto;
@@ -312,7 +345,7 @@ table.oneliners td.bul {
 }
 .dyk-item,
 .note-box-body {
-  font-size: 9.1pt;
+  font-size: 10.5pt;
   color: #222222;
   padding: 1.2mm 2.2mm;
 }
@@ -335,10 +368,10 @@ table.oneliners td.bul {
   break-inside: auto;
 }
 .def-list .dl-item {
-  font-size: 9.3pt;
-  line-height: 1.35;
+  font-size: 10.5pt;                         /* Tamil-readable body */
+  line-height: 1.55;
   color: #222222;
-  padding: 0.5mm 0;
+  padding: 0.8mm 0;
   border-bottom: 0.2pt solid #d8d8d8;
 }
 .def-list .dl-item:last-child { border-bottom: none; }
@@ -355,8 +388,8 @@ table.rapid th {
   font-weight: 700;
   text-align: left;
 }
-table.grid th { padding: 1.25mm 1.45mm; font-size: 8.95pt; }
-table.rapid th { padding: 1.05mm 1.6mm; font-size: 8.75pt; }
+table.grid th { padding: 1.25mm 1.45mm; font-size: 10.5pt; }
+table.rapid th { padding: 1.05mm 1.6mm; font-size: 10.5pt; }
 
 table.grid td,
 table.rapid td {
@@ -364,8 +397,8 @@ table.rapid td {
   color: #1f1f1f;
   vertical-align: middle;
 }
-table.grid td { padding: 1.05mm 1.2mm; font-size: 8.75pt; }
-table.rapid td { padding: 0.86mm 1.5mm; font-size: 8.6pt; }
+table.grid td { padding: 1.4mm 1.8mm; font-size: 10.5pt; line-height: 1.45; }
+table.rapid td { padding: 1.2mm 1.8mm; font-size: 10.5pt; line-height: 1.45; }
 table.grid tr.alt td,
 table.rapid tr.alt td { background: var(--surface-alt); }
 table.rapid td:first-child { font-weight: 700; color: #181818; }
@@ -386,7 +419,7 @@ table.twocol td {
   background: #f7f7f7;
   border: 0.35pt solid #bdbdbd;
   color: #1f1f1f;
-  font-size: 8.75pt;
+  font-size: 10.5pt;
   padding: 1.25mm 1.7mm;
 }
 table.twocol td div { padding: 0.34mm 0; }
@@ -394,7 +427,7 @@ table.twocol td div { padding: 0.34mm 0; }
 /* --- Solved problems --- */
 table.prob {
   border: 0.45pt solid #444444;
-  font-size: 9pt;
+  font-size: 10.5pt;
 }
 table.prob td {
   padding: 0.7mm 1.7mm;
@@ -407,7 +440,7 @@ table.prob td.pnum {
   color: #ffffff;
   width: 9mm;
   text-align: center;
-  font-size: 10pt;
+  font-size: 10.5pt;
   font-weight: 700;
 }
 table.prob td.pq { background: #efefef; color: #191919; }
@@ -416,7 +449,7 @@ table.prob td.plbl {
   color: #222222;
   width: 20mm;
   text-align: center;
-  font-size: 8.6pt;
+  font-size: 10.5pt;
   font-weight: 700;
 }
 table.prob td.pans-lbl { background: #767f88; color: #ffffff; }
@@ -473,7 +506,7 @@ table.prob td.pans { background: #ececec; color: #111111; font-weight: 700; }
   padding: 0.18mm 1.2mm;
   background: #e4e4e4;
   color: #1f1f1f;
-  font-size: 8.1pt;
+  font-size: 10.5pt;
   font-weight: 700;
 }
 .probc .probc-ans { background: #f0f0f0; }
@@ -487,7 +520,7 @@ table.prob td.pans { background: #ececec; color: #111111; font-weight: 700; }
   margin: 0 0 1.8mm 0;
 }
 .gloss-1col .g1-item {
-  font-size: 8.9pt;
+  font-size: 10.5pt;
   line-height: 1.3;
   padding: 0.45mm 1.4mm;
   border-bottom: 0.18pt solid #dedede;
@@ -506,7 +539,7 @@ table.prob td.pans { background: #ececec; color: #111111; font-weight: 700; }
   margin: 0 0 1.8mm 0;
 }
 .term-pairs .tp-item {
-  font-size: 8.5pt;
+  font-size: 10.5pt;
   line-height: 1.28;
   padding: 0.34mm 1.4mm;
   border-bottom: 0.16pt solid #e0e0e0;
@@ -527,14 +560,14 @@ sub { font-size: 0.74em; vertical-align: sub; }
 
 p.pbody {
   margin: 0.4mm 0 0.9mm 0;
-  font-size: 9pt;
+  font-size: 10.5pt;
   line-height: 1.36;
   text-align: justify;
   color: #252525;
 }
 p.pbold {
   margin: 1mm 0 0.45mm 0;
-  font-size: 9pt;
+  font-size: 10.5pt;
   color: #121212;
   font-weight: 700;
 }
@@ -597,7 +630,7 @@ p.pbold {
 }
 .insert-main-note {
   margin-top: 3mm;
-  font-size: 10pt;
+  font-size: 10.5pt;
   font-weight: 600;
   color: #1f1f1f;
 }
@@ -677,7 +710,7 @@ p.pbold {
     linear-gradient(to bottom, #ffffff 0%, #f7f7f7 58%, #efefef 100%);
 }
 .cover-kicker {
-  font-size: 9.4pt;
+  font-size: 10.5pt;
   letter-spacing: 0.7px;
   color: #3d3d3d;
   margin-bottom: 3.2mm;
@@ -705,7 +738,7 @@ p.pbold {
   font-weight: 700;
 }
 .cover-sub2 {
-  font-size: 9.8pt;
+  font-size: 10.5pt;
   letter-spacing: 0.55px;
   color: #474747;
   margin-bottom: 5.2mm;
@@ -722,7 +755,7 @@ p.pbold {
 .cover-target-list {
   margin: 0 0 5mm 4.8mm;
   padding: 0;
-  font-size: 9.2pt;
+  font-size: 10.5pt;
   line-height: 1.5;
   color: #1f1f1f;
 }
@@ -730,7 +763,7 @@ p.pbold {
   margin: 0 0 1.1mm 0;
 }
 .cover-meta {
-  font-size: 9pt;
+  font-size: 10.5pt;
   line-height: 1.5;
   color: #2a2a2a;
 }
@@ -843,7 +876,7 @@ p.pbold {
   color: #2a2a2a;
 }
 .inside-text {
-  font-size: 9.6pt;
+  font-size: 10.5pt;
   line-height: 1.5;
   color: #242424;
   margin-bottom: 2.5mm;
@@ -884,7 +917,7 @@ p.pbold {
 .foreword-body .inside-text {
   margin-bottom: 2.5mm;
   line-height: 1.55;
-  font-size: 9.4pt;
+  font-size: 10.5pt;
 }
 .foreword-page .feature-box {
   margin: 3mm 0 3mm 0;
@@ -897,11 +930,11 @@ p.pbold {
   padding: 2.4mm 2.8mm;
 }
 .foreword-page .feature-title {
-  font-size: 10pt;
+  font-size: 10.5pt;
   margin-bottom: 2mm;
 }
 .feature-title {
-  font-size: 10pt;
+  font-size: 10.5pt;
   font-weight: 700;
   margin-bottom: 1.6mm;
   color: #191919;
@@ -912,12 +945,12 @@ p.pbold {
 }
 .foreword-page .feature-list li {
   margin: 0 0 1.4mm 0;
-  font-size: 9pt;
+  font-size: 10.5pt;
   line-height: 1.5;
 }
 .feature-list li {
   margin: 0 0 1.1mm 0;
-  font-size: 9.2pt;
+  font-size: 10.5pt;
   line-height: 1.42;
   color: #202020;
 }
@@ -925,7 +958,7 @@ p.pbold {
   font-weight: 700;
   margin-top: 0.5mm;
   margin-bottom: 0.3mm;
-  font-size: 9pt;
+  font-size: 10.5pt;
 }
 .foreword-signoff {
   white-space: normal;
@@ -978,10 +1011,10 @@ p.pbold {
 }
 .foreword-page .instruction-step {
   margin-bottom: 1mm;
-  font-size: 9.5pt;
+  font-size: 10.5pt;
 }
 .foreword-page .instruction-detail {
-  font-size: 9pt;
+  font-size: 10.5pt;
   line-height: 1.5;
 }
 .exam-subtitle {
@@ -996,13 +1029,13 @@ p.pbold {
   padding: 2.1mm 0.5mm;
 }
 .exam-name {
-  font-size: 9.4pt;
+  font-size: 10.5pt;
   font-weight: 700;
   color: #151515;
   margin-bottom: 1.1mm;
 }
 .exam-desc {
-  font-size: 9pt;
+  font-size: 10.5pt;
   line-height: 1.45;
   color: #2b2b2b;
 }
@@ -1041,13 +1074,13 @@ p.pbold {
   background: #f2f2f2;
 }
 .instruction-step {
-  font-size: 9.4pt;
+  font-size: 10.5pt;
   font-weight: 700;
   color: #181818;
   margin-bottom: 0.7mm;
 }
 .instruction-detail {
-  font-size: 9pt;
+  font-size: 10.5pt;
   line-height: 1.42;
   color: #2f2f2f;
 }
@@ -1067,7 +1100,7 @@ p.pbold {
 .legal-row > span {
   display: table-cell;
   padding: 1.5mm 2mm;
-  font-size: 9pt;
+  font-size: 10.5pt;
   color: #2c2c2c;
   vertical-align: top;
 }
@@ -1086,7 +1119,7 @@ p.pbold {
 .toc-table {
   width: 170mm;
   border-collapse: collapse;
-  font-size: 9.5pt;
+  font-size: 10.5pt;
 }
 .toc-table th,
 .toc-table td {
@@ -1230,7 +1263,7 @@ table.prob tr {
   margin-bottom: 5mm;
 }
 .back-points {
-  font-size: 9.5pt;
+  font-size: 10.5pt;
   line-height: 1.62;
   color: #232323;
   margin-bottom: 8mm;
@@ -1239,7 +1272,7 @@ table.prob tr {
   margin-top: 10mm;
   border-top: 0.4pt solid #9e9e9e;
   padding-top: 3mm;
-  font-size: 9.3pt;
+  font-size: 10.5pt;
   color: #3a3a3a;
 }
 .back-footer-strip {
@@ -1267,12 +1300,22 @@ table.prob tr {
 .insert-pub-sub { font-size: 19pt; }
 
 .sec { font-size: 11.4pt; }
-.subh { font-size: 10pt; }                /* smaller than sec — proper hierarchy */
+.subh { font-size: 10.5pt; }                /* smaller than sec — proper hierarchy */
+
+/* Section ordering marker (A, B, C, A.1, 1, 2...) — enlarged via wrapper
+   span emitted by sec()/subh() builders. Targets the leading Latin marker
+   for visual emphasis. */
+.sec-marker,
+.subh-marker {
+  font-size: 1.25em;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
 .inside-title { font-size: 17pt; }
 .toc-title { font-size: 18pt; }
-table.kv th { font-size: 7.8pt; }
-table.grid th { font-size: 7.8pt; }
-table.rapid th { font-size: 7.6pt; }
+table.kv th { font-size: 10.5pt; }
+table.grid th { font-size: 10.5pt; }
+table.rapid th { font-size: 10.5pt; }
 table.prob td.pq { font-size: 10.5pt; }
 table.prob td.pnum { font-size: 14.2pt; } /* மற்ற தலைப்புகள் +2 */
 .insert-main-exams { font-size: 19pt; }   /* மற்ற தலைப்புகள் +2 */

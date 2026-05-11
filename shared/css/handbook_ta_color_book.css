@@ -99,7 +99,7 @@
   padding: 0;
   margin: 0;
   line-height: 1;
-  font-family: 'Noto Serif Tamil', 'ATM345', 'NST', serif;
+  font-family: 'NotoSerifTamilHead', 'Noto Serif Tamil', 'ATM345', 'NST', serif;
   display: inline-flex;
   align-items: baseline;
 }
@@ -129,7 +129,7 @@
   font-weight: 700;
   line-height: 1.15;
   letter-spacing: 0.1px;
-  font-family: 'Noto Serif Tamil', 'ATM345', 'NST', serif;
+  font-family: 'NotoSerifTamilHead', 'Noto Serif Tamil', 'ATM345', 'NST', serif;
   word-wrap: break-word;
   overflow-wrap: break-word;
   hyphens: auto;
@@ -327,14 +327,14 @@ table.rapid td:last-child { color: #475569; }
 .note-box-title {
   background: transparent !important;
   font-weight: 700;
-  font-size: 9.6pt;
+  font-size: 10.5pt;
   padding: 2mm 3.5mm 0.6mm 3.5mm;
   letter-spacing: 0.1px;
 }
 .dyk-item,
 .note-box-body {
   padding: 0.4mm 3.5mm 2mm 3.5mm;
-  font-size: 9.1pt;
+  font-size: 10.5pt;
   line-height: 1.45;
 }
 .dyk-item:not(:last-child) { padding-bottom: 0.6mm; }
@@ -650,7 +650,7 @@ table.prob td.pans { background: var(--b-soft); color: var(--b-deep); }
   margin-top: auto;
 }
 .subject-divider .sd-toc-title {
-  font-size: 10pt;
+  font-size: 10.5pt;
   font-weight: 700;
   letter-spacing: 2.4px;
   text-transform: uppercase;
